@@ -4,3 +4,20 @@ server:
 spring:
   application:
     name: tycoon
+    
+  datasource:
+    url: ${MARIADB_URL}
+    username: ${MARIADB_USERNAME}
+    password: ${MARIADB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 0
+    locations: classpath:db/migration  # TODO: 마이그레이션 스크립트 위치 변경 가능
+    encoding: UTF-8
+    validate-on-migrate: true
+    clean-disabled: true
+    out-of-order: false
+    table: flyway_schema_history
