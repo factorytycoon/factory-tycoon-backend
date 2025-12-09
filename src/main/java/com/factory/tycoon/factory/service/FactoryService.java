@@ -66,7 +66,7 @@ public class FactoryService {
         factoryRepository.delete(factory);
     }
 
-    public List<Object> getEquipments(Long factoryId) {
+    public List<EquipmentResponse> getEquipments(Long factoryId) {
         return equipmentRepository.findByFactory_FactoryId(factoryId).stream()
                 .map(EquipmentResponse::new)
                 .collect(Collectors.toList());

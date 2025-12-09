@@ -3,6 +3,9 @@ package com.factory.tycoon.factory.ctrl;
 import com.factory.tycoon.factory.domain.dto.FactoryRequest;
 import com.factory.tycoon.factory.domain.dto.FactoryResponse;
 import com.factory.tycoon.factory.service.FactoryService;
+import com.factory.tycoon.equipment.domain.dto.EquipmentResponse;
+import com.factory.tycoon.inventory.domain.dto.InventoryResponse;
+import com.factory.tycoon.order.domain.dto.OrderResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -63,7 +66,7 @@ public class FactoryCtrl {
     @Operation(summary = "공장 장비 목록 조회", 
                description = "특정 공장에 속한 장비 목록을 조회합니다.")
     @GetMapping("/{factoryId}/equipments")
-    public ResponseEntity<List<Object>> getEquipments(
+    public ResponseEntity<List<EquipmentResponse>> getEquipments(
             @Parameter(description = "공장 ID", required = true) @PathVariable Long factoryId) {
         return ResponseEntity.ok(factoryService.getEquipments(factoryId));
     }
@@ -71,16 +74,16 @@ public class FactoryCtrl {
     @Operation(summary = "공장 재고 목록 조회", 
                description = "특정 공장이 소유한 재고 목록을 조회합니다.")
     @GetMapping("/{factoryId}/inventory")
-    public ResponseEntity<List<Object>> getInventory(
+    public ResponseEntity<List<InventoryResponse>> getInventory(
             @Parameter(description = "공장 ID", required = true) @PathVariable Long factoryId) {
-        return ResponseEntity.ok((List<Object>) (List<?>) factoryService.getInventory(factoryId));
+        return ResponseEntity.ok(factoryService.getInventory(factoryId));
     }
 
     @Operation(summary = "공장 수주 목록 조회", 
                description = "특정 공장이 받은 수주 목록을 조회합니다.")
     @GetMapping("/{factoryId}/orders")
-    public ResponseEntity<List<Object>> getOrders(
+    public ResponseEntity<List<OrderResponse>> getOrders(
             @Parameter(description = "공장 ID", required = true) @PathVariable Long factoryId) {
-        return ResponseEntity.ok((List<Object>) (List<?>) factoryService.getOrders(factoryId));
+        return ResponseEntity.ok(factoryService.getOrders(factoryId));
     }
 }
