@@ -6,7 +6,7 @@ import com.factory.tycoon.alarm.domain.entity.AlarmEntity;
 import com.factory.tycoon.alarm.domain.entity.AlarmLevel;
 import com.factory.tycoon.alarm.repository.AlarmRepository;
 import com.factory.tycoon.sensor.domain.entity.SensorEntity;
-import com.factory.tycoon.sensor.repository.SensorRepository;
+import com.factory.tycoon.sensor.service.SensorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class AlarmService {
 
     private final AlarmRepository alarmRepository;
-    private final SensorRepository sensorRepository;
+    private final SensorService sensorService;
 
     public List<AlarmResponse> getAllAlarms(String level, Boolean status) {
         if (level != null && status != null) {
@@ -45,8 +45,7 @@ public class AlarmService {
 
     @Transactional
     public AlarmResponse createAlarm(AlarmRequest request) {
-        SensorEntity sensor = sensorRepository.findById(request.getSensorId())
-                .orElseThrow(() -> new IllegalArgumentException("Sensor not found with id: " + request.getSensorId()));
+        SensorEntity sensor = sensorService.getSensorEntity(request.getSensorId());
 
         AlarmEntity alarm = AlarmEntity.builder()
                 .sensor(sensor)

@@ -48,6 +48,11 @@ public class SensorService {
         return new SensorResponse(saved);
     }
 
+    public SensorEntity getSensorEntity(Long id) {
+        return sensorRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Sensor not found with id: " + id));
+    }
+
     public SensorResponse getSensor(Long id) {
         SensorEntity sensor = sensorRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Sensor not found with id: " + id));
