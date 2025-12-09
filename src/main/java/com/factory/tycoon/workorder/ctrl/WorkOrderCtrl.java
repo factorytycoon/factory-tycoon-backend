@@ -3,6 +3,8 @@ package com.factory.tycoon.workorder.ctrl;
 import com.factory.tycoon.workorder.domain.dto.WorkOrderRequest;
 import com.factory.tycoon.workorder.domain.dto.WorkOrderResponse;
 import com.factory.tycoon.workorder.service.WorkOrderService;
+import com.factory.tycoon.schedule.domain.dto.ScheduleResponse;
+import com.factory.tycoon.schedule.service.ScheduleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,6 +21,7 @@ import java.util.List;
 public class WorkOrderCtrl {
 
     private final WorkOrderService workorderService;
+    private final ScheduleService scheduleService;
 
     @Operation(summary = "작업지시서 목록 조회", 
                description = "모든 작업지시서 목록을 조회합니다.")
@@ -60,11 +63,11 @@ public class WorkOrderCtrl {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "수주별 작업지시서 목록 조회", 
-               description = "특정 수주에 속한 작업지시서 목록을 조회합니다.")
+    @Operation(summary = "작업지시서의 스케줄 목록 조회", 
+               description = "특정 작업지시서에 속한 스케줄 목록을 조회합니다.")
     @GetMapping("/{workorderId}/schedules")
-    public ResponseEntity<List<WorkOrderResponse>> getWorkOrdersByOrderId(
+    public ResponseEntity<List<ScheduleResponse>> getSchedulesByWorkorderId(
             @Parameter(description = "작업지시서 ID", required = true) @PathVariable Long workorderId) {
-        return ResponseEntity.ok(workorderService.getWorkOrdersByOrderId(workorderId));
+        return ResponseEntity.ok(scheduleService.getSchedulesByWorkorderId(workorderId));
     }
 }
