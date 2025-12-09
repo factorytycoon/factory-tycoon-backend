@@ -1,0 +1,29 @@
+package com.factory.tycoon.workorder.domain.dto;
+
+import com.factory.tycoon.workorder.domain.entity.WorkOrderEntity;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@Getter
+@NoArgsConstructor
+public class WorkOrderResponse {
+    private Long workorderId;
+    private Long equipmentId;
+    private Long orderId;
+    private String productName;
+    private Integer targetAmount;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    public WorkOrderResponse(WorkOrderEntity workorder) {
+        this.workorderId = workorder.getWorkorderId();
+        this.equipmentId = workorder.getEquipmentId();
+        this.orderId = workorder.getOrderId();
+        this.productName = workorder.getProductName();
+        this.targetAmount = workorder.getTargetAmount();
+        this.createdAt = workorder.getCreatedAt();
+        this.updatedAt = workorder.getUpdatedAt();
+    }
+}
