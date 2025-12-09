@@ -69,4 +69,10 @@ public class OrderService {
                 .orElseThrow(() -> new IllegalArgumentException("Order not found with id: " + id));
         orderRepository.delete(order);
     }
+
+    public List<OrderResponse> getOrdersByFactoryId(Long factoryId) {
+        return orderRepository.findByFactory_FactoryId(factoryId).stream()
+                .map(OrderResponse::new)
+                .collect(Collectors.toList());
+    }
 }

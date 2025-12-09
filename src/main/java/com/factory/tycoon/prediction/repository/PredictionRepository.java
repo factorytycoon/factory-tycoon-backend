@@ -12,4 +12,5 @@ public interface PredictionRepository extends JpaRepository<PredictionEntity, Lo
     List<PredictionEntity> findByLevel(PredictionLevel level);
     List<PredictionEntity> findBySelected(Boolean selected);
     List<PredictionEntity> findByType(String type);
+    List<PredictionEntity> findByFactoryId(Long factoryId);
 }

@@ -1,15 +1,17 @@
 package com.factory.tycoon.factory.service;
 
 import com.factory.tycoon.equipment.domain.dto.EquipmentResponse;
-import com.factory.tycoon.equipment.repository.EquipmentRepository;
+import com.factory.tycoon.equipment.service.EquipmentService;
 import com.factory.tycoon.factory.domain.dto.FactoryRequest;
 import com.factory.tycoon.factory.domain.dto.FactoryResponse;
 import com.factory.tycoon.factory.domain.entity.FactoryEntity;
 import com.factory.tycoon.factory.repository.FactoryRepository;
 import com.factory.tycoon.inventory.domain.dto.InventoryResponse;
-import com.factory.tycoon.inventory.repository.InventoryRepository;
+import com.factory.tycoon.inventory.service.InventoryService;
 import com.factory.tycoon.order.domain.dto.OrderResponse;
-import com.factory.tycoon.order.repository.OrderRepository;
+import com.factory.tycoon.order.service.OrderService;
+import com.factory.tycoon.prediction.domain.dto.PredictionResponse;
+import com.factory.tycoon.prediction.service.PredictionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,9 +25,10 @@ import java.util.stream.Collectors;
 public class FactoryService {
 
     private final FactoryRepository factoryRepository;
-    private final EquipmentRepository equipmentRepository;
-    private final InventoryRepository inventoryRepository;
-    private final OrderRepository orderRepository;
+    private final EquipmentService equipmentService;
+    private final InventoryService inventoryService;
+    private final OrderService orderService;
+    private final PredictionService predictionService;
 
     public List<FactoryResponse> getFactories() {
         return factoryRepository.findAll().stream()
@@ -67,20 +70,18 @@ public class FactoryService {
     }
 
     public List<EquipmentResponse> getEquipments(Long factoryId) {
-        return equipmentRepository.findByFactory_FactoryId(factoryId).stream()
-                .map(EquipmentResponse::new)
-                .collect(Collectors.toList());
+        return equipmentService.getEquipmentsByFactoryId(factoryId);
     }
 
     public List<InventoryResponse> getInventory(Long factoryId) {
-        return inventoryRepository.findByFactory_FactoryId(factoryId).stream()
-                .map(InventoryResponse::new)
-                .collect(Collectors.toList());
+        return inventoryService.getInventoryByFactoryId(factoryId);
     }
 
     public List<OrderResponse> getOrders(Long factoryId) {
-        return orderRepository.findByFactory_FactoryId(factoryId).stream()
-                .map(OrderResponse::new)
-                .collect(Collectors.toList());
+        return orderService.getOrdersByFactoryId(factoryId);
+    }
+
+    public List<PredictionResponse> getPredictions(Long factoryId, String type, String level, Boolean selected) {
+        return predictionService.getPredictionsByFactory(factoryId, type, level, selected);
     }
 }

@@ -6,6 +6,7 @@ import com.factory.tycoon.factory.service.FactoryService;
 import com.factory.tycoon.equipment.domain.dto.EquipmentResponse;
 import com.factory.tycoon.inventory.domain.dto.InventoryResponse;
 import com.factory.tycoon.order.domain.dto.OrderResponse;
+import com.factory.tycoon.prediction.domain.dto.PredictionResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -85,5 +86,16 @@ public class FactoryCtrl {
     public ResponseEntity<List<OrderResponse>> getOrders(
             @Parameter(description = "공장 ID", required = true) @PathVariable Long factoryId) {
         return ResponseEntity.ok(factoryService.getOrders(factoryId));
+    }
+
+    @Operation(summary = "공장 예측값 조회",
+               description = "특정 공장의 예측값을 타입/레벨/선택여부로 필터링하여 조회합니다.")
+    @GetMapping("/{factoryId}/predictions")
+    public ResponseEntity<List<PredictionResponse>> getPredictionsByFactory(
+            @Parameter(description = "공장 ID", required = true) @PathVariable Long factoryId,
+            @Parameter(description = "예측 타입") @RequestParam(required = false) String type,
+            @Parameter(description = "예측 레벨 (warning/critical)") @RequestParam(required = false) String level,
+            @Parameter(description = "선택 상태 (true: 선택됨, false: 미선택)") @RequestParam(required = false) Boolean selected) {
+        return ResponseEntity.ok(factoryService.getPredictions(factoryId, type, level, selected));
     }
 }

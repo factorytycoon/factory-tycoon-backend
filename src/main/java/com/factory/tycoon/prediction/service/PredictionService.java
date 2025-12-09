@@ -20,30 +20,11 @@ public class PredictionService {
     private final PredictionRepository predictionRepository;
 
     public List<PredictionResponse> getAllPredictions(String type, String level, Boolean selected) {
-        List<PredictionEntity> predictions = predictionRepository.findAll();
+        return filterAndMap(predictionRepository.findAll(), type, level, selected);
+    }
 
-        if (type != null) {
-            predictions = predictions.stream()
-                    .filter(p -> p.getType().equalsIgnoreCase(type))
-                    .collect(Collectors.toList());
-        }
-
-        if (level != null) {
-            PredictionLevel predictionLevel = PredictionLevel.from(level);
-            predictions = predictions.stream()
-                    .filter(p -> p.getLevel() == predictionLevel)
-                    .collect(Collectors.toList());
-        }
-
-        if (selected != null) {
-            predictions = predictions.stream()
-                    .filter(p -> p.getSelected().equals(selected))
-                    .collect(Collectors.toList());
-        }
-
-        return predictions.stream()
-                .map(PredictionResponse::new)
-                .collect(Collectors.toList());
+    public List<PredictionResponse> getPredictionsByFactory(Long factoryId, String type, String level, Boolean selected) {
+        return filterAndMap(predictionRepository.findByFactoryId(factoryId), type, level, selected);
     }
 
     @Transactional
@@ -78,5 +59,30 @@ public class PredictionService {
         PredictionEntity prediction = predictionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Prediction not found with id: " + id));
         predictionRepository.delete(prediction);
+    }
+
+    private List<PredictionResponse> filterAndMap(List<PredictionEntity> predictions, String type, String level, Boolean selected) {
+        if (type != null) {
+            predictions = predictions.stream()
+                    .filter(p -> p.getType().equalsIgnoreCase(type))
+                    .collect(Collectors.toList());
+        }
+
+        if (level != null) {
+            PredictionLevel predictionLevel = PredictionLevel.from(level);
+            predictions = predictions.stream()
+                    .filter(p -> p.getLevel() == predictionLevel)
+                    .collect(Collectors.toList());
+        }
+
+        if (selected != null) {
+            predictions = predictions.stream()
+                    .filter(p -> p.getSelected().equals(selected))
+                    .collect(Collectors.toList());
+        }
+
+        return predictions.stream()
+                .map(PredictionResponse::new)
+                .collect(Collectors.toList());
     }
 }
