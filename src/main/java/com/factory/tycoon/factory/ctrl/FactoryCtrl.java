@@ -75,4 +75,12 @@ public class FactoryCtrl {
             @Parameter(description = "공장 ID", required = true) @PathVariable Long factoryId) {
         return ResponseEntity.ok((List<Object>) (List<?>) factoryService.getInventory(factoryId));
     }
+
+    @Operation(summary = "공장 수주 목록 조회", 
+               description = "특정 공장이 받은 수주 목록을 조회합니다.")
+    @GetMapping("/{factoryId}/orders")
+    public ResponseEntity<List<Object>> getOrders(
+            @Parameter(description = "공장 ID", required = true) @PathVariable Long factoryId) {
+        return ResponseEntity.ok((List<Object>) (List<?>) factoryService.getOrders(factoryId));
+    }
 }
