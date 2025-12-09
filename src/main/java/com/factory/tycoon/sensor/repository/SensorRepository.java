@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface SensorRepository extends JpaRepository<SensorEntity, Long> {
     List<SensorEntity> findByEquipment_EquipmentId(Long equipmentId);
+    List<SensorEntity> findByType(String type);
 }

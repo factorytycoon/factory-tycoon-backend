@@ -82,4 +82,10 @@ public class SensorService {
         // TODO: replace with real sensor data
         return List.of();
     }
+
+    public List<SensorResponse> getSensorsByType(String sensorType) {
+        return sensorRepository.findByType(sensorType).stream()
+                .map(SensorResponse::new)
+                .collect(Collectors.toList());
+    }
 }

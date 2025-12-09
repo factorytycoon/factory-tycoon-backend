@@ -22,10 +22,14 @@ public class SensorCtrl {
 
     private final SensorService sensorService;
 
-    @Operation(summary = "센서 목록 조회", description = "등록된 모든 센서 목록을 조회합니다.")
+    @Operation(summary = "센서 목록 조회", description = "등록된 모든 센서 목록을 조회하거나 타입별로 필터링합니다.")
     @GetMapping
-    public ResponseEntity<List<SensorResponse>> getSensors() {
-        return ResponseEntity.ok(sensorService.getSensors());
+    public ResponseEntity<List<SensorResponse>> getSensors(
+            @Parameter(description = "센서 타입 (선택사항)") @RequestParam(required = false) String sensorType) {
+        if (sensorType == null || sensorType.trim().isEmpty()) {
+            return ResponseEntity.ok(sensorService.getSensors());
+        }
+        return ResponseEntity.ok(sensorService.getSensorsByType(sensorType));
     }
 
     @Operation(summary = "센서 등록", description = "새로운 센서를 등록합니다.")
