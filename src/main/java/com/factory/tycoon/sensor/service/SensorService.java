@@ -1,5 +1,7 @@
 package com.factory.tycoon.sensor.service;
 
+import com.factory.tycoon.alarm.domain.dto.AlarmResponse;
+import com.factory.tycoon.alarm.repository.AlarmRepository;
 import com.factory.tycoon.equipment.domain.entity.EquipmentEntity;
 import com.factory.tycoon.equipment.repository.EquipmentRepository;
 import com.factory.tycoon.sensordata.domain.dto.SensorDataResponse;
@@ -24,6 +26,7 @@ public class SensorService {
     private final SensorRepository sensorRepository;
     private final EquipmentRepository equipmentRepository;
     private final SensorDataRepository sensorDataRepository;
+    private final AlarmRepository alarmRepository;
 
     public List<SensorResponse> getSensors() {
         return sensorRepository.findAll().stream()
@@ -75,8 +78,10 @@ public class SensorService {
     public List<Object> getAlarms(Long sensorId) {
         sensorRepository.findById(sensorId)
                 .orElseThrow(() -> new IllegalArgumentException("Sensor not found with id: " + sensorId));
-        // TODO: replace with real alarm data
-        return List.of();
+        
+        return alarmRepository.findBySensor_SensorId(sensorId).stream()
+                .map(AlarmResponse::new)
+                .collect(Collectors.toList());
     }
 
     public List<Object> getSensorData(Long sensorId, LocalDate date, String sensorType) {
