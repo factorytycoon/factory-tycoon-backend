@@ -1,0 +1,11 @@
+CREATE TABLE prediction (
+    prediction_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    factory_id BIGINT NOT NULL,
+    type VARCHAR(100) NOT NULL,
+    level VARCHAR(50) NOT NULL,
+    message TEXT,
+    selected BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (factory_id) REFERENCES factory(factory_id)
+);
