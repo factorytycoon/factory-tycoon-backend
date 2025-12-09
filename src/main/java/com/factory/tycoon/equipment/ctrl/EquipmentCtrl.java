@@ -60,14 +60,6 @@ public class EquipmentCtrl {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "공장별 설비 목록 조회", 
-               description = "특정 공장에 속한 설비 목록을 조회합니다.")
-    @GetMapping("/factory/{factoryId}")
-    public ResponseEntity<List<EquipmentResponse>> getEquipmentsByFactoryId(
-            @Parameter(description = "공장 ID", required = true) @PathVariable Long factoryId) {
-        return ResponseEntity.ok(equipmentService.getEquipmentsByFactoryId(factoryId));
-    }
-
     @Operation(summary = "설비 센서 목록 조회", 
                description = "특정 설비에 속한 센서 목록을 조회합니다.")
     @GetMapping("/{equipmentId}/sensors")
