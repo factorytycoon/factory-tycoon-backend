@@ -1,5 +1,7 @@
 package com.factory.tycoon.sensordata.service;
 
+import com.factory.tycoon.sensoranalysis.domain.dto.SensorAnalysisResponse;
+import com.factory.tycoon.sensoranalysis.repository.SensorAnalysisRepository;
 import com.factory.tycoon.sensordata.domain.dto.SensorDataRequest;
 import com.factory.tycoon.sensordata.domain.dto.SensorDataResponse;
 import com.factory.tycoon.sensordata.domain.entity.SensorDataEntity;
@@ -21,6 +23,7 @@ public class SensorDataService {
 
     private final SensorDataRepository sensorDataRepository;
     private final SensorRepository sensorRepository;
+    private final SensorAnalysisRepository sensorAnalysisRepository;
 
     public List<SensorDataResponse> getAllSensorData() {
         return sensorDataRepository.findAll().stream()
@@ -69,7 +72,9 @@ public class SensorDataService {
     public Object getSensorAnalysis(Long sensorDataId) {
         sensorDataRepository.findById(sensorDataId)
                 .orElseThrow(() -> new IllegalArgumentException("SensorData not found with id: " + sensorDataId));
-        // TODO: implement sensor analysis logic
-        return new Object();
+        
+        return sensorAnalysisRepository.findBySensorData_SensorDataId(sensorDataId)
+                .map(SensorAnalysisResponse::new)
+                .orElse(null);
     }
 }
