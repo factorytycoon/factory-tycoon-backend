@@ -1,10 +1,11 @@
-package com.factory.tycoon.factory.dto;
+package com.factory.tycoon.factory.domain.dto;
 
-import com.factory.tycoon.factory.domain.Factory;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+
+import com.factory.tycoon.factory.domain.entity.FactoryEntity;
 
 @Getter
 @NoArgsConstructor
@@ -17,7 +18,7 @@ public class FactoryResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public FactoryResponse(Factory factory) {
+    public FactoryResponse(FactoryEntity factory) {
         this.factoryId = factory.getFactoryId();
         this.name = factory.getName();
         this.location = factory.getLocation();

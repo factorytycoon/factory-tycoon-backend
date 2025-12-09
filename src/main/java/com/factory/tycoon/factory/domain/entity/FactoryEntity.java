@@ -1,4 +1,4 @@
-package com.factory.tycoon.factory.domain;
+package com.factory.tycoon.factory.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Factory {
+public class FactoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,4 +1,4 @@
-package com.factory.tycoon.factory.dto;
+package com.factory.tycoon.factory.domain.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

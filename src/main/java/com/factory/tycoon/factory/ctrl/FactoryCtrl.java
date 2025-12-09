@@ -1,7 +1,7 @@
 package com.factory.tycoon.factory.ctrl;
 
-import com.factory.tycoon.factory.dto.FactoryRequest;
-import com.factory.tycoon.factory.dto.FactoryResponse;
+import com.factory.tycoon.factory.domain.dto.FactoryRequest;
+import com.factory.tycoon.factory.domain.dto.FactoryResponse;
 import com.factory.tycoon.factory.service.FactoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,8 +1,8 @@
 package com.factory.tycoon.factory.service;
 
-import com.factory.tycoon.factory.domain.Factory;
-import com.factory.tycoon.factory.dto.FactoryRequest;
-import com.factory.tycoon.factory.dto.FactoryResponse;
+import com.factory.tycoon.factory.domain.dto.FactoryRequest;
+import com.factory.tycoon.factory.domain.dto.FactoryResponse;
+import com.factory.tycoon.factory.domain.entity.FactoryEntity;
 import com.factory.tycoon.factory.repository.FactoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,25 +27,25 @@ public class FactoryService {
 
     @Transactional
     public FactoryResponse createFactory(FactoryRequest request) {
-        Factory factory = Factory.builder()
+        FactoryEntity factory = FactoryEntity.builder()
                 .name(request.getName())
                 .location(request.getLocation())
                 .description(request.getDescription())
                 .phone(request.getPhone())
                 .build();
-        Factory savedFactory = factoryRepository.save(factory);
+        FactoryEntity savedFactory = factoryRepository.save(factory);
         return new FactoryResponse(savedFactory);
     }
 
     public FactoryResponse getFactory(Long id) {
-        Factory factory = factoryRepository.findById(id)
+        FactoryEntity factory = factoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Factory not found with id: " + id));
         return new FactoryResponse(factory);
     }
 
     @Transactional
     public FactoryResponse updateFactory(Long id, FactoryRequest request) {
-        Factory factory = factoryRepository.findById(id)
+        FactoryEntity factory = factoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Factory not found with id: " + id));
         factory.update(request.getName(), request.getLocation(), request.getDescription(), request.getPhone());
         return new FactoryResponse(factory);
@@ -53,7 +53,7 @@ public class FactoryService {
 
     @Transactional
     public void deleteFactory(Long id) {
-        Factory factory = factoryRepository.findById(id)
+        FactoryEntity factory = factoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Factory not found with id: " + id));
         factoryRepository.delete(factory);
     }
