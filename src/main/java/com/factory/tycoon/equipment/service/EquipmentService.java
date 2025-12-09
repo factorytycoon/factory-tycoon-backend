@@ -7,6 +7,8 @@ import com.factory.tycoon.equipment.domain.entity.EquipmentStatus;
 import com.factory.tycoon.equipment.repository.EquipmentRepository;
 import com.factory.tycoon.factory.domain.entity.FactoryEntity;
 import com.factory.tycoon.factory.repository.FactoryRepository;
+import com.factory.tycoon.sensor.domain.dto.SensorResponse;
+import com.factory.tycoon.sensor.repository.SensorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,7 @@ public class EquipmentService {
 
     private final EquipmentRepository equipmentRepository;
     private final FactoryRepository factoryRepository;
+    private final SensorRepository sensorRepository;
 
     public List<EquipmentResponse> getEquipments() {
         return equipmentRepository.findAll().stream()
@@ -72,9 +75,11 @@ public class EquipmentService {
     }
 
     public List<Object> getSensors(Long equipmentId) {
-        // TODO: Implement sensor logic
         equipmentRepository.findById(equipmentId)
                 .orElseThrow(() -> new IllegalArgumentException("Equipment not found with id: " + equipmentId));
-        return List.of();
+        
+        return sensorRepository.findByEquipment_EquipmentId(equipmentId).stream()
+                .map(SensorResponse::new)
+                .collect(Collectors.toList());
     }
 }
