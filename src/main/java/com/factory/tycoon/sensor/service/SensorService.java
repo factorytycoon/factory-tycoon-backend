@@ -2,9 +2,11 @@ package com.factory.tycoon.sensor.service;
 
 import com.factory.tycoon.equipment.domain.entity.EquipmentEntity;
 import com.factory.tycoon.equipment.repository.EquipmentRepository;
+import com.factory.tycoon.sensordata.domain.dto.SensorDataResponse;
 import com.factory.tycoon.sensor.domain.dto.SensorRequest;
 import com.factory.tycoon.sensor.domain.dto.SensorResponse;
 import com.factory.tycoon.sensor.domain.entity.SensorEntity;
+import com.factory.tycoon.sensordata.repository.SensorDataRepository;
 import com.factory.tycoon.sensor.repository.SensorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ public class SensorService {
 
     private final SensorRepository sensorRepository;
     private final EquipmentRepository equipmentRepository;
+    private final SensorDataRepository sensorDataRepository;
 
     public List<SensorResponse> getSensors() {
         return sensorRepository.findAll().stream()
@@ -79,8 +82,15 @@ public class SensorService {
     public List<Object> getSensorData(Long sensorId, LocalDate date, String sensorType) {
         sensorRepository.findById(sensorId)
                 .orElseThrow(() -> new IllegalArgumentException("Sensor not found with id: " + sensorId));
-        // TODO: replace with real sensor data
-        return List.of();
+        
+        if (date != null) {
+            return sensorDataRepository.findBySensor_SensorIdAndDate(sensorId, date).stream()
+                    .map(SensorDataResponse::new)
+                    .collect(Collectors.toList());
+        }
+        return sensorDataRepository.findBySensor_SensorId(sensorId).stream()
+                .map(SensorDataResponse::new)
+                .collect(Collectors.toList());
     }
 
     public List<SensorResponse> getSensorsByType(String sensorType) {
