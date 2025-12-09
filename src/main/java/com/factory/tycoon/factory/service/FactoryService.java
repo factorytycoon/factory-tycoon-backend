@@ -1,5 +1,7 @@
 package com.factory.tycoon.factory.service;
 
+import com.factory.tycoon.equipment.domain.dto.EquipmentResponse;
+import com.factory.tycoon.equipment.repository.EquipmentRepository;
 import com.factory.tycoon.factory.domain.dto.FactoryRequest;
 import com.factory.tycoon.factory.domain.dto.FactoryResponse;
 import com.factory.tycoon.factory.domain.entity.FactoryEntity;
@@ -8,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 public class FactoryService {
 
     private final FactoryRepository factoryRepository;
+    private final EquipmentRepository equipmentRepository;
 
     public List<FactoryResponse> getFactories() {
         return factoryRepository.findAll().stream()
@@ -59,7 +61,8 @@ public class FactoryService {
     }
 
     public List<Object> getEquipments(Long factoryId) {
-        // TODO: Implement equipment logic
-        return Collections.emptyList();
+        return equipmentRepository.findByFactory_FactoryId(factoryId).stream()
+                .map(EquipmentResponse::new)
+                .collect(Collectors.toList());
     }
 }
