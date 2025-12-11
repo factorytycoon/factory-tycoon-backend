@@ -41,13 +41,13 @@ jobs:
           push: true
           platforms: linux/amd64
           tags: |
-            ${{ steps.login-ecr.outputs.registry }}/factory-tycoon:latest
-            ${{ steps.login-ecr.outputs.registry }}/factory-tycoon:${{ github.sha }}
-          cache-from: type=registry,ref=${{ steps.login-ecr.outputs.registry }}/factory-tycoon:latest
+            ${{ steps.login-ecr.outputs.registry }}/sf-backend:latest
+            ${{ steps.login-ecr.outputs.registry }}/sf-backend:${{ github.sha }}
+          cache-from: type=registry,ref=${{ steps.login-ecr.outputs.registry }}/sf-backend:latest
           cache-to: type=inline
 
       - name: Image digest
         run: |
           echo "Image pushed to ECR:"
-          echo "${{ steps.login-ecr.outputs.registry }}/factory-tycoon:latest"
-          echo "${{ steps.login-ecr.outputs.registry }}/factory-tycoon:${{ github.sha }}"
+          echo "${{ steps.login-ecr.outputs.registry }}/sf-backend:latest"
+          echo "${{ steps.login-ecr.outputs.registry }}/sf-backend:${{ github.sha }}"
