@@ -55,7 +55,7 @@ jobs:
       - name: Update k8s Backend Deployment Manifest
         run: |
           git clone https://github.com/lgcns5team/factory-tycoon-k8s
-          cd factory-tycooon-k8s/be
+          cd factory-tycoon-k8s/be
           sed -i "s|image:.*|image: ${{ steps.login-ecr.outputs.registry }}/sf-backend:${{ github.sha }}|g" deployment.yaml
           cd ..
           git config --global user.email "actions@github.com"
