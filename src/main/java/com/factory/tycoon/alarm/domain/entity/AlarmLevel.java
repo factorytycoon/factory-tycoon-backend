@@ -3,8 +3,8 @@ package com.factory.tycoon.alarm.domain.entity;
 import java.util.Arrays;
 
 public enum AlarmLevel {
-    WARNING,
-    CRITICAL;
+    warning,
+    critical;
 
     public static AlarmLevel from(String value) {
         if (value == null) {

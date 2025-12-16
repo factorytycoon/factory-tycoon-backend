@@ -3,9 +3,9 @@ package com.factory.tycoon.equipment.domain.entity;
 import java.util.Arrays;
 
 public enum EquipmentStatus {
-    NORMAL,
-    WARNING,
-    ERROR;
+    normal,
+    warning,
+    error;
 
     public static EquipmentStatus from(String value) {
         if (value == null) {

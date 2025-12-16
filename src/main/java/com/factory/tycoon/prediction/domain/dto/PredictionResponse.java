@@ -22,7 +22,7 @@ public class PredictionResponse {
         this.predictionId = prediction.getPredictionId();
         this.factoryId = prediction.getFactoryId();
         this.type = prediction.getType();
-        this.level = prediction.getLevel().getValue();
+        this.level = prediction.getLevel().name();
         this.message = prediction.getMessage();
         this.selected = prediction.getSelected();
         this.createdAt = prediction.getCreatedAt();
