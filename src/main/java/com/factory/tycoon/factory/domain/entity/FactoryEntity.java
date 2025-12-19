@@ -37,6 +37,9 @@ public class FactoryEntity {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "factory_code", length = 20)
+    private String factoryCode; //공장 코드
+
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
@@ -47,4 +50,13 @@ public class FactoryEntity {
         this.description = description;
         this.phone = phone;
     }
+
+    public void setFactoryCode(String factoryCode) {
+        this.factoryCode = factoryCode;
+    } //공장코드 setter
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }
