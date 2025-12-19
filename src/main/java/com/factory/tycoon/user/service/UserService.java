@@ -13,6 +13,8 @@ import com.factory.tycoon.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -23,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
     private final FactoryRepository factoryRepository;
@@ -67,6 +71,7 @@ public class UserService {
     //로그인
     @Transactional(readOnly = true)
     public UserResponse.AuthResponse login(UserRequest.LoginRequest req) {
+        logger.info("Login request received: email={}", req.email());
         UserEntity user = userRepository.findByEmail(req.email())
                 .orElseThrow(() -> new IllegalArgumentException("이메일 또는 비밀번호가 올바르지 않습니다."));
 
