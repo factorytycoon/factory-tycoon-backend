@@ -13,6 +13,13 @@ spring:
     password: ${MARIADB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+      
+
   flyway:
     enabled: true
     baseline-on-migrate: true
@@ -23,3 +30,8 @@ spring:
     clean-disabled: true
     out-of-order: false
     table: flyway_schema_history
+
+jwt:
+  secret: ${JWT_SECRET_KEY}
+  access-ttl-ms: ${JWT_ACCESS_TTL_MS}
+  refresh-ttl-ms: ${JWT_REFRESH_TTL_MS}

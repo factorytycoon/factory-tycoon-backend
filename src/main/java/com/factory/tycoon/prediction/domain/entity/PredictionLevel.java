@@ -1,25 +1,18 @@
 package com.factory.tycoon.prediction.domain.entity;
 
+import java.util.Arrays;
+
 public enum PredictionLevel {
-    WARNING("warning"),
-    CRITICAL("critical");
-
-    private final String value;
-
-    PredictionLevel(String value) {
-        this.value = value;
-    }
-
-    public String getValue() {
-        return value;
-    }
+    warning,
+    critical;
 
     public static PredictionLevel from(String value) {
-        for (PredictionLevel level : PredictionLevel.values()) {
-            if (level.value.equalsIgnoreCase(value)) {
-                return level;
-            }
+        if (value == null) {
+            throw new IllegalArgumentException("Prediction level cannot be null");
         }
-        throw new IllegalArgumentException("Invalid prediction level: " + value);
+        return Arrays.stream(values())
+                .filter(v -> v.name().equalsIgnoreCase(value))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Invalid prediction level: " + value));
     }
 }
