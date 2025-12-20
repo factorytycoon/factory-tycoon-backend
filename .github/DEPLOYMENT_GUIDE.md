@@ -15,6 +15,7 @@ Repository Settings → Secrets and variables → Actions에서 다음 시크릿
 AWS_ACCESS_KEY_ID         # AWS IAM Access Key ID
 AWS_SECRET_ACCESS_KEY     # AWS IAM Secret Access Key
 AWS_REGION                # AWS Region (예: ap-northeast-2)
+GH_PAT                    # GitHub Personal Access Token (factory-tycoon-k8s 저장소 push 권한 필요)
 ```
 
 ### 2. AWS 리소스 준비
