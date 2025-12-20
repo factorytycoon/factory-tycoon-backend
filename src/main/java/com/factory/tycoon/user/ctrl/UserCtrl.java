@@ -1,0 +1,40 @@
+package com.factory.tycoon.user.ctrl;
+
+import com.factory.tycoon.user.domain.dto.UserRequest;
+import com.factory.tycoon.user.domain.dto.UserResponse;
+import com.factory.tycoon.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@Tag(name = "User", description = "회원가입/로그인 API")
+@RestController
+@RequestMapping("/api/v1/ft/user")
+@RequiredArgsConstructor
+public class UserCtrl {
+
+    private final UserService userService;
+
+    @Operation(summary = "회원가입", description = "owner: 업종에 따라 공장코드를 자동 생성 / worker : 공장코드를 입력해 가입")
+    @PostMapping("/signup")
+    public ResponseEntity<UserResponse.SignupResponse> signup(@RequestBody UserRequest.SignupRequest request) {
+        return ResponseEntity.ok(userService.signup(request));
+    }
+
+    @Operation(summary = "로그인", description = "이메일/비밀번호로 로그인하고 accessToken을 발급")
+    @PostMapping("/login")
+    public ResponseEntity<UserResponse.AuthResponse> login(@RequestBody UserRequest.LoginRequest request) {
+        return ResponseEntity.ok(userService.login(request));
+    }
+
+    @Operation(summary = "로그아웃", description = "refreshToken이 있으면 Redis에서 폐기")
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestBody(required = false) UserRequest.LogoutRequest request) {
+        if (request != null && request.refreshToken() != null && !request.refreshToken().isBlank()) {
+            userService.logout(request.refreshToken());
+        }
+        return ResponseEntity.ok().build();
+    }
+}
