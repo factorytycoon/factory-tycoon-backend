@@ -12,4 +12,7 @@ public class WorkOrderRequest {
     private Long orderId;
     private String productName;
     private Integer targetAmount;
+    private String customerName;
+    private Boolean status;
+    private String price;
 }
