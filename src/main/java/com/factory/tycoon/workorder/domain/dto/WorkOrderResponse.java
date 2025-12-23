@@ -14,6 +14,9 @@ public class WorkOrderResponse {
     private Long orderId;
     private String productName;
     private Integer targetAmount;
+    private String customerName;
+    private Boolean status;
+    private String price;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -23,6 +26,9 @@ public class WorkOrderResponse {
         this.orderId = workorder.getOrderId();
         this.productName = workorder.getProductName();
         this.targetAmount = workorder.getTargetAmount();
+        this.customerName = workorder.getCustomerName();
+        this.status = workorder.getStatus();
+        this.price = workorder.getPrice();
         this.createdAt = workorder.getCreatedAt();
         this.updatedAt = workorder.getUpdatedAt();
     }

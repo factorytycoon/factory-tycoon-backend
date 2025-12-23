@@ -36,6 +36,16 @@ public class WorkOrderEntity {
     @Column(nullable = false)
     private Integer targetAmount;
 
+    @Column(name = "customer_name")
+    private String customerName;
+
+    @Builder.Default
+    @Column(nullable = false)
+    private Boolean status = false;
+
+    @Column
+    private String price;
+
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
