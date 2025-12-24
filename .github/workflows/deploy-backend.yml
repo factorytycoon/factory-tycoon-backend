@@ -3,6 +3,7 @@ name: Deploy Factory Tycoon Backend
 on:
   push:
     branches:
+      - main
       - deploy
     paths:
       - 'src/**'
