@@ -60,3 +60,7 @@ jobs:
           sed -i "s|image:.*|image: ${{ steps.login-ecr.outputs.registry }}/sf-backend:${{ github.sha }}|g" deployment.yaml
           cd ..
           git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions"
+          git add .
+          git commit -m "Update BE image tag to ${{ github.sha }}"
+          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/lgcns5team/factory-tycoon-k8s.git
