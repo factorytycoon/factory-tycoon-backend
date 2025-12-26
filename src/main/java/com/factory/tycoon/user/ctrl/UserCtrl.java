@@ -3,6 +3,8 @@ package com.factory.tycoon.user.ctrl;
 import com.factory.tycoon.user.domain.dto.UserRequest;
 import com.factory.tycoon.user.domain.dto.UserResponse;
 import com.factory.tycoon.user.service.UserService;
+
+import java.util.List;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -37,4 +39,11 @@ public class UserCtrl {
         }
         return ResponseEntity.ok().build();
     }
+
+    @Operation(summary = "유저 조회", description = "역할로 유저 목록 조회 (role=worker 또는 role=owner)")
+    @GetMapping("/list")
+    public ResponseEntity<List<UserResponse.WorkerResponse>> getUsersByRole(@RequestParam String role) {
+        return ResponseEntity.ok(userService.findByRole(role));
+    }
+
 }

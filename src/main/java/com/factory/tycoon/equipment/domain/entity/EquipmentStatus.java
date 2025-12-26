@@ -5,7 +5,9 @@ import java.util.Arrays;
 public enum EquipmentStatus {
     normal,
     warning,
-    error;
+    error,
+    on,
+    off;
 
     public static EquipmentStatus from(String value) {
         if (value == null) {
