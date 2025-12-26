@@ -15,4 +15,13 @@ public class UserResponse {
             String role,
             String accessToken
     ) {}
+
+    public record WorkerResponse(
+            Long userId,
+            String name,
+            String email,
+            String phone,
+            Long factoryId,
+            String factoryCode
+    ) {}
 }

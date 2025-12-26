@@ -125,4 +125,20 @@ public class UserService {
         return factoryRepository.findByFactoryCode(req.factoryCode())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 공장 코드입니다."));
     }
+
+    // 역할별 사용자 조회
+    @Transactional(readOnly = true)
+    public java.util.List<UserResponse.WorkerResponse> findByRole(String role) {
+        UserRole userRole = UserRole.from(role);
+        return userRepository.findByRole(userRole).stream()
+                .map(user -> new UserResponse.WorkerResponse(
+                        user.getUserId(),
+                        user.getName(),
+                        user.getEmail(),
+                        user.getPhone(),
+                        user.getFactory().getFactoryId(),
+                        user.getFactory().getFactoryCode()
+                ))
+                .toList();
+    }
 }
