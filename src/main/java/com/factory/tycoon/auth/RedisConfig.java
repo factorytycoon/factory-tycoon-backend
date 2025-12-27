@@ -17,15 +17,15 @@ public class RedisConfig {
 
     @Value("${spring.data.redis.port}")
     private int port;
-    @Value("${spring.data.redis.password}")
-    private String password;
+    // @Value("${spring.data.redis.password}")
+    // private String password;
     
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
         config.setHostName(host);
         config.setPort(port);
-        config.setPassword(password); // 비밀번호가 설정되어 있지 않은 경우 빈 문자열로 설정
+        // config.setPassword(password); // 비밀번호가 설정되어 있지 않은 경우 빈 문자열로 설정
  
         return new LettuceConnectionFactory(config);
     }
