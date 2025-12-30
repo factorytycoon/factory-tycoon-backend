@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/ft/user")
 @RequiredArgsConstructor
 public class UserCtrl {
+    @Operation(summary = "공장별 작업자 목록 조회", description = "특정 factoryId의 worker 목록 조회")
+    @GetMapping("/factory/{factoryId}/workers")
+    public ResponseEntity<List<UserResponse.WorkerResponse>> getWorkersByFactoryId(@PathVariable Long factoryId) {
+        return ResponseEntity.ok(userService.findWorkersByFactoryId(factoryId));
+    }
 
     private final UserService userService;
     private final com.factory.tycoon.auth.TokenService tokenService;

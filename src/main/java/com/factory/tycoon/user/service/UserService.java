@@ -23,6 +23,34 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+    // userId로 사용자 정보 반환
+    @Transactional(readOnly = true)
+    public com.factory.tycoon.user.domain.dto.UserResponse.AuthResponse getUserInfo(Long userId) {
+    UserEntity user = userRepository.findById(userId)
+        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+    return new com.factory.tycoon.user.domain.dto.UserResponse.AuthResponse(
+        user.getUserId(),
+        user.getFactory().getFactoryId(),
+        user.getRole().toApiValue(),
+        null // accessToken은 반환하지 않음
+    );
+    }
+
+    // 특정 factoryId에 속한 worker 목록 반환
+    @Transactional(readOnly = true)
+    public java.util.List<UserResponse.WorkerResponse> findWorkersByFactoryId(Long factoryId) {
+    com.factory.tycoon.user.domain.entity.UserRole workerRole = com.factory.tycoon.user.domain.entity.UserRole.WORKER;
+    return userRepository.findByFactory_FactoryIdAndRole(factoryId, workerRole).stream()
+        .map(user -> new UserResponse.WorkerResponse(
+            user.getUserId(),
+            user.getName(),
+            user.getEmail(),
+            user.getPhone(),
+            user.getFactory().getFactoryId(),
+            user.getFactory().getFactoryCode()
+        ))
+        .toList();
+    }
 
     private final UserRepository userRepository;
     private final FactoryRepository factoryRepository;
