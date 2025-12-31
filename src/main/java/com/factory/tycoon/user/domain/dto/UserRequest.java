@@ -11,6 +11,7 @@ public class UserRequest {
             String email,
             String password,
             String role,        // owner / worker
+            String location,
             String industry,    // owner만 사용(저장 X)
             String factoryCode,  // worker만 사용
             String factoryName // owner만 사용

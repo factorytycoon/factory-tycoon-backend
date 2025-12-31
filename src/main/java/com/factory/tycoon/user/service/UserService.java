@@ -134,9 +134,10 @@ public class UserService {
             String prefix = factoryCodeGenerator.industryToPrefix(req.industry());
             String factoryCode = factoryCodeGenerator.nextFactoryCode(prefix);
 
-            // 공장 생성
+            // 공장 생성 (location 포함)
             FactoryEntity factory = FactoryEntity.builder()
                     .name(req.factoryName())
+                    .location(req.location())
                     .build();
 
             // FactoryEntity에 factoryCode 필드가 있어야 set 가능
