@@ -1,7 +1,8 @@
-package com.factory.tycoon.oepnserch.sensordata.service;
+package com.factory.tycoon.oepnsearch.sensordata.service;
 
-import com.factory.tycoon.oepnserch.sensordata.document.SensorDataDocument;
 import org.springframework.stereotype.Service;
+
+import com.factory.tycoon.oepnsearch.sensordata.document.SensorDataDocument;
 
 import java.util.DoubleSummaryStatistics;
 import java.util.HashMap;

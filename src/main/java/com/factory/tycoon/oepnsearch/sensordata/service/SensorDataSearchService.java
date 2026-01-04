@@ -1,6 +1,5 @@
-package com.factory.tycoon.oepnserch.sensordata.service;
+package com.factory.tycoon.oepnsearch.sensordata.service;
 
-import com.factory.tycoon.oepnserch.sensordata.document.SensorDataDocument;
 import org.opensearch.client.opensearch.OpenSearchClient;
 import org.opensearch.client.opensearch._types.query_dsl.Query;
 import org.opensearch.client.opensearch.core.SearchRequest;
@@ -9,6 +8,8 @@ import org.opensearch.client.opensearch.core.search.Hit;
 import org.opensearch.client.json.JsonData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.factory.tycoon.oepnsearch.sensordata.document.SensorDataDocument;
 
 import java.io.IOException;
 import java.time.LocalDate;

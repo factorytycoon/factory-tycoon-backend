@@ -1,8 +1,5 @@
-package com.factory.tycoon.oepnserch.sensordata.ctrl;
+package com.factory.tycoon.oepnsearch.sensordata.ctrl;
 
-import com.factory.tycoon.oepnserch.sensordata.document.SensorDataDocument;
-import com.factory.tycoon.oepnserch.sensordata.service.SensorDataSearchService;
-import com.factory.tycoon.oepnserch.sensordata.service.SensorDataAnalysisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.factory.tycoon.oepnsearch.sensordata.document.SensorDataDocument;
+import com.factory.tycoon.oepnsearch.sensordata.service.SensorDataAnalysisService;
+import com.factory.tycoon.oepnsearch.sensordata.service.SensorDataSearchService;
 
 import java.io.IOException;
 import java.time.LocalDate;

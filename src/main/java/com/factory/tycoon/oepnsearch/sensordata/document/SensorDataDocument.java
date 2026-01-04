@@ -1,4 +1,4 @@
-package com.factory.tycoon.oepnserch.sensordata.document;
+package com.factory.tycoon.oepnsearch.sensordata.document;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
