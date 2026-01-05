@@ -69,11 +69,11 @@ public class SensorDataService {
                 .collect(Collectors.toList());
     }
 
-    public Object getSensorAnalysis(Long sensorDataId) {
-        sensorDataRepository.findById(sensorDataId)
+    public SensorAnalysisResponse getSensorAnalysis(Long sensorDataId) {
+        SensorDataEntity sensorData = sensorDataRepository.findById(sensorDataId)
                 .orElseThrow(() -> new IllegalArgumentException("SensorData not found with id: " + sensorDataId));
         
-        return sensorAnalysisRepository.findBySensorData_SensorDataId(sensorDataId)
+        return sensorAnalysisRepository.findBySensor_SensorIdAndDate(sensorData.getSensor().getSensorId(), sensorData.getDate())
                 .map(SensorAnalysisResponse::new)
                 .orElse(null);
     }
