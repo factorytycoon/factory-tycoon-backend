@@ -22,12 +22,14 @@ spring:
     enabled: true
     baseline-on-migrate: true
     baseline-version: 0
-    locations: classpath:db/migration  # TODO: 마이그레이션 스크립트 위치 변경 가능
+    locations: classpath:db/migration
     encoding: UTF-8
     validate-on-migrate: false
     clean-disabled: true
     out-of-order: false
     table: flyway_schema_history
+    create-schemas: true
+    schemas: factory-tycoon-temp
 
 jwt:
   secret: ${JWT_SECRET_KEY}

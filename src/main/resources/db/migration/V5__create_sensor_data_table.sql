@@ -4,8 +4,7 @@ CREATE TABLE sensor_data (
     path VARCHAR(500),
     date DATE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (sensor_id) REFERENCES sensor(sensor_id) ON DELETE CASCADE
+    FOREIGN KEY (sensor_id) REFERENCES sensor(sensor_id) ON DELETE CASCADE,
+    INDEX idx_sensor_data_sensor_id (sensor_id),
+    INDEX idx_sensor_data_date (date)
 );
-
-CREATE INDEX idx_sensor_data_sensor_id ON sensor_data(sensor_id);
-CREATE INDEX idx_sensor_data_date ON sensor_data(date);

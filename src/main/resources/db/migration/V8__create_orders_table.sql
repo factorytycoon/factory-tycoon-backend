@@ -6,8 +6,7 @@ CREATE TABLE orders (
     quantity INT NOT NULL,
     due_date DATE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (factory_id) REFERENCES factory(factory_id) ON DELETE CASCADE
+    FOREIGN KEY (factory_id) REFERENCES factory(factory_id) ON DELETE CASCADE,
+    INDEX idx_order_factory_id (factory_id),
+    INDEX idx_order_customer (customer)
 );
-
-CREATE INDEX idx_order_factory_id ON orders(factory_id);
-CREATE INDEX idx_order_customer ON orders(customer);

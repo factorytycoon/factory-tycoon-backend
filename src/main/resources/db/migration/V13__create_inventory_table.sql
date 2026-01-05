@@ -4,8 +4,9 @@ CREATE TABLE inventory (
     item_name VARCHAR(255) NOT NULL,
     quantity INT NOT NULL,
     unit VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (factory_id) REFERENCES factory(factory_id) ON DELETE CASCADE
+    expiration_date DATE,
+    FOREIGN KEY (factory_id) REFERENCES factory(factory_id) ON DELETE CASCADE,
+    INDEX idx_inventory_factory_id (factory_id)
 );
-
-CREATE INDEX idx_inventory_factory_id ON inventory(factory_id);
