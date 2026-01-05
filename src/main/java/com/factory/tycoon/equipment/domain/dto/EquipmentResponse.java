@@ -14,6 +14,7 @@ public class EquipmentResponse {
     private String name;
     private String status;
     private String type;
+    private String imageUrl;
     private LocalDateTime installedAt;
     private LocalDateTime createdAt;
 
@@ -23,6 +24,7 @@ public class EquipmentResponse {
         this.name = equipment.getName();
         this.status = equipment.getStatus() != null ? equipment.getStatus().name().toLowerCase() : null;
         this.type = equipment.getType();
+        this.imageUrl = equipment.getImageUrl();
         this.installedAt = equipment.getInstalledAt();
         this.createdAt = equipment.getCreatedAt();
     }

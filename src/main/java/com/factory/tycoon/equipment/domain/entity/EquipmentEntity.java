@@ -37,6 +37,9 @@ public class EquipmentEntity {
 
     private String type;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @Column(name = "installed_at")
     private LocalDateTime installedAt;
 
@@ -44,10 +47,11 @@ public class EquipmentEntity {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    public void update(String name, EquipmentStatus status, String type, LocalDateTime installedAt) {
+    public void update(String name, EquipmentStatus status, String type, String imageUrl, LocalDateTime installedAt) {
         this.name = name;
         this.status = status;
         this.type = type;
+        this.imageUrl = imageUrl;
         this.installedAt = installedAt;
     }
 }
