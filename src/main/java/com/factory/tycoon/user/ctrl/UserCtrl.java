@@ -53,10 +53,12 @@ public class UserCtrl {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "유저 조회", description = "역할로 유저 목록 조회 (role=worker 또는 role=owner)")
-    @GetMapping("/list")
-    public ResponseEntity<List<UserResponse.WorkerResponse>> getUsersByRole(@RequestParam String role) {
-        return ResponseEntity.ok(userService.findByRole(role));
+    @Operation(summary = "유저 조회", description = "공장별 역할로 유저 목록 조회 (role=worker 또는 role=owner)")
+    @GetMapping("/factory/{factoryId}/list")
+    public ResponseEntity<List<UserResponse.WorkerResponse>> getUsersByRole(
+            @PathVariable Long factoryId,
+            @RequestParam String role) {
+        return ResponseEntity.ok(userService.findByFactoryAndRole(factoryId, role));
     }
 
 }

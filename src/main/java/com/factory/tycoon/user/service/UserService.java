@@ -155,19 +155,19 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 공장 코드입니다."));
     }
 
-    // 역할별 사용자 조회
-    @Transactional(readOnly = true)
-    public java.util.List<UserResponse.WorkerResponse> findByRole(String role) {
+        // 공장별 역할 사용자 조회
+        @Transactional(readOnly = true)
+        public java.util.List<UserResponse.WorkerResponse> findByFactoryAndRole(Long factoryId, String role) {
         UserRole userRole = UserRole.from(role);
-        return userRepository.findByRole(userRole).stream()
-                .map(user -> new UserResponse.WorkerResponse(
-                        user.getUserId(),
-                        user.getName(),
-                        user.getEmail(),
-                        user.getPhone(),
-                        user.getFactory().getFactoryId(),
-                        user.getFactory().getFactoryCode()
-                ))
-                .toList();
-    }
+        return userRepository.findByFactory_FactoryIdAndRole(factoryId, userRole).stream()
+            .map(user -> new UserResponse.WorkerResponse(
+                user.getUserId(),
+                user.getName(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getFactory().getFactoryId(),
+                user.getFactory().getFactoryCode()
+            ))
+            .toList();
+        }
 }
