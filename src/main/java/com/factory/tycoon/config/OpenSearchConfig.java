@@ -1,4 +1,4 @@
-package com.factory.tycoon.oepnsearch.config;
+package com.factory.tycoon.config;
 
 import org.opensearch.client.opensearch.OpenSearchClient;
 import org.opensearch.client.transport.aws.AwsSdk2Transport;
