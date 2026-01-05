@@ -16,17 +16,27 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/ft/user")
 @RequiredArgsConstructor
 public class UserCtrl {
+    private final UserService userService;
+    private final com.factory.tycoon.auth.TokenService tokenService;
+    
+    
     @Operation(summary = "공장별 작업자 목록 조회", description = "특정 factoryId의 worker 목록 조회")
     @GetMapping("/factory/{factoryId}/workers")
     public ResponseEntity<List<UserResponse.WorkerResponse>> getWorkersByFactoryId(@PathVariable Long factoryId) {
         return ResponseEntity.ok(userService.findWorkersByFactoryId(factoryId));
     }
 
-    private final UserService userService;
-    private final com.factory.tycoon.auth.TokenService tokenService;
-    @Operation(summary = "내 정보 조회", description = "현재 로그인한 사용자 정보 반환")
+    @Operation(summary = "내 인증 정보 조회", description = "현재 로그인한 사용자 인증 정보 반환")
     @GetMapping("/me")
-    public ResponseEntity<UserResponse.AuthResponse> getMyInfo(@RequestHeader("Authorization") String authorizationHeader) {
+    public ResponseEntity<UserResponse.AuthResponse> getMyAuth(@RequestHeader("Authorization") String authorizationHeader) {
+        String token = authorizationHeader.replaceFirst("(?i)^Bearer ", "");
+        Long userId = tokenService.getUserId(token);
+        return ResponseEntity.ok(userService.getUserAuth(userId));
+    }
+    
+    @Operation(summary = "내 정보 조회", description = "현재 로그인한 사용자 정보 반환")
+    @GetMapping("/my_info")
+    public ResponseEntity<UserResponse.WorkerResponse> getMyInfo(@RequestHeader("Authorization") String authorizationHeader) {
         String token = authorizationHeader.replaceFirst("(?i)^Bearer ", "");
         Long userId = tokenService.getUserId(token);
         return ResponseEntity.ok(userService.getUserInfo(userId));
