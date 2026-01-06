@@ -37,8 +37,7 @@ public class SensorAnalysisService {
         SensorDataEntity sensorData = sensorDataRepository.findById(request.getSensorDataId())
                 .orElseThrow(() -> new IllegalArgumentException("SensorData not found with id: " + request.getSensorDataId()));
 
-        // 임시 데이터 생성 -> opensearch 에서 받아오는 데이터로 대체 필요
-        List<BigDecimal> sensorValues = List.of(BigDecimal.valueOf(100), BigDecimal.valueOf(200), BigDecimal.valueOf(150));
+        List<BigDecimal> sensorValues = request.getSensorValues();
         
         sensorAnalysisRepository.findBySensor_SensorIdAndDate(sensorData.getSensor().getSensorId(), sensorData.getDate())
                 .ifPresent(entity -> {
