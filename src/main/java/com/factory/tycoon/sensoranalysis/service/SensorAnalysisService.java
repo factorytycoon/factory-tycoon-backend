@@ -1,7 +1,6 @@
 package com.factory.tycoon.sensoranalysis.service;
 
 import com.factory.tycoon.sensoranalysis.domain.entity.SensorAnalysisEntity;
-import com.factory.tycoon.opensearch.service.OpenSearchService;
 import com.factory.tycoon.sensordata.domain.entity.SensorDataEntity;
 import com.factory.tycoon.sensordata.repository.SensorDataRepository;
 import com.factory.tycoon.sensoranalysis.domain.dto.SensorAnalysisRequest;
@@ -16,7 +15,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +24,6 @@ public class SensorAnalysisService {
 
     private final SensorAnalysisRepository sensorAnalysisRepository;
     private final SensorDataRepository sensorDataRepository;
-    private final OpenSearchService openSearchService;
 
     public List<SensorAnalysisResponse> getAllSensorAnalysis() {
         return sensorAnalysisRepository.findAll().stream()
@@ -36,20 +33,22 @@ public class SensorAnalysisService {
 
     @Transactional
     public SensorAnalysisResponse createSensorAnalysis(SensorAnalysisRequest request) {
-        log.info("Starting sensor analysis creation for sensorDataId: {}", request.getSensorDataId());
     
         SensorDataEntity sensorData = sensorDataRepository.findById(request.getSensorDataId())
                 .orElseThrow(() -> new IllegalArgumentException("SensorData not found with id: " + request.getSensorDataId()));
 
-        log.info("Found SensorData. SensorId: {}, Date: {}", sensorData.getSensor().getSensorId(), sensorData.getDate());
-
-        List<BigDecimal> sensorValues = openSearchService.getSensorValues(sensorData.getSensor().getSensorId(), sensorData.getDate());
-        log.info("Retrieved {} sensor values from OpenSearch", sensorValues.size());
+        // 임시 데이터 생성 -> opensearch 에서 받아오는 데이터로 대체 필요
+        List<BigDecimal> sensorValues = List.of(BigDecimal.valueOf(100), BigDecimal.valueOf(200), BigDecimal.valueOf(150));
+        
+        sensorAnalysisRepository.findBySensor_SensorIdAndDate(sensorData.getSensor().getSensorId(), sensorData.getDate())
+                .ifPresent(entity -> {
+                    sensorAnalysisRepository.delete(entity);
+                    sensorAnalysisRepository.flush();
+                });
 
         BigDecimal max = sensorValues.stream().max(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
         BigDecimal min = sensorValues.stream().min(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
         BigDecimal avg = sensorValues.isEmpty() ? BigDecimal.ZERO : sensorValues.stream().reduce(BigDecimal.ZERO, BigDecimal::add).divide(BigDecimal.valueOf(sensorValues.size()), 2, RoundingMode.HALF_UP);
-        log.info("Calculated stats - Max: {}, Min: {}, Avg: {}", max, min, avg);
 
         SensorAnalysisEntity sensorAnalysis = SensorAnalysisEntity.builder()
                 .sensor(sensorData.getSensor())

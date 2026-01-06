@@ -34,7 +34,3 @@ jwt:
   access-ttl-ms: 3600000
   refresh-ttl-ms: 86400000
 
-opensearch:
-  endpoint: https://vpc-factory-tycoon-search-hfbepbqmh7clcs6u73ou53d7ta.ap-northeast-2.es.amazonaws.com
-  region: ap-northeast-2
-
