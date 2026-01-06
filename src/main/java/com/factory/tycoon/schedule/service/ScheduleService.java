@@ -11,16 +11,39 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.factory.tycoon.workorder.repository.WorkOrderRepository;
+import com.factory.tycoon.equipment.repository.EquipmentRepository;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final WorkOrderRepository workOrderRepository;
+    private final EquipmentRepository equipmentRepository;
+
 
     public List<ScheduleResponse> getSchedules() {
         return scheduleRepository.findAll().stream()
-                .map(ScheduleResponse::new)
+                .map(schedule -> {
+                    Long workorderId = schedule.getWorkorderId();
+                    Long equipmentId = null;
+                    String equipmentName = null;
+                    if (workorderId != null) {
+                        var workorder = workOrderRepository.findById(workorderId).orElse(null);
+                        if (workorder != null) {
+                            equipmentId = workorder.getEquipmentId();
+                            if (equipmentId != null) {
+                                var equipment = equipmentRepository.findById(equipmentId).orElse(null);
+                                if (equipment != null) {
+                                    equipmentName = equipment.getName();
+                                }
+                            }
+                        }
+                    }
+                    return new ScheduleResponse(schedule, equipmentId, equipmentName);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -34,13 +57,46 @@ public class ScheduleService {
                 .worker(request.getWorker())
                 .build();
         ScheduleEntity savedSchedule = scheduleRepository.save(schedule);
-        return new ScheduleResponse(savedSchedule);
+
+        // equipment 정보도 포함해서 반환
+        Long workorderId = savedSchedule.getWorkorderId();
+        Long equipmentId = null;
+        String equipmentName = null;
+        if (workorderId != null) {
+            var workorder = workOrderRepository.findById(workorderId).orElse(null);
+            if (workorder != null) {
+                equipmentId = workorder.getEquipmentId();
+                if (equipmentId != null) {
+                    var equipment = equipmentRepository.findById(equipmentId).orElse(null);
+                    if (equipment != null) {
+                        equipmentName = equipment.getName();
+                    }
+                }
+            }
+        }
+        return new ScheduleResponse(savedSchedule, equipmentId, equipmentName);
     }
+
 
     public ScheduleResponse getSchedule(Long id) {
         ScheduleEntity schedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Schedule not found with id: " + id));
-        return new ScheduleResponse(schedule);
+        Long workorderId = schedule.getWorkorderId();
+        Long equipmentId = null;
+        String equipmentName = null;
+        if (workorderId != null) {
+            var workorder = workOrderRepository.findById(workorderId).orElse(null);
+            if (workorder != null) {
+                equipmentId = workorder.getEquipmentId();
+                if (equipmentId != null) {
+                    var equipment = equipmentRepository.findById(equipmentId).orElse(null);
+                    if (equipment != null) {
+                        equipmentName = equipment.getName();
+                    }
+                }
+            }
+        }
+        return new ScheduleResponse(schedule, equipmentId, equipmentName);
     }
 
     @Transactional
@@ -48,7 +104,24 @@ public class ScheduleService {
         ScheduleEntity schedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Schedule not found with id: " + id));
         schedule.update(request.getStatus(), request.getDate(), request.getShift(), request.getWorker());
-        return new ScheduleResponse(schedule);
+
+        // equipment 정보도 포함해서 반환
+        Long workorderId = schedule.getWorkorderId();
+        Long equipmentId = null;
+        String equipmentName = null;
+        if (workorderId != null) {
+            var workorder = workOrderRepository.findById(workorderId).orElse(null);
+            if (workorder != null) {
+                equipmentId = workorder.getEquipmentId();
+                if (equipmentId != null) {
+                    var equipment = equipmentRepository.findById(equipmentId).orElse(null);
+                    if (equipment != null) {
+                        equipmentName = equipment.getName();
+                    }
+                }
+            }
+        }
+        return new ScheduleResponse(schedule, equipmentId, equipmentName);
     }
 
     @Transactional
@@ -60,7 +133,21 @@ public class ScheduleService {
 
     public List<ScheduleResponse> getSchedulesByWorkorderId(Long workorderId) {
         return scheduleRepository.findByWorkorderId(workorderId).stream()
-                .map(ScheduleResponse::new)
+                .map(schedule -> {
+                    Long equipmentId = null;
+                    String equipmentName = null;
+                    var workorder = workOrderRepository.findById(workorderId).orElse(null);
+                    if (workorder != null) {
+                        equipmentId = workorder.getEquipmentId();
+                        if (equipmentId != null) {
+                            var equipment = equipmentRepository.findById(equipmentId).orElse(null);
+                            if (equipment != null) {
+                                equipmentName = equipment.getName();
+                            }
+                        }
+                    }
+                    return new ScheduleResponse(schedule, equipmentId, equipmentName);
+                })
                 .collect(Collectors.toList());
     }
 }

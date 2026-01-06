@@ -21,7 +21,11 @@ public class ScheduleResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public ScheduleResponse(ScheduleEntity schedule) {
+    // 설비 정보 추가
+    private Long equipmentId;
+    private String equipmentName;
+
+    public ScheduleResponse(ScheduleEntity schedule, Long equipmentId, String equipmentName) {
         this.scheduleId = schedule.getScheduleId();
         this.workorderId = schedule.getWorkorderId();
         this.status = schedule.getStatus();
@@ -30,5 +34,11 @@ public class ScheduleResponse {
         this.worker = schedule.getWorker();
         this.createdAt = schedule.getCreatedAt();
         this.updatedAt = schedule.getUpdatedAt();
+        this.equipmentId = equipmentId;
+        this.equipmentName = equipmentName;
+    }
+
+    public ScheduleResponse(ScheduleEntity schedule) {
+        this(schedule, null, null);
     }
 }
