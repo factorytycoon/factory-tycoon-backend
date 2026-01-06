@@ -29,8 +29,7 @@ public class SensorDataEntity {
     @JoinColumn(name = "sensor_id", nullable = false)
     private SensorEntity sensor;
 
-    private String path;
-
+    @Column(name = "date", nullable = false)
     private LocalDate date;
 
     @CreatedDate
@@ -38,7 +37,6 @@ public class SensorDataEntity {
     private LocalDateTime createdAt;
 
     public void update(String path, LocalDate date) {
-        this.path = path;
         this.date = date;
     }
 }

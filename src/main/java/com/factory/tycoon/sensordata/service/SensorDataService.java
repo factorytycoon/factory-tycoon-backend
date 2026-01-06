@@ -38,7 +38,6 @@ public class SensorDataService {
 
         SensorDataEntity sensorData = SensorDataEntity.builder()
                 .sensor(sensor)
-                .path(request.getPath())
                 .date(request.getDate())
                 .build();
         SensorDataEntity saved = sensorDataRepository.save(sensorData);
