@@ -58,4 +58,11 @@ public class UserEntity {
     public void updateImage(String image) {
         this.image = image;
     }
+    
+    public void updateProfile(String name, String email, String phone, FactoryEntity factory) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.factory = factory;
+    }
 }

@@ -29,4 +29,14 @@ public class UserRequest {
     public record UpdateImageRequest(
             String image // S3 file name (nullable)
     ) {}
+    
+    public record ManageWorkerRequest(
+        String name,
+        String email,
+        String phone,
+        String factoryCode,
+        String role,
+        java.time.LocalDate dob,
+        String password
+    ) {}
 }

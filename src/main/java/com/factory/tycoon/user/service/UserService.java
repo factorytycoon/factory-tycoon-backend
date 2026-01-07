@@ -11,6 +11,10 @@ import com.factory.tycoon.user.domain.entity.UserEntity;
 import com.factory.tycoon.user.domain.entity.UserRole;
 import com.factory.tycoon.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+
+import java.time.LocalDate;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -196,5 +200,126 @@ public class UserService {
         user.updateImage(req.image());
         userRepository.save(user);
         return new UserResponse.UpdateImageResponse(user.getUserId(), user.getImage());
+    }
+    
+    // 직원 생성 (프론트 관리 UI용)
+    @Transactional
+    public UserResponse.WorkerResponse createWorker(UserRequest.ManageWorkerRequest req) {
+        validateManageRequest(req);
+        validateEmailUniqueness(req.email(), null);
+
+        FactoryEntity factory = resolveFactoryByCode(req.factoryCode());
+        UserRole role = resolveRole(req);
+
+        UserEntity user = UserEntity.builder()
+                .factory(factory)
+                .name(req.name())
+                .dob(resolveDob(req))
+                .phone(req.phone())
+                .email(req.email())
+                .password(resolveHashedPassword(req))
+                .role(role)
+                .build();
+
+        UserEntity saved = userRepository.save(user);
+        return toWorkerResponse(saved);
+    }
+
+    // 직원 수정 (프론트 관리 UI용)
+    @Transactional
+    public UserResponse.WorkerResponse updateWorker(Long userId, UserRequest.ManageWorkerRequest req) {
+        validateManageRequest(req);
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+
+        if (user.getRole() != UserRole.WORKER) {
+            throw new IllegalArgumentException("owner는 이 경로로 수정할 수 없습니다.");
+        }
+
+        resolveRole(req); // role 필드가 들어오면 worker인지 검증
+        validateEmailUniqueness(req.email(), userId);
+        FactoryEntity factory = resolveFactoryByCode(req.factoryCode());
+        user.updateProfile(req.name(), req.email(), req.phone(), factory);
+
+        return toWorkerResponse(user);
+    }
+
+    @Transactional
+    public void deleteUser(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
+        }
+        userRepository.deleteById(userId);
+    }
+    private FactoryEntity resolveFactoryByCode(String factoryCode) {
+        if (factoryCode == null || factoryCode.isBlank()) {
+            throw new IllegalArgumentException("factoryCode가 필요합니다.");
+        }
+        return factoryRepository.findByFactoryCode(factoryCode)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 공장 코드입니다."));
+    }
+
+    private void validateManageRequest(UserRequest.ManageWorkerRequest req) {
+        if (req == null) {
+            throw new IllegalArgumentException("요청 본문이 필요합니다.");
+        }
+        if (req.name() == null || req.name().isBlank()) {
+            throw new IllegalArgumentException("이름이 필요합니다.");
+        }
+        if (req.email() == null || req.email().isBlank()) {
+            throw new IllegalArgumentException("이메일이 필요합니다.");
+        }
+        if (req.phone() == null || req.phone().isBlank()) {
+            throw new IllegalArgumentException("전화번호가 필요합니다.");
+        }
+        if (req.factoryCode() == null || req.factoryCode().isBlank()) {
+            throw new IllegalArgumentException("factoryCode가 필요합니다.");
+        }
+    }
+
+    private void validateEmailUniqueness(String email, Long excludeUserId) {
+        if (excludeUserId == null) {
+            if (userRepository.existsByEmail(email)) {
+                throw new IllegalArgumentException("이미 가입된 이메일입니다.");
+            }
+            return;
+        }
+        if (userRepository.existsByEmailAndUserIdNot(email, excludeUserId)) {
+            throw new IllegalArgumentException("이미 가입된 이메일입니다.");
+        }
+    }
+
+    private String resolveHashedPassword(UserRequest.ManageWorkerRequest req) {
+        String raw = (req.password() == null || req.password().isBlank())
+                ? UUID.randomUUID().toString()
+                : req.password();
+        return passwordService.hash(raw);
+    }
+
+    private LocalDate resolveDob(UserRequest.ManageWorkerRequest req) {
+        return req.dob() != null ? req.dob() : LocalDate.now();
+    }
+
+    private UserRole resolveRole(UserRequest.ManageWorkerRequest req) {
+        if (req.role() == null || req.role().isBlank()) {
+            return UserRole.WORKER;
+        }
+        UserRole role = UserRole.from(req.role());
+        if (role != UserRole.WORKER) {
+            throw new IllegalArgumentException("직원 관리 API는 worker만 생성/수정할 수 있습니다.");
+        }
+        return role;
+    }
+    
+    private UserResponse.WorkerResponse toWorkerResponse(UserEntity user) {
+        return new UserResponse.WorkerResponse(
+                user.getUserId(),
+                user.getName(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getFactory().getFactoryId(),
+                user.getFactory().getFactoryCode(),
+                user.getImage()
+         );
     }
 }
