@@ -40,7 +40,6 @@ public class EquipmentService {
             .name(request.getName())
             .status(EquipmentStatus.from(request.getStatus()))
             .type(request.getType())
-            .imageUrl(request.getImageUrl())
             .installedAt(request.getInstalledAt())
             .build();
         EquipmentEntity savedEquipment = equipmentRepository.save(equipment);
@@ -57,7 +56,7 @@ public class EquipmentService {
     public EquipmentResponse updateEquipment(Long id, EquipmentRequest request) {
         EquipmentEntity equipment = equipmentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Equipment not found with id: " + id));
-        equipment.update(request.getName(), EquipmentStatus.from(request.getStatus()), request.getType(), request.getImageUrl(), request.getInstalledAt());
+        equipment.update(request.getName(), EquipmentStatus.from(request.getStatus()), request.getType(), request.getInstalledAt());
         return new EquipmentResponse(equipment);
     }
 

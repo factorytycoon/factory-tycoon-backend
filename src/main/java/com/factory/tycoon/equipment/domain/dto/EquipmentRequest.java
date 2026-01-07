@@ -14,6 +14,5 @@ public class EquipmentRequest {
     private String name;
     private String status;
     private String type;
-    private String imageUrl;
     private LocalDateTime installedAt;
 }
