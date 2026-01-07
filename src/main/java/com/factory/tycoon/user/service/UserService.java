@@ -49,6 +49,8 @@ public class UserService {
             user.getName(),
             user.getEmail(),
             user.getPhone(),
+            user.getRole().toApiValue(),
+            user.getStatus(),
             user.getFactory().getFactoryId(),
             user.getFactory().getFactoryCode(),
             user.getImage()
@@ -65,6 +67,8 @@ public class UserService {
             user.getName(),
             user.getEmail(),
             user.getPhone(),
+            user.getRole().toApiValue(),
+            user.getStatus(),
             user.getFactory().getFactoryId(),
             user.getFactory().getFactoryCode(),
             user.getImage()
@@ -185,6 +189,8 @@ public class UserService {
                 user.getName(),
                 user.getEmail(),
                 user.getPhone(),
+                user.getRole().toApiValue(),
+                user.getStatus(),
                 user.getFactory().getFactoryId(),
                 user.getFactory().getFactoryCode(),
                 user.getImage()
@@ -239,7 +245,7 @@ public class UserService {
         resolveRole(req); // role 필드가 들어오면 worker인지 검증
         validateEmailUniqueness(req.email(), userId);
         FactoryEntity factory = resolveFactoryByCode(req.factoryCode());
-        user.updateProfile(req.name(), req.email(), req.phone(), factory);
+        user.updateProfile(req.name(), req.email(), req.phone(), factory, req.status());
 
         return toWorkerResponse(user);
     }
@@ -313,13 +319,15 @@ public class UserService {
     
     private UserResponse.WorkerResponse toWorkerResponse(UserEntity user) {
         return new UserResponse.WorkerResponse(
-                user.getUserId(),
-                user.getName(),
-                user.getEmail(),
-                user.getPhone(),
-                user.getFactory().getFactoryId(),
-                user.getFactory().getFactoryCode(),
-                user.getImage()
+            user.getUserId(),
+            user.getName(),
+            user.getEmail(),
+            user.getPhone(),
+            user.getRole().toApiValue(),
+            user.getStatus(),
+            user.getFactory().getFactoryId(),
+            user.getFactory().getFactoryCode(),
+            user.getImage()
          );
     }
 }

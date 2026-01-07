@@ -49,6 +49,9 @@ public class UserEntity {
     private UserRole role;
 
     @Column(length = 255)
+    private Boolean status; // 0: 배치 미완료, 1: 배치 완료
+
+    @Column(length = 255)
     private String image;
 
     @CreatedDate
@@ -59,10 +62,11 @@ public class UserEntity {
         this.image = image;
     }
     
-    public void updateProfile(String name, String email, String phone, FactoryEntity factory) {
+    public void updateProfile(String name, String email, String phone, FactoryEntity factory, Boolean status) {
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.factory = factory;
+        this.status = status;
     }
 }

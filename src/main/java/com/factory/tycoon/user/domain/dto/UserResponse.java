@@ -21,6 +21,8 @@ public class UserResponse {
             String name,
             String email,
             String phone,
+            String role,
+            Boolean status, // 0: 배치 미완료, 1: 배치 완료
             Long factoryId,
             String factoryCode,
             String image
