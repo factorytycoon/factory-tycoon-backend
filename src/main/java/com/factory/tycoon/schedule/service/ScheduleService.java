@@ -20,14 +20,9 @@ import com.factory.tycoon.equipment.repository.EquipmentRepository;
 @Transactional(readOnly = true)
 public class ScheduleService {
 
-    public List<String> findWorkerByDateShift(Long equipmentId, LocalDate date, String shift) {
-        // equipmentId로 workorderId 리스트 조회
-        var workOrders = workOrderRepository.findByEquipmentId(equipmentId);
-        if (workOrders == null || workOrders.isEmpty()) return List.of();
-
-        // 각 workorderId에 대해 schedule에서 date, shift, workorderId로 조회
-        List<Long> workerIds = workOrders.stream()
-            .flatMap(workOrder -> scheduleRepository.findByDateAndShiftAndWorkorderId(date, shift, workOrder.getWorkorderId()).stream())
+    public List<String> findWorkerByDateShift(Long workorderId, LocalDate date, String shift) {
+        // schedule에서 date, shift, workorderId로 조회
+        List<Long> workerIds = scheduleRepository.findByDateAndShiftAndWorkorderId(date, shift, workorderId).stream()
             .map(sch -> {
                 try {
                     return Long.parseLong(sch.getWorker());
