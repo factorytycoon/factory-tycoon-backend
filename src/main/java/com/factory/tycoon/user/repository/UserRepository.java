@@ -11,7 +11,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Optional<UserEntity> findByEmail(String email);
     boolean existsByEmail(String email);
-    boolean existsByEmailAndUserIdNot(String email, Long userId);
     
     List<UserEntity> findByRole(@Param("role") com.factory.tycoon.user.domain.entity.UserRole role);
 
