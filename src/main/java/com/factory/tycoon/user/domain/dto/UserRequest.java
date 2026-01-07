@@ -34,5 +34,7 @@ public class UserRequest {
             String role,
             java.time.LocalDate dob,
             String password
+    public record UpdateImageRequest(
+            String image // S3 file name (nullable)
     ) {}
 }

@@ -40,6 +40,15 @@ public class UserService {
                 user.getFactory().getFactoryId(),
                 user.getRole().toApiValue(),
                 null // accessToken은 반환하지 않음
+            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+        return new com.factory.tycoon.user.domain.dto.UserResponse.WorkerResponse(
+            user.getUserId(),
+            user.getName(),
+            user.getEmail(),
+            user.getPhone(),
+            user.getFactory().getFactoryId(),
+            user.getFactory().getFactoryCode(),
+            user.getImage()
         );
     }
 
@@ -57,6 +66,19 @@ public class UserService {
         return userRepository.findByFactory_FactoryIdAndRole(factoryId, workerRole).stream()
                 .map(this::toWorkerResponse)
                 .toList();
+    public java.util.List<UserResponse.WorkerResponse> findWorkersByFactoryId(Long factoryId) {
+    com.factory.tycoon.user.domain.entity.UserRole workerRole = com.factory.tycoon.user.domain.entity.UserRole.WORKER;
+    return userRepository.findByFactory_FactoryIdAndRole(factoryId, workerRole).stream()
+        .map(user -> new UserResponse.WorkerResponse(
+            user.getUserId(),
+            user.getName(),
+            user.getEmail(),
+            user.getPhone(),
+            user.getFactory().getFactoryId(),
+            user.getFactory().getFactoryCode(),
+            user.getImage()
+        ))
+        .toList();
     }
 
     // 공장별 역할 사용자 조회
@@ -283,5 +305,19 @@ public class UserService {
                 user.getFactory().getFactoryId(),
                 user.getFactory().getFactoryCode()
         );
+                user.getFactory().getFactoryCode(),
+                user.getImage()
+            ))
+            .toList();
+        }
+
+    // 사용자 이미지 수정
+    @Transactional
+    public UserResponse.UpdateImageResponse updateUserImage(Long userId, UserRequest.UpdateImageRequest req) {
+        UserEntity user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+        user.updateImage(req.image());
+        userRepository.save(user);
+        return new UserResponse.UpdateImageResponse(user.getUserId(), user.getImage());
     }
 }

@@ -18,6 +18,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ScheduleCtrl {
 
+    @Operation(summary = "조건별 작업자 조회", description = "workorderId, date, shift로 worker name 리스트 조회")
+    @GetMapping("/find-worker-by-date-shift")
+    public ResponseEntity<List<String>> findWorkerByDateShift(
+            @RequestParam Long workorderId,
+            @RequestParam String date,
+            @RequestParam String shift) {
+        java.time.LocalDate localDate = java.time.LocalDate.parse(date);
+        List<String> workers = scheduleService.findWorkerByDateShift(workorderId, localDate, shift);
+        return ResponseEntity.ok(workers);
+    }
+
     private final ScheduleService scheduleService;
 
     @Operation(summary = "스케줄 목록 조회", 

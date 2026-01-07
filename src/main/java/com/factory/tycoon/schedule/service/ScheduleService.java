@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.time.LocalDate;
 
 import com.factory.tycoon.workorder.repository.WorkOrderRepository;
 import com.factory.tycoon.equipment.repository.EquipmentRepository;
@@ -19,9 +20,31 @@ import com.factory.tycoon.equipment.repository.EquipmentRepository;
 @Transactional(readOnly = true)
 public class ScheduleService {
 
+    public List<String> findWorkerByDateShift(Long workorderId, LocalDate date, String shift) {
+        // schedule에서 date, shift, workorderId로 조회
+        List<Long> workerIds = scheduleRepository.findByDateAndShiftAndWorkorderId(date, shift, workorderId).stream()
+            .map(sch -> {
+                try {
+                    return Long.parseLong(sch.getWorker());
+                } catch (NumberFormatException e) {
+                    return null;
+                }
+            })
+            .filter(id -> id != null)
+            .distinct()
+            .collect(Collectors.toList());
+
+        // userId로 user name 조회 (userRepository.findById 반복 호출)
+        return workerIds.stream()
+            .map(id -> userRepository.findById(id).map(user -> user.getName()).orElse(null))
+            .filter(name -> name != null)
+            .collect(Collectors.toList());
+    }
+
     private final ScheduleRepository scheduleRepository;
     private final WorkOrderRepository workOrderRepository;
     private final EquipmentRepository equipmentRepository;
+    private final com.factory.tycoon.user.repository.UserRepository userRepository;
 
 
     public List<ScheduleResponse> getSchedules() {

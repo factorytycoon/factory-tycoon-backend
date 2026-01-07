@@ -16,4 +16,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     List<UserEntity> findByRole(@Param("role") com.factory.tycoon.user.domain.entity.UserRole role);
 
     List<UserEntity> findByFactory_FactoryIdAndRole(Long factoryId, com.factory.tycoon.user.domain.entity.UserRole role);
+
 }

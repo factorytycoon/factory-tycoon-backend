@@ -22,6 +22,12 @@ public class UserResponse {
             String email,
             String phone,
             Long factoryId,
-            String factoryCode
+            String factoryCode,
+            String image
+    ) {}
+
+    public record UpdateImageResponse(
+            Long userId,
+            String image
     ) {}
 }
