@@ -2,8 +2,6 @@ package com.factory.tycoon.config;
 
 import com.factory.tycoon.auth.AuthInterceptor;
 
-import jakarta.validation.OverridesAttribute;
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
