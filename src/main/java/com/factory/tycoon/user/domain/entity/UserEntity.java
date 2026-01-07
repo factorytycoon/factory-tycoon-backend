@@ -48,8 +48,9 @@ public class UserEntity {
     @Column(nullable = false, length = 20)
     private UserRole role;
 
-    @Column(length = 255)
-    private Boolean status; // 0: 배치 미완료, 1: 배치 완료
+    @Builder.Default
+    @Column(nullable = false)
+    private Boolean status = false;
 
     @Column(length = 255)
     private String image;
@@ -67,6 +68,6 @@ public class UserEntity {
         this.email = email;
         this.phone = phone;
         this.factory = factory;
-        this.status = status;
+        this.status = (status == null) ? false : status;
     }
 }
