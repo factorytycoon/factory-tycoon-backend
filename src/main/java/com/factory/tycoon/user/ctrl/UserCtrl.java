@@ -71,4 +71,26 @@ public class UserCtrl {
         return ResponseEntity.ok(userService.findByFactoryAndRole(factoryId, role));
     }
 
+    @Operation(summary = "직원 추가", description = "factoryCode를 기준으로 worker를 등록")
+    @PostMapping
+    public ResponseEntity<UserResponse.WorkerResponse> createWorker(
+            @RequestBody UserRequest.ManageWorkerRequest request) {
+        return ResponseEntity.ok(userService.createWorker(request));
+    }
+
+    @Operation(summary = "직원 수정", description = "이름/이메일/전화/공장코드를 수정")
+    @PutMapping("/{userId}")
+    public ResponseEntity<UserResponse.WorkerResponse> updateWorker(
+            @PathVariable Long userId,
+            @RequestBody UserRequest.ManageWorkerRequest request) {
+        return ResponseEntity.ok(userService.updateWorker(userId, request));
+    }
+
+    @Operation(summary = "직원 삭제", description = "userId로 직원 삭제")
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.noContent().build();
+    }
+
 }

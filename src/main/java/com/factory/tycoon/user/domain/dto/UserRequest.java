@@ -25,4 +25,14 @@ public class UserRequest {
     public record LogoutRequest(
             String refreshToken // 지금은 안 쓰면 null 가능
     ) {}
+
+    public record ManageWorkerRequest(
+            String name,
+            String email,
+            String phone,
+            String factoryCode,
+            String role,
+            java.time.LocalDate dob,
+            String password
+    ) {}
 }

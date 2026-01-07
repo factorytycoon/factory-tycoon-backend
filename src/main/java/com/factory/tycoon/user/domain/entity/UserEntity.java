@@ -51,4 +51,11 @@ public class UserEntity {
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+
+    public void updateProfile(String name, String email, String phone, FactoryEntity factory) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.factory = factory;
+    }
 }
