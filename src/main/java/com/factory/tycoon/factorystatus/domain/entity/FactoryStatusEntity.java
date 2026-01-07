@@ -18,7 +18,7 @@ public class FactoryStatusEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long factoryStatusid;
 
     private LocalDate date;
     private String factoryId;

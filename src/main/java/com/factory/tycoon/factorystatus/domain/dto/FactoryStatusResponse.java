@@ -7,6 +7,7 @@ import java.util.List;
 @Data
 @Builder
 public class FactoryStatusResponse {
+    private String factoryStatusId;
     private String date;
     private double totalScore100; // 100점 환산 점수
     private String rank;          // SS, S, A, B, C

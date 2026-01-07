@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 
 @RestController
-@RequestMapping("/api/factory-status")
+@RequestMapping("/api/v1/factoryStatus")
 @RequiredArgsConstructor
 public class FactoryStatusController {
 
     private final FactoryStatusService factoryStatusService;
 
-    @GetMapping("/daily-rank")
+    @GetMapping("/{id}}")
     public ResponseEntity<FactoryStatusResponse> getDailyFactoryRank(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         FactoryStatusResponse result = factoryStatusService.analyzeFactoryStatus(date);
