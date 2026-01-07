@@ -48,7 +48,14 @@ public class UserEntity {
     @Column(nullable = false, length = 20)
     private UserRole role;
 
+    @Column(length = 255)
+    private String image;
+
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+
+    public void updateImage(String image) {
+        this.image = image;
+    }
 }

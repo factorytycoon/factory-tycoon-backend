@@ -25,4 +25,8 @@ public class UserRequest {
     public record LogoutRequest(
             String refreshToken // 지금은 안 쓰면 null 가능
     ) {}
+
+    public record UpdateImageRequest(
+            String image // S3 file name (nullable)
+    ) {}
 }

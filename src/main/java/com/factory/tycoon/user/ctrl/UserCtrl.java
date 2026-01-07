@@ -71,4 +71,14 @@ public class UserCtrl {
         return ResponseEntity.ok(userService.findByFactoryAndRole(factoryId, role));
     }
 
+    @Operation(summary = "내 이미지 수정", description = "S3 파일명을 저장하여 사용자 이미지 업데이트")
+    @PutMapping("/image_update")
+    public ResponseEntity<UserResponse.UpdateImageResponse> updateMyImage(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestBody UserRequest.UpdateImageRequest request) {
+        String token = authorizationHeader.replaceFirst("(?i)^Bearer ", "");
+        Long userId = tokenService.getUserId(token);
+        return ResponseEntity.ok(userService.updateUserImage(userId, request));
+    }
+
 }

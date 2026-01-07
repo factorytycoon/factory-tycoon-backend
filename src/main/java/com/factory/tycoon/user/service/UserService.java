@@ -46,7 +46,8 @@ public class UserService {
             user.getEmail(),
             user.getPhone(),
             user.getFactory().getFactoryId(),
-            user.getFactory().getFactoryCode()
+            user.getFactory().getFactoryCode(),
+            user.getImage()
         );
     }
 
@@ -61,7 +62,8 @@ public class UserService {
             user.getEmail(),
             user.getPhone(),
             user.getFactory().getFactoryId(),
-            user.getFactory().getFactoryCode()
+            user.getFactory().getFactoryCode(),
+            user.getImage()
         ))
         .toList();
     }
@@ -180,8 +182,19 @@ public class UserService {
                 user.getEmail(),
                 user.getPhone(),
                 user.getFactory().getFactoryId(),
-                user.getFactory().getFactoryCode()
+                user.getFactory().getFactoryCode(),
+                user.getImage()
             ))
             .toList();
         }
+
+    // 사용자 이미지 수정
+    @Transactional
+    public UserResponse.UpdateImageResponse updateUserImage(Long userId, UserRequest.UpdateImageRequest req) {
+        UserEntity user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+        user.updateImage(req.image());
+        userRepository.save(user);
+        return new UserResponse.UpdateImageResponse(user.getUserId(), user.getImage());
+    }
 }
