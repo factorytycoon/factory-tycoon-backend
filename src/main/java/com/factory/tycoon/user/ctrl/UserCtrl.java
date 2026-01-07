@@ -103,5 +103,18 @@ public class UserCtrl {
         return ResponseEntity.noContent().build();
     }
     
+    @Operation(summary = "직원 상태만 변경", description = "userId로 직원의 status만 변경(PATCH)")
+    @PatchMapping("/{userId}/status")
+    public ResponseEntity<UserResponse.WorkerResponse> updateUserStatus(
+            @PathVariable Long userId,
+            @RequestBody StatusRequest statusRequest) {
+        return ResponseEntity.ok(userService.updateUserStatus(userId, statusRequest.getStatus()));
+    }
+    public static class StatusRequest {
+        private Boolean status;
+        public Boolean getStatus() { return status; }
+        public void setStatus(Boolean status) { this.status = status; }
+    }
+    
     
 }

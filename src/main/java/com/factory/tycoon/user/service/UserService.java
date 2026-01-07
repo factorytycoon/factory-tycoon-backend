@@ -27,6 +27,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+        // 직원 status만 변경 (부분 업데이트)
+        @Transactional
+        public UserResponse.WorkerResponse updateUserStatus(Long userId, Boolean status) {
+            UserEntity user = userRepository.findById(userId)
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+            user.setStatus(status != null ? status : false);
+            return toWorkerResponse(user);
+        }
     // userId로 사용자 정보 반환
     @Transactional(readOnly = true)
     public com.factory.tycoon.user.domain.dto.UserResponse.AuthResponse getUserAuth(Long userId) {

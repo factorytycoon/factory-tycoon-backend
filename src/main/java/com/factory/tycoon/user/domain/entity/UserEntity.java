@@ -20,6 +20,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class UserEntity {
+    // status 필드 setter 추가
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
