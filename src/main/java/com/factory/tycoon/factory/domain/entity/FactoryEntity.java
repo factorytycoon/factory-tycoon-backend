@@ -37,6 +37,12 @@ public class FactoryEntity {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "modeling", length = 255)
+    private String modeling; // 3D Model File Path
+
+    @Column(name = "operation_start_at")
+    private LocalDateTime operationStartAt; // 운영 시작 시간 (가동 시간 계산용)
+
     @Column(name = "factory_code", length = 20)
     private String factoryCode; //공장 코드
 

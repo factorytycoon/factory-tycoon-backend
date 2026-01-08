@@ -44,6 +44,9 @@ public class EquipmentEntity {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "modeling", length = 255)
+    private String modeling; // 3D Model File Path
+
     public void update(String name, EquipmentStatus status, String type, LocalDateTime installedAt) {
         this.name = name;
         this.status = status;

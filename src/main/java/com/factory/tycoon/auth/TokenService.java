@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class TokenService {
     private final JwtProps props;
     private final RedisTemplate<String, String> redisTemplate;
 
-    public TokenService(JwtProps props, RedisTemplate<String, String> redisTemplate) { 
+    public TokenService(JwtProps props, @Qualifier("redisTemplate") RedisTemplate<String, String> redisTemplate) { 
         this.props = props;
         this.redisTemplate = redisTemplate;
     }
