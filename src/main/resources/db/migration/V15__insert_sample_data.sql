@@ -1,11 +1,11 @@
   -- Insert sample data for all tables
 
   -- Insert Factory (4 rows)
-INSERT INTO factory (name, location, description, phone, factory_code, operation_start_at, modeling) VALUES
-('Seoul Factory', 'Seoul, South Korea', 'Main production facility', '02-1234-5678', 'FACT-001', '2024-01-01 09:00:00', '/models/factory_seoul.glb'),
-('Busan Factory', 'Busan, South Korea', 'Secondary production facility', '051-9876-5432', 'FACT-002', '2024-01-05 08:30:00', '/models/factory_busan.glb'),
-('Incheon Factory', 'Incheon, South Korea', 'Quality control facility', '032-5555-6666', 'FACT-003', '2024-01-10 10:00:00', '/models/factory_incheon.glb'),
-('Daegu Factory', 'Daegu, South Korea', 'Assembly facility', '053-1111-2222', 'FACT-004', '2024-01-15 07:00:00', '/models/factory_daegu.glb');
+INSERT INTO factory (factory_id, name, location, description, phone, factory_code, operation_start_at, modeling) VALUES
+(1, 'Seoul Factory', 'Seoul, South Korea', 'Main production facility', '02-1234-5678', 'FACT-001', '2024-01-01 09:00:00', '/models/factory_seoul.glb'),
+(2, 'Busan Factory', 'Busan, South Korea', 'Secondary production facility', '051-9876-5432', 'FACT-002', '2024-01-05 08:30:00', '/models/factory_busan.glb'),
+(3, 'Incheon Factory', 'Incheon, South Korea', 'Quality control facility', '032-5555-6666', 'FACT-003', '2024-01-10 10:00:00', '/models/factory_incheon.glb'),
+(4, 'Daegu Factory', 'Daegu, South Korea', 'Assembly facility', '053-1111-2222', 'FACT-004', '2024-01-15 07:00:00', '/models/factory_daegu.glb');
 
   -- Insert Equipment (4 rows per factory)
 INSERT INTO equipment (factory_id, name, status, type, installed_at, modeling) VALUES
@@ -133,11 +133,11 @@ INSERT INTO sensor_analysis (sensor_data_id, max_value, min_value, avg_value) VA
 
   -- Insert Alarm (5 rows)
 INSERT INTO alarm (equipment_id, monitor_name, trigger_name, sensor_snapshot, status, sensor_dt, created_at) VALUES
-('ft-pi-002', 'turning', 'red', '{"device_id": "ft-pi-002", "timestamp": "2026-01-08T06:48:56+00:00", "sensors": [{"type": "rpm", "value": 326.79}, {"type": "nois", "value": 110.09}, {"type": "disp", "value": 0.02}, {"type": "temp", "value": 89.23}, {"type": "humi", "value": 56.82}, {"type": "illu", "value": 651.33}]}', 'OPEN', '2026-01-08 06:48:56', '2026-01-08 06:52:44'),
-('ft-pi-001', 'temperature', 'yellow', '{"device_id": "ft-pi-001", "timestamp": "2026-01-08T07:10:30+00:00", "sensors": [{"type": "rpm", "value": 450.49}, {"type": "nois", "value": 117.63}, {"type": "disp", "value": 0.08}, {"type": "temp", "value": 92.33}, {"type": "humi", "value": 58.19}, {"type": "illu", "value": 640.17}]}', 'OPEN', '2026-01-08 07:10:30', '2026-01-08 07:15:22'),
-('ft-pi-003', 'vibration', 'red', '{"device_id": "ft-pi-003", "timestamp": "2026-01-08T08:25:15+00:00", "sensors": [{"type": "rpm", "value": 520.15}, {"type": "nois", "value": 125.45}, {"type": "disp", "value": 0.15}, {"type": "temp", "value": 85.67}, {"type": "humi", "value": 62.34}, {"type": "illu", "value": 680.29}]}', 'RESOLVED', '2026-01-08 08:25:15', '2026-01-08 08:30:10'),
-('ft-pi-002', 'noise', 'yellow', '{"device_id": "ft-pi-002", "timestamp": "2026-01-08T09:15:45+00:00", "sensors": [{"type": "rpm", "value": 380.25}, {"type": "nois", "value": 118.90}, {"type": "disp", "value": 0.05}, {"type": "temp", "value": 87.10}, {"type": "humi", "value": 60.15}, {"type": "illu", "value": 655.80}]}', 'OPEN', '2026-01-08 09:15:45', '2026-01-08 09:20:33'),
-('ft-pi-004', 'rpm', 'red', '{"device_id": "ft-pi-004", "timestamp": "2026-01-08T10:05:20+00:00", "sensors": [{"type": "rpm", "value": 580.95}, {"type": "nois", "value": 130.22}, {"type": "disp", "value": 0.12}, {"type": "temp", "value": 95.40}, {"type": "humi", "value": 65.78}, {"type": "illu", "value": 720.45}]}', 'RESOLVED', '2026-01-08 10:05:20', '2026-01-08 10:12:15');
+(2, 'turning', 'red', '{"device_id": "ft-pi-002", "timestamp": "2026-01-08T06:48:56+00:00", "sensors": [{"type": "rpm", "value": 326.79}, {"type": "nois", "value": 110.09}, {"type": "disp", "value": 0.02}, {"type": "temp", "value": 89.23}, {"type": "humi", "value": 56.82}, {"type": "illu", "value": 651.33}]}', 'OPEN', '2026-01-08 06:48:56', '2026-01-08 06:52:44'),
+(1, 'temperature', 'yellow', '{"device_id": "ft-pi-001", "timestamp": "2026-01-08T07:10:30+00:00", "sensors": [{"type": "rpm", "value": 450.49}, {"type": "nois", "value": 117.63}, {"type": "disp", "value": 0.08}, {"type": "temp", "value": 92.33}, {"type": "humi", "value": 58.19}, {"type": "illu", "value": 640.17}]}', 'OPEN', '2026-01-08 07:10:30', '2026-01-08 07:15:22'),
+(3, 'vibration', 'red', '{"device_id": "ft-pi-003", "timestamp": "2026-01-08T08:25:15+00:00", "sensors": [{"type": "rpm", "value": 520.15}, {"type": "nois", "value": 125.45}, {"type": "disp", "value": 0.15}, {"type": "temp", "value": 85.67}, {"type": "humi", "value": 62.34}, {"type": "illu", "value": 680.29}]}', 'CLOSE', '2026-01-08 08:25:15', '2026-01-08 08:30:10'),
+(2, 'noise', 'yellow', '{"device_id": "ft-pi-002", "timestamp": "2026-01-08T09:15:45+00:00", "sensors": [{"type": "rpm", "value": 380.25}, {"type": "nois", "value": 118.90}, {"type": "disp", "value": 0.05}, {"type": "temp", "value": 87.10}, {"type": "humi", "value": 60.15}, {"type": "illu", "value": 655.80}]}', 'OPEN', '2026-01-08 09:15:45', '2026-01-08 09:20:33'),
+(4, 'rpm', 'red', '{"device_id": "ft-pi-004", "timestamp": "2026-01-08T10:05:20+00:00", "sensors": [{"type": "rpm", "value": 580.95}, {"type": "nois", "value": 130.22}, {"type": "disp", "value": 0.12}, {"type": "temp", "value": 95.40}, {"type": "humi", "value": 65.78}, {"type": "illu", "value": 720.45}]}', 'CLOSE', '2026-01-08 10:05:20', '2026-01-08 10:12:15');
 
   -- Insert Orders (4 rows)
 INSERT INTO orders (factory_id, customer, product_name, quantity, due_date) VALUES
