@@ -20,10 +20,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class UserEntity {
-    // status 필드 setter 추가
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,9 +48,6 @@ public class UserEntity {
     @Column(nullable = false, length = 20)
     private UserRole role;
 
-    @Builder.Default
-    @Column(nullable = false)
-    private Boolean status = false;
 
     @Column(length = 255)
     private String image;
@@ -67,11 +60,10 @@ public class UserEntity {
         this.image = image;
     }
     
-    public void updateProfile(String name, String email, String phone, FactoryEntity factory, Boolean status) {
+    public void updateProfile(String name, String email, String phone, FactoryEntity factory) {
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.factory = factory;
-        this.status = (status == null) ? false : status;
     }
 }
