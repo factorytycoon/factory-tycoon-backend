@@ -3,6 +3,7 @@ package com.factory.tycoon.order.ctrl;
 import com.factory.tycoon.order.domain.dto.OrderRequest;
 import com.factory.tycoon.order.domain.dto.OrderResponse;
 import com.factory.tycoon.order.service.OrderService;
+import com.factory.tycoon.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,6 +20,13 @@ import java.util.List;
 public class OrderCtrl {
 
     private final OrderService orderService;
+    private final UserService userService;
+    @Operation(summary = "특정 factory의 수주 목록 조회", description = "factory_id에 해당하는 모든 수주 조회")
+    @GetMapping("/my-factory")
+    public ResponseEntity<List<OrderResponse>> getOrdersByFactoryId(@RequestParam Long factoryId) {
+        List<OrderResponse> orders = orderService.getOrdersByFactoryId(factoryId);
+        return ResponseEntity.ok(orders);
+    }
 
     @Operation(summary = "수주 목록 조회", description = "등록된 수주 목록을 조회합니다. customer 파라미터로 고객명 검색이 가능합니다.")
     @GetMapping
