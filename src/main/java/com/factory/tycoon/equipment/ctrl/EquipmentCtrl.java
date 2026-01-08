@@ -17,6 +17,11 @@ import java.util.List;
 @RequestMapping("/api/v1/ft/equipment")
 @RequiredArgsConstructor
 public class EquipmentCtrl {
+    @Operation(summary = "공장별 설비 목록 조회", description = "factoryId로 해당 공장에 속한 설비 목록 조회")
+    @GetMapping(params = "factoryId")
+    public ResponseEntity<List<EquipmentResponse>> getEquipmentsByFactoryId(@RequestParam Long factoryId) {
+        return ResponseEntity.ok(equipmentService.getEquipmentsByFactoryId(factoryId));
+    }
 
     private final EquipmentService equipmentService;
 
