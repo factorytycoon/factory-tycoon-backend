@@ -27,12 +27,29 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+            private final com.factory.tycoon.user.repository.UserStatusRepository userStatusRepository;
+            // 특정 날짜에 status가 0인 유저 조회
+            @Transactional(readOnly = true)
+            public java.util.List<UserEntity> findUnavailableUsersByDate(java.time.LocalDate date) {
+                return userStatusRepository.findUnavailableUsersByDate(date);
+            }
         // 직원 status만 변경 (부분 업데이트)
         @Transactional
         public UserResponse.WorkerResponse updateUserStatus(Long userId, Boolean status) {
             UserEntity user = userRepository.findById(userId)
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
-            user.setStatus(status != null ? status : false);
+            java.time.LocalDate today = java.time.LocalDate.now();
+            com.factory.tycoon.user.domain.entity.UserStatus userStatus = userStatusRepository
+                .findAll().stream()
+                .filter(us -> us.getUser().getUserId().equals(userId) && us.getDate().equals(today))
+                .findFirst()
+                .orElse(null);
+            if (userStatus == null) {
+                userStatus = new com.factory.tycoon.user.domain.entity.UserStatus(user, today, status);
+            } else {
+                userStatus.setStatus(status);
+            }
+            userStatusRepository.save(userStatus);
             return toWorkerResponse(user);
         }
     // userId로 사용자 정보 반환
@@ -58,7 +75,6 @@ public class UserService {
             user.getEmail(),
             user.getPhone(),
             user.getRole().toApiValue(),
-            user.getStatus(),
             user.getFactory().getFactoryId(),
             user.getFactory().getFactoryCode(),
             user.getImage()
@@ -76,7 +92,6 @@ public class UserService {
             user.getEmail(),
             user.getPhone(),
             user.getRole().toApiValue(),
-            user.getStatus(),
             user.getFactory().getFactoryId(),
             user.getFactory().getFactoryCode(),
             user.getImage()
@@ -198,7 +213,6 @@ public class UserService {
                 user.getEmail(),
                 user.getPhone(),
                 user.getRole().toApiValue(),
-                user.getStatus(),
                 user.getFactory().getFactoryId(),
                 user.getFactory().getFactoryCode(),
                 user.getImage()
@@ -253,7 +267,7 @@ public class UserService {
         resolveRole(req); // role 필드가 들어오면 worker인지 검증
         validateEmailUniqueness(req.email(), userId);
         FactoryEntity factory = resolveFactoryByCode(req.factoryCode());
-        user.updateProfile(req.name(), req.email(), req.phone(), factory, req.status());
+        user.updateProfile(req.name(), req.email(), req.phone(), factory);
 
         return toWorkerResponse(user);
     }
@@ -332,7 +346,6 @@ public class UserService {
             user.getEmail(),
             user.getPhone(),
             user.getRole().toApiValue(),
-            user.getStatus(),
             user.getFactory().getFactoryId(),
             user.getFactory().getFactoryCode(),
             user.getImage()
