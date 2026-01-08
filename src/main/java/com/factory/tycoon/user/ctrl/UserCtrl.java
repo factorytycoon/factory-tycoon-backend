@@ -16,6 +16,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/ft/user")
 @RequiredArgsConstructor
 public class UserCtrl {
+            @GetMapping("/factory/{factoryId}/available-workers")
+            public ResponseEntity<List<String>> getAvailableWorkers(
+                    @PathVariable Long factoryId,
+                    @RequestParam("date") String dateStr) {
+                java.time.LocalDate date = java.time.LocalDate.parse(dateStr);
+                List<String> names = userService.findAvailableWorkers(factoryId, date)
+                        .stream()
+                        .map(com.factory.tycoon.user.domain.entity.UserEntity::getName)
+                        .toList();
+                return ResponseEntity.ok(names);
+            }
         @Operation(summary = "특정 날짜에 status=0인 유저 조회", description = "date별로 근무 불가인 유저 목록 조회")
         @GetMapping("/unavailable")
         public ResponseEntity<List<com.factory.tycoon.user.domain.entity.UserEntity>> getUnavailableUsersByDate(@RequestParam("date") String dateStr) {

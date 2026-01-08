@@ -12,7 +12,9 @@ import com.factory.tycoon.user.domain.entity.UserRole;
 import com.factory.tycoon.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
+
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -27,6 +29,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+                // 특정 factory, 날짜에 배치 가능한(근무중이 아닌) worker 목록 조회
+                @Transactional(readOnly = true)
+                public List<UserEntity> findAvailableWorkers(Long factoryId, java.time.LocalDate date) {
+                    List<Long> workingUserIds = userStatusRepository.findWorkingUserIdsByDate(date);
+                    return userRepository.findByFactory_FactoryIdAndRole(factoryId, com.factory.tycoon.user.domain.entity.UserRole.WORKER)
+                            .stream()
+                            .filter(user -> !workingUserIds.contains(user.getUserId()))
+                            .toList();
+                }
             private final com.factory.tycoon.user.repository.UserStatusRepository userStatusRepository;
             // 특정 날짜에 status가 0인 유저 조회
             @Transactional(readOnly = true)
