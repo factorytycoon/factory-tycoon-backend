@@ -16,6 +16,7 @@ public class EquipmentResponse {
     private String type;
     private LocalDateTime installedAt;
     private LocalDateTime createdAt;
+    private String modeling;
 
     public EquipmentResponse(EquipmentEntity equipment) {
         this.equipmentId = equipment.getEquipmentId();
@@ -25,5 +26,6 @@ public class EquipmentResponse {
         this.type = equipment.getType();
         this.installedAt = equipment.getInstalledAt();
         this.createdAt = equipment.getCreatedAt();
+        this.modeling = equipment.getModeling();
     }
 }
