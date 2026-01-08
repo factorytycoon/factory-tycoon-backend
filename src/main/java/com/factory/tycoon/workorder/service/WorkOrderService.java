@@ -75,7 +75,6 @@ public class WorkOrderService {
         workorder.setProductName(order.getProductName());
         workorder.setTargetAmount(order.getQuantity());
         workorder.setCustomerName(order.getCustomer());
-        // status, price 등은 필요시 추가
 
         return new WorkOrderResponse(workorder);
         }
