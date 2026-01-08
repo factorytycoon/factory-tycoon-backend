@@ -168,7 +168,7 @@ INSERT INTO prediction (factory_id, type, level, message, selected) VALUES
 
   -- Insert User (4 rows)
 INSERT INTO `user` (factory_id, name, dob, phone, email, password, role, created_at, image) VALUES
-  (1,'Kim Min-ho', '1985-05-12','010-1234-5678','sf@sf.com','$2a$10$slYQmyNdGzin7olVN3/p2OPST9/PgBkqquzi.Ss7KIUgO2t0jKMUm','OWNER','2024-01-01 09:00:00',NULL),
+  (1,'Kim Min-ho', '1985-05-12','010-1234-5678','sf@sf.com','$2b$10$/0a6E6Zpf3VG4VeMD5F/NOlaH.6wMstvWgLP/DdhyJELeqrpWtMmK','OWNER','2024-01-01 09:00:00',NULL),
   (1,'Lee Ji-won','1990-08-25','010-2345-6789','fs@fs.com','$2b$10$498HEzFnAWeVzlpuuccw6u6qkJCDQCJKAA5x5wpYGgN/d1v.MkRkK','WORKER','2024-01-01 09:00:00','lee_profile.jpg'),
   (2,'Park Sung-il','1988-03-18','010-3456-7890','park.sungil@factory.com','$2a$10$slYQmyNdGzin7olVN3/p2OPST9/PgBkqquzi.Ss7KIUgO2t0jKMUm','OWNER','2024-01-01 09:00:00','park_profile.jpg'),
   (3,'Choi Young-soo','1992-11-30','010-4567-8901','choi.youngsoo@factory.com','$2a$10$slYQmyNdGzin7olVN3/p2OPST9/PgBkqquzi.Ss7KIUgO2t0jKMUm','WORKER','2024-01-01 09:00:00','choi_profile.jpg');
