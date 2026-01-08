@@ -29,7 +29,7 @@ spring:
     out-of-order: false
     table: flyway_schema_history
     create-schemas: true
-    schemas: factory-tycoon-temp
+    schemas: factory-tycoon
 
 jwt:
   secret: ${JWT_SECRET_KEY}
