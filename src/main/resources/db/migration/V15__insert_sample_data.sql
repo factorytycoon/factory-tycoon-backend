@@ -178,3 +178,10 @@ INSERT INTO inventory (factory_id, item_name, quantity, location, unit, expirati
 (1, 'Rubber Gasket', 1000, 'Warehouse B', 'box', '2025-12-31'),
 (2, 'Aluminum Bar', 300, 'Warehouse A', 'pcs', NULL),
 (3, 'Plastic Resin', 200, 'Warehouse C', 'kg', '2025-06-30');
+
+-- Insert User Status (4 rows)
+INSERT INTO user_status (user_id, date, status) VALUES
+(1, '2024-01-08', TRUE),
+(2, '2024-01-08', TRUE),
+(3, '2024-01-08', FALSE),
+(4, '2024-01-08', TRUE);
