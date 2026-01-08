@@ -30,7 +30,9 @@ public class FactoryStatusService {
     public FactoryStatusResponse analyzeFactoryStatus(LocalDate date) {
         // 1. RDB 데이터 가져오기 (현재는 더미 데이터 사용)
         FactoryStatusRequest status = getDailyFactoryStatusFromRDB(date);
-
+        if (status == null) {
+            throw new IllegalStateException("FactoryStatusRequest 생성 실패");
+        }
         List<CategoryScore> details = new ArrayList<>();
         int totalRawScore = 0;
 
@@ -134,11 +136,19 @@ public class FactoryStatusService {
         // 1. 안전: 알람 테이블(Alarm)에서 카운트
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.atTime(23, 59, 59);
-        List<AlarmEntity> alarms = alarmRepository.findAllByCreatedAtBetween(startOfDay, endOfDay);
+        List<AlarmEntity> alarms =
+            alarmRepository.findAllByCreatedAtBetween(startOfDay, endOfDay);
+
+        if (alarms == null) {
+            alarms = List.of();
+        }
         int safetyAlertCount = alarms.size();
 
         // 2. 오더 데이터 가져오기 (WorkOrder)
         List<WorkOrderEntity> allOrders = workOrderRepository.findAll();
+        if (allOrders == null) {
+            allOrders = List.of();
+        }
         List<WorkOrderEntity> todayOrders = allOrders.stream()
                 .filter(o -> o.getCreatedAt() != null && o.getCreatedAt().toLocalDate().equals(date))
                 .toList();
@@ -156,9 +166,17 @@ public class FactoryStatusService {
 
         // 4. 수익: 현재 수익 (오늘 오더의 가격 합계)
         BigDecimal currentProfit = todayOrders.stream()
-                .map(o -> o.getPrice() != null ? new BigDecimal(o.getPrice()) : BigDecimal.ZERO)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
+            .map(o -> {
+                try {
+                    return o.getPrice() != null
+                        ? new BigDecimal(o.getPrice())
+                        : BigDecimal.ZERO;
+                } catch (Exception e) {
+                    return BigDecimal.ZERO;
+                }
+            })
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+            
         return FactoryStatusRequest.builder()
                 .safetyAlertCount(safetyAlertCount)
                 .targetProduction(targetProduction)

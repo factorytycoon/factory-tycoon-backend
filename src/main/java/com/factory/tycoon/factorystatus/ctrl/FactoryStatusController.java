@@ -19,7 +19,7 @@ public class FactoryStatusController {
 
     private final FactoryStatusService factoryStatusService;
 
-    @GetMapping("/{id}}")
+    @GetMapping
     public ResponseEntity<FactoryStatusResponse> getDailyFactoryRank(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         FactoryStatusResponse result = factoryStatusService.analyzeFactoryStatus(date);
