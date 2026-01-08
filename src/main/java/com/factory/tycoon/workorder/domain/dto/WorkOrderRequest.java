@@ -8,11 +8,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class WorkOrderRequest {
-    private Long equipmentId;
     private Long orderId;
-    private String productName;
-    private Integer targetAmount;
-    private String customerName;
-    private Boolean status;
-    private String price;
+    private Long equipmentId;
 }
