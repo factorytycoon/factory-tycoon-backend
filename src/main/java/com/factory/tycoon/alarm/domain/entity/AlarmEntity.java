@@ -51,8 +51,4 @@ public class AlarmEntity {
         this.sensorSnapshot = sensorSnapshot;
         this.status = status;
     }
-
-    public void resolve() {
-        this.status = "OPEN";
-    }
 }
