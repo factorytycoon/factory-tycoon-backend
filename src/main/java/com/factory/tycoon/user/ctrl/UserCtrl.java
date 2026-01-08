@@ -16,17 +16,27 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/ft/user")
 @RequiredArgsConstructor
 public class UserCtrl {
+    private final UserService userService;
+    private final com.factory.tycoon.auth.TokenService tokenService;
+    
+    
     @Operation(summary = "공장별 작업자 목록 조회", description = "특정 factoryId의 worker 목록 조회")
     @GetMapping("/factory/{factoryId}/workers")
     public ResponseEntity<List<UserResponse.WorkerResponse>> getWorkersByFactoryId(@PathVariable Long factoryId) {
         return ResponseEntity.ok(userService.findWorkersByFactoryId(factoryId));
     }
 
-    private final UserService userService;
-    private final com.factory.tycoon.auth.TokenService tokenService;
-    @Operation(summary = "내 정보 조회", description = "현재 로그인한 사용자 정보 반환")
+    @Operation(summary = "내 인증 정보 조회", description = "현재 로그인한 사용자 인증 정보 반환")
     @GetMapping("/me")
-    public ResponseEntity<UserResponse.AuthResponse> getMyInfo(@RequestHeader("Authorization") String authorizationHeader) {
+    public ResponseEntity<UserResponse.AuthResponse> getMyAuth(@RequestHeader("Authorization") String authorizationHeader) {
+        String token = authorizationHeader.replaceFirst("(?i)^Bearer ", "");
+        Long userId = tokenService.getUserId(token);
+        return ResponseEntity.ok(userService.getUserAuth(userId));
+    }
+    
+    @Operation(summary = "내 정보 조회", description = "현재 로그인한 사용자 정보 반환")
+    @GetMapping("/my_info")
+    public ResponseEntity<UserResponse.WorkerResponse> getMyInfo(@RequestHeader("Authorization") String authorizationHeader) {
         String token = authorizationHeader.replaceFirst("(?i)^Bearer ", "");
         Long userId = tokenService.getUserId(token);
         return ResponseEntity.ok(userService.getUserInfo(userId));
@@ -53,10 +63,58 @@ public class UserCtrl {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "유저 조회", description = "역할로 유저 목록 조회 (role=worker 또는 role=owner)")
-    @GetMapping("/list")
-    public ResponseEntity<List<UserResponse.WorkerResponse>> getUsersByRole(@RequestParam String role) {
-        return ResponseEntity.ok(userService.findByRole(role));
+    @Operation(summary = "유저 조회", description = "공장별 역할로 유저 목록 조회 (role=worker 또는 role=owner)")
+    @GetMapping("/factory/{factoryId}/list")
+    public ResponseEntity<List<UserResponse.WorkerResponse>> getUsersByRole(
+            @PathVariable Long factoryId,
+            @RequestParam String role) {
+        return ResponseEntity.ok(userService.findByFactoryAndRole(factoryId, role));
     }
 
+    @Operation(summary = "내 이미지 수정", description = "S3 파일명을 저장하여 사용자 이미지 업데이트")
+    @PutMapping("/image_update")
+    public ResponseEntity<UserResponse.UpdateImageResponse> updateMyImage(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestBody UserRequest.UpdateImageRequest request) {
+        String token = authorizationHeader.replaceFirst("(?i)^Bearer ", "");
+        Long userId = tokenService.getUserId(token);
+        return ResponseEntity.ok(userService.updateUserImage(userId, request));
+    }
+
+    @Operation(summary = "직원 추가", description = "factoryCode를 기준으로 worker를 등록")
+    @PostMapping
+    public ResponseEntity<UserResponse.WorkerResponse> createWorker(
+            @RequestBody UserRequest.ManageWorkerRequest request) {
+        return ResponseEntity.ok(userService.createWorker(request));
+    }
+
+    @Operation(summary = "직원 수정", description = "이름/이메일/전화/공장코드를 수정")
+    @PutMapping("/{userId}")
+    public ResponseEntity<UserResponse.WorkerResponse> updateWorker(
+            @PathVariable Long userId,
+            @RequestBody UserRequest.ManageWorkerRequest request) {
+        return ResponseEntity.ok(userService.updateWorker(userId, request));
+    }
+
+    @Operation(summary = "직원 삭제", description = "userId로 직원 삭제")
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.noContent().build();
+    }
+    
+    @Operation(summary = "직원 상태만 변경", description = "userId로 직원의 status만 변경(PATCH)")
+    @PatchMapping("/{userId}/status")
+    public ResponseEntity<UserResponse.WorkerResponse> updateUserStatus(
+            @PathVariable Long userId,
+            @RequestBody StatusRequest statusRequest) {
+        return ResponseEntity.ok(userService.updateUserStatus(userId, statusRequest.getStatus()));
+    }
+    public static class StatusRequest {
+        private Boolean status;
+        public Boolean getStatus() { return status; }
+        public void setStatus(Boolean status) { this.status = status; }
+    }
+    
+    
 }

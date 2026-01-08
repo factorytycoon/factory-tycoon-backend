@@ -1,4 +1,4 @@
-package com.factory.tycoon.global.config;
+package com.factory.tycoon.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
