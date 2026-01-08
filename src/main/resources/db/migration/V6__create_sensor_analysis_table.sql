@@ -1,4 +1,4 @@
-CREATE TABLE sensor_analysis (
+CREATE TABLE IF NOT EXISTS sensor_analysis (
     sensor_analysis_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     sensor_data_id BIGINT NOT NULL,
     max_value DECIMAL(15, 2),

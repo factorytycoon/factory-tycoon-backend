@@ -1,4 +1,4 @@
-CREATE TABLE alarm (
+CREATE TABLE IF NOT EXISTS alarm (
     alarm_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     sensor_id BIGINT NOT NULL,
     level VARCHAR(20) NOT NULL COMMENT 'warning/critical',

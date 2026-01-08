@@ -1,4 +1,4 @@
-CREATE TABLE prediction (
+CREATE TABLE IF NOT EXISTS prediction (
     prediction_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     factory_id BIGINT NOT NULL,
     type VARCHAR(100) NOT NULL,

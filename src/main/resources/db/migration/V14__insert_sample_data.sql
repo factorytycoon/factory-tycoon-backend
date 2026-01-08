@@ -1,103 +1,181 @@
--- ============================================
--- Sample Data for Factory Tycoon Application
--- ============================================
+-- Insert sample data for all tables
 
--- 1. Factory Sample Data (4개)
-INSERT INTO factory (name, location, description, phone, factory_code, modeling, operation_start_at) VALUES
-('Samsung Electronics Manufacturing Plant', 'Seoul, South Korea', 'Advanced semiconductor and display manufacturing facility', '02-1234-5678', 'FC001', '/models/samsung-plant.3d', '2023-01-15 09:00:00'),
-('LG Display Manufacturing Center', 'Incheon, South Korea', 'Large-scale LCD and OLED display production', '032-5678-9012', 'FC002', '/models/lg-center.3d', '2023-03-20 08:00:00'),
-('SK Hynix Semiconductor Fab', 'Icheon, South Korea', 'Memory chip manufacturing and testing facility', '031-3456-7890', 'FC003', '/models/skhynix-fab.3d', '2023-02-10 07:30:00'),
-('Hyundai Motor Parts Factory', 'Gwangju, South Korea', 'Automotive parts and components manufacturing', '062-9876-5432', 'FC004', '/models/hyundai-parts.3d', '2023-04-05 06:00:00');
+-- Insert Factory (4 rows)
+INSERT INTO factory (name, location, description, phone, factory_code, operation_start_at, modeling) VALUES
+('Seoul Factory', 'Seoul, South Korea', 'Main production facility', '02-1234-5678', 'FACT-001', '2024-01-01 09:00:00', '/models/factory_seoul.glb'),
+('Busan Factory', 'Busan, South Korea', 'Secondary production facility', '051-9876-5432', 'FACT-002', '2024-01-05 08:30:00', '/models/factory_busan.glb'),
+('Incheon Factory', 'Incheon, South Korea', 'Quality control facility', '032-5555-6666', 'FACT-003', '2024-01-10 10:00:00', '/models/factory_incheon.glb'),
+('Daegu Factory', 'Daegu, South Korea', 'Assembly facility', '053-1111-2222', 'FACT-004', '2024-01-15 07:00:00', '/models/factory_daegu.glb');
 
--- 2. Equipment Sample Data (16개)
+-- Insert Equipment (4 rows per factory)
 INSERT INTO equipment (factory_id, name, status, type, installed_at, modeling) VALUES
--- Factory 1
-(1, 'Assembly Line A1', 'normal', 'Robotic Assembly System', '2023-01-20 10:00:00', '/models/line-a1.3d'),
-(1, 'Testing Station B1', 'warning', 'Automated Test Equipment', '2023-02-05 14:30:00', '/models/station-b1.3d'),
-(1, 'Packaging Unit C1', 'normal', 'Automated Packaging Machine', '2023-01-25 11:00:00', '/models/unit-c1.3d'),
-(1, 'Quality Control D1', 'error', 'Vision Inspection System', '2023-03-01 09:15:00', '/models/qc-d1.3d'),
--- Factory 2
-(2, 'Display Production Line EP1', 'normal', 'LCD Display Manufacturing', '2023-03-25 08:00:00', '/models/ep1.3d'),
-(2, 'OLED Coating Station FP2', 'normal', 'OLED Coating Equipment', '2023-04-10 10:30:00', '/models/fp2.3d'),
-(2, 'Lamination Unit GP3', 'warning', 'Display Lamination Machine', '2023-04-15 15:00:00', '/models/gp3.3d'),
-(2, 'Inspection Line HP4', 'normal', 'Display Quality Inspection', '2023-04-20 11:45:00', '/models/hp4.3d'),
--- Factory 3
-(3, 'Wafer Processing IP1', 'normal', 'Wafer Fabrication Equipment', '2023-02-15 08:00:00', '/models/ip1.3d'),
-(3, 'Etching Machine JP2', 'warning', 'Plasma Etching System', '2023-02-20 10:30:00', '/models/jp2.3d'),
-(3, 'Implantation Unit KP3', 'normal', 'Ion Implantation Equipment', '2023-03-05 09:00:00', '/models/kp3.3d'),
-(3, 'Metrology Station LP4', 'normal', 'Precision Measurement System', '2023-03-10 14:00:00', '/models/lp4.3d'),
--- Factory 4
-(4, 'Stamping Press MP1', 'normal', 'High-Power Stamping Machine', '2023-04-01 07:00:00', '/models/mp1.3d'),
-(4, 'Welding Robot NP2', 'normal', 'Automated Welding System', '2023-04-08 09:30:00', '/models/np2.3d'),
-(4, 'Painting Booth OP3', 'warning', 'Automated Painting Line', '2023-04-12 08:15:00', '/models/op3.3d'),
-(4, 'Assembly Station PP4', 'normal', 'Final Assembly Line', '2023-04-18 10:00:00', '/models/pp4.3d');
+(1, 'CNC Machine 1', 'normal', 'CNC', '2023-06-01 10:00:00', '/models/cnc_1.glb'),
+(1, 'Welding Robot 1', 'normal', 'Welding', '2023-06-15 11:00:00', '/models/welder_1.glb'),
+(1, 'Assembly Line 1', 'warning', 'Assembly', '2023-07-01 09:00:00', '/models/assembly_1.glb'),
+(1, 'Quality Checker 1', 'normal', 'Inspection', '2023-07-15 08:00:00', '/models/checker_1.glb'),
+(2, 'CNC Machine 2', 'normal', 'CNC', '2023-08-01 10:00:00', '/models/cnc_2.glb'),
+(2, 'Welding Robot 2', 'error', 'Welding', '2023-08-15 11:00:00', '/models/welder_2.glb'),
+(2, 'Assembly Line 2', 'normal', 'Assembly', '2023-09-01 09:00:00', '/models/assembly_2.glb'),
+(2, 'Quality Checker 2', 'normal', 'Inspection', '2023-09-15 08:00:00', '/models/checker_2.glb'),
+(3, 'CNC Machine 3', 'normal', 'CNC', '2023-10-01 10:00:00', '/models/cnc_3.glb'),
+(3, 'Welding Robot 3', 'normal', 'Welding', '2023-10-15 11:00:00', '/models/welder_3.glb'),
+(3, 'Assembly Line 3', 'normal', 'Assembly', '2023-11-01 09:00:00', '/models/assembly_3.glb'),
+(3, 'Quality Checker 3', 'warning', 'Inspection', '2023-11-15 08:00:00', '/models/checker_3.glb'),
+(4, 'CNC Machine 4', 'normal', 'CNC', '2023-12-01 10:00:00', '/models/cnc_4.glb'),
+(4, 'Welding Robot 4', 'normal', 'Welding', '2023-12-15 11:00:00', '/models/welder_4.glb'),
+(4, 'Assembly Line 4', 'normal', 'Assembly', '2024-01-01 09:00:00', '/models/assembly_4.glb'),
+(4, 'Quality Checker 4', 'normal', 'Inspection', '2024-01-15 08:00:00', '/models/checker_4.glb');
 
--- 3. Sensor Sample Data (4개)
+-- Insert Sensor (4 rows per equipment)
 INSERT INTO sensor (equipment_id, name, type) VALUES
-(1, 'Temperature Sensor TS001', 'temperature'),
-(2, 'Vibration Sensor VS001', 'vibration'),
-(3, 'Pressure Sensor PS001', 'pressure'),
-(4, 'Current Sensor CS001', 'current');
+(1, 'Temperature Sensor 1-1', 'Temperature'),
+(1, 'Pressure Sensor 1-1', 'Pressure'),
+(1, 'Vibration Sensor 1-1', 'Vibration'),
+(1, 'Speed Sensor 1-1', 'Speed'),
+(2, 'Temperature Sensor 2-1', 'Temperature'),
+(2, 'Pressure Sensor 2-1', 'Pressure'),
+(2, 'Vibration Sensor 2-1', 'Vibration'),
+(2, 'Speed Sensor 2-1', 'Speed'),
+(3, 'Temperature Sensor 3-1', 'Temperature'),
+(3, 'Pressure Sensor 3-1', 'Pressure'),
+(3, 'Vibration Sensor 3-1', 'Vibration'),
+(3, 'Speed Sensor 3-1', 'Speed'),
+(4, 'Temperature Sensor 4-1', 'Temperature'),
+(4, 'Pressure Sensor 4-1', 'Pressure'),
+(4, 'Vibration Sensor 4-1', 'Vibration'),
+(4, 'Speed Sensor 4-1', 'Speed'),
+(5, 'Temperature Sensor 5-1', 'Temperature'),
+(5, 'Pressure Sensor 5-1', 'Pressure'),
+(5, 'Vibration Sensor 5-1', 'Vibration'),
+(5, 'Speed Sensor 5-1', 'Speed'),
+(6, 'Temperature Sensor 6-1', 'Temperature'),
+(6, 'Pressure Sensor 6-1', 'Pressure'),
+(6, 'Vibration Sensor 6-1', 'Vibration'),
+(6, 'Speed Sensor 6-1', 'Speed'),
+(7, 'Temperature Sensor 7-1', 'Temperature'),
+(7, 'Pressure Sensor 7-1', 'Pressure'),
+(7, 'Vibration Sensor 7-1', 'Vibration'),
+(7, 'Speed Sensor 7-1', 'Speed'),
+(8, 'Temperature Sensor 8-1', 'Temperature'),
+(8, 'Pressure Sensor 8-1', 'Pressure'),
+(8, 'Vibration Sensor 8-1', 'Vibration'),
+(8, 'Speed Sensor 8-1', 'Speed'),
+(9, 'Temperature Sensor 9-1', 'Temperature'),
+(9, 'Pressure Sensor 9-1', 'Pressure'),
+(9, 'Vibration Sensor 9-1', 'Vibration'),
+(9, 'Speed Sensor 9-1', 'Speed'),
+(10, 'Temperature Sensor 10-1', 'Temperature'),
+(10, 'Pressure Sensor 10-1', 'Pressure'),
+(10, 'Vibration Sensor 10-1', 'Vibration'),
+(10, 'Speed Sensor 10-1', 'Speed'),
+(11, 'Temperature Sensor 11-1', 'Temperature'),
+(11, 'Pressure Sensor 11-1', 'Pressure'),
+(11, 'Vibration Sensor 11-1', 'Vibration'),
+(11, 'Speed Sensor 11-1', 'Speed'),
+(12, 'Temperature Sensor 12-1', 'Temperature'),
+(12, 'Pressure Sensor 12-1', 'Pressure'),
+(12, 'Vibration Sensor 12-1', 'Vibration'),
+(12, 'Speed Sensor 12-1', 'Speed'),
+(13, 'Temperature Sensor 13-1', 'Temperature'),
+(13, 'Pressure Sensor 13-1', 'Pressure'),
+(13, 'Vibration Sensor 13-1', 'Vibration'),
+(13, 'Speed Sensor 13-1', 'Speed'),
+(14, 'Temperature Sensor 14-1', 'Temperature'),
+(14, 'Pressure Sensor 14-1', 'Pressure'),
+(14, 'Vibration Sensor 14-1', 'Vibration'),
+(14, 'Speed Sensor 14-1', 'Speed'),
+(15, 'Temperature Sensor 15-1', 'Temperature'),
+(15, 'Pressure Sensor 15-1', 'Pressure'),
+(15, 'Vibration Sensor 15-1', 'Vibration'),
+(15, 'Speed Sensor 15-1', 'Speed'),
+(16, 'Temperature Sensor 16-1', 'Temperature'),
+(16, 'Pressure Sensor 16-1', 'Pressure'),
+(16, 'Vibration Sensor 16-1', 'Vibration'),
+(16, 'Speed Sensor 16-1', 'Speed');
 
--- 4. Sensor Data Sample Data (4개)
+-- Insert Sensor Data (4 rows per sensor)
 INSERT INTO sensor_data (sensor_id, path, date) VALUES
-(1, '/factory/line-a1/temperature', CURDATE()),
-(2, '/factory/station-b1/vibration', CURDATE()),
-(3, '/factory/unit-c1/pressure', CURDATE()),
-(4, '/factory/qc-d1/current', CURDATE());
+(1, '/data/sensor/1/2024-01-01.csv', '2024-01-01'),
+(1, '/data/sensor/1/2024-01-02.csv', '2024-01-02'),
+(1, '/data/sensor/1/2024-01-03.csv', '2024-01-03'),
+(1, '/data/sensor/1/2024-01-04.csv', '2024-01-04'),
+(2, '/data/sensor/2/2024-01-01.csv', '2024-01-01'),
+(2, '/data/sensor/2/2024-01-02.csv', '2024-01-02'),
+(2, '/data/sensor/2/2024-01-03.csv', '2024-01-03'),
+(2, '/data/sensor/2/2024-01-04.csv', '2024-01-04'),
+(3, '/data/sensor/3/2024-01-01.csv', '2024-01-01'),
+(3, '/data/sensor/3/2024-01-02.csv', '2024-01-02'),
+(3, '/data/sensor/3/2024-01-03.csv', '2024-01-03'),
+(3, '/data/sensor/3/2024-01-04.csv', '2024-01-04'),
+(4, '/data/sensor/4/2024-01-01.csv', '2024-01-01'),
+(4, '/data/sensor/4/2024-01-02.csv', '2024-01-02'),
+(4, '/data/sensor/4/2024-01-03.csv', '2024-01-03'),
+(4, '/data/sensor/4/2024-01-04.csv', '2024-01-04');
 
--- 5. Sensor Analysis Sample Data (4개)
+-- Insert Sensor Analysis (4 rows per sensor data)
 INSERT INTO sensor_analysis (sensor_data_id, max_value, min_value, avg_value) VALUES
-(1, 85.50, 72.30, 78.90),
-(2, 12.80, 8.40, 10.60),
-(3, 98.50, 95.20, 96.80),
-(4, 45.30, 42.10, 43.70);
+(1, 95.5, 45.3, 70.4),
+(2, 98.2, 48.1, 73.2),
+(3, 92.1, 42.5, 67.3),
+(4, 96.8, 46.9, 71.9),
+(5, 125.4, 50.2, 87.8),
+(6, 128.9, 52.1, 90.5),
+(7, 122.3, 48.7, 85.5),
+(8, 127.6, 51.4, 89.5),
+(9, 55.4, 20.1, 37.8),
+(10, 58.9, 22.5, 40.7),
+(11, 52.3, 18.6, 35.5),
+(12, 57.6, 21.3, 39.5),
+(13, 88.4, 35.2, 61.8),
+(14, 91.9, 37.8, 64.9),
+(15, 85.3, 33.1, 59.2),
+(16, 90.6, 36.4, 63.5);
 
--- 6. Alarm Sample Data (4개)
+-- Insert Alarm (4 rows)
 INSERT INTO alarm (sensor_id, level, message, status) VALUES
-(1, 'warning', 'Temperature approaching upper limit (>80°C)', FALSE),
-(2, 'critical', 'Vibration level exceeds safety threshold', TRUE),
-(3, 'warning', 'Pressure fluctuation detected', FALSE),
-(4, 'critical', 'Current consumption abnormal', FALSE);
+(1, 'warning', 'Temperature above normal range', FALSE),
+(2, 'critical', 'Pressure sensor malfunction detected', FALSE),
+(3, 'warning', 'Excessive vibration detected', TRUE),
+(4, 'critical', 'Speed sensor error - immediate action required', FALSE);
 
--- 7. Orders Sample Data (4개)
+-- Insert Orders (4 rows)
 INSERT INTO orders (factory_id, customer, product_name, quantity, due_date) VALUES
-(1, 'Apple Inc.', 'Semiconductor Chips Type-X', 50000, DATE_ADD(CURDATE(), INTERVAL 30 DAY)),
-(2, 'Samsung Display', 'OLED Display Panels 55-inch', 10000, DATE_ADD(CURDATE(), INTERVAL 45 DAY)),
-(3, 'Intel Corporation', 'Memory Chips DDR5 Series', 80000, DATE_ADD(CURDATE(), INTERVAL 60 DAY)),
-(4, 'Hyundai Motors', 'Engine Control Modules', 25000, DATE_ADD(CURDATE(), INTERVAL 35 DAY));
+(1, 'ABC Electronics', 'PCB Assembly', 1000, '2024-02-28'),
+(1, 'XYZ Manufacturing', 'Motor Component', 500, '2024-03-15'),
+(2, 'DEF Industries', 'Metal Fastener', 5000, '2024-02-15'),
+(3, 'GHI Corporation', 'Plastic Housing', 2000, '2024-03-30');
 
--- 8. WorkOrder Sample Data (4개)
+-- Insert Workorder (4 rows)
 INSERT INTO workorder (equipment_id, order_id, product_name, target_amount, customer_name, status, price) VALUES
-(1, 1, 'Semiconductor Chips Type-X', 10000, 'Apple Inc.', FALSE, '5000000'),
-(5, 2, 'OLED Display Panels 55-inch', 2500, 'Samsung Display', FALSE, '8500000'),
-(9, 3, 'Memory Chips DDR5 Series', 20000, 'Intel Corporation', FALSE, '12000000'),
-(13, 4, 'Engine Control Modules', 6250, 'Hyundai Motors', TRUE, '3500000');
+(1, 1, 'PCB Assembly', 250, 'ABC', FALSE, '50000'),
+(2, 2, 'Motor Component', 125, 'XYZ', FALSE, '75000'),
+(5, 3, 'Metal Fastener', 1250, 'DEF', TRUE, '30000'),
+(9, 4, 'Plastic Housing', 500, 'GHI', FALSE, '45000');
 
--- 9. Schedule Sample Data (4개)
+-- Insert Schedule (4 rows)
 INSERT INTO schedule (workorder_id, status, date, shift, worker) VALUES
-(1, 'scheduled', CURDATE(), 'morning', 'Kim Min-jun'),
-(2, 'in-progress', DATE_ADD(CURDATE(), INTERVAL 1 DAY), 'afternoon', 'Park Ji-won'),
-(3, 'in-progress', DATE_ADD(CURDATE(), INTERVAL 2 DAY), 'night', 'Lee Sung-ho'),
-(4, 'completed', DATE_SUB(CURDATE(), INTERVAL 5 DAY), 'morning', 'Choi Young-soo');
+(1, 'pending', '2024-01-10', 'morning', 'Kim, Min-ho'),
+(2, 'in_progress', '2024-01-11', 'afternoon', 'Lee, Ji-won'),
+(3, 'completed', '2024-01-12', 'night', 'Park, Sung-il'),
+(4, 'pending', '2024-01-13', 'morning', 'Choi, Young-soo');
 
--- 10. Prediction Sample Data (4개)
+-- Insert Prediction (4 rows)
 INSERT INTO prediction (factory_id, type, level, message, selected) VALUES
-(1, 'equipment_maintenance', 'critical', 'Equipment A1 requires maintenance within 7 days', TRUE),
-(2, 'production_delay', 'warning', 'Production may be delayed due to component shortage', FALSE),
-(3, 'equipment_failure', 'critical', 'Wafer processing equipment shows signs of failure', TRUE),
-(4, 'quality_issue', 'warning', 'Quality defect rate increasing, review process needed', FALSE);
+(1, 'maintenance', 'warning', 'CNC Machine 1 requires maintenance in 7 days', FALSE),
+(2, 'failure', 'critical', 'Welding Robot 2 failure risk detected', TRUE),
+(3, 'efficiency', 'warning', 'Assembly Line 3 efficiency dropped by 15%', FALSE),
+(4, 'safety', 'critical', 'Safety inspection required immediately', TRUE);
 
--- 11. User Sample Data (4개 - 각 팩토리별로)
-INSERT INTO `user` (factory_id, name, dob, phone, email, password, role) VALUES
-(1, 'Kim Min-jun', '1985-03-15', '010-1234-5678', 'minjun.kim@samsung.com', '$2a$10$dXJ3SW6G7P50eS3sWOeE.e0HjBHYEHXhZABqGfNyJDMFbHLQ9H.h6', 'OWNER'),
-(2, 'Park Ji-won', '1990-07-22', '010-2345-6789', 'jiwon.park@lg.com', '$2a$10$dXJ3SW6G7P50eS3sWOeE.e0HjBHYEHXhZABqGfNyJDMFbHLQ9H.h6', 'WORKER'),
-(3, 'Lee Sung-ho', '1988-11-30', '010-3456-7890', 'sungho.lee@sk.com', '$2a$10$dXJ3SW6G7P50eS3sWOeE.e0HjBHYEHXhZABqGfNyJDMFbHLQ9H.h6', 'OWNER'),
-(4, 'Choi Young-soo', '1992-05-18', '010-4567-8901', 'youngsoo.choi@hyundai.com', '$2a$10$dXJ3SW6G7P50eS3sWOeE.e0HjBHYEHXhZABqGfNyJDMFbHLQ9H.h6', 'WORKER');
+-- Insert User (4 rows)
+INSERT INTO `user` (factory_id, name, dob, phone, email, password, role, image) VALUES
+(1, 'minu', '1985-05-12', '010-1234-5678', 'sf@sf.com', '1234', 'OWNER', NULL),
+(1, 'Lee, Ji-won', '1990-08-25', '010-2345-6789', 'lee.jiwon@factory.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcg7b3XeKeUxWdeS86E36gZvWFm', 'WORKER', 'lee_profile.jpg'),
+(2, 'Park, Sung-il', '1988-03-18', '010-3456-7890', 'park.sungil@factory.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcg7b3XeKeUxWdeS86E36gZvWFm', 'OWNER', 'park_profile.jpg'),
+(3, 'Choi, Young-soo', '1992-11-30', '010-4567-8901', 'choi.youngsoo@factory.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcg7b3XeKeUxWdeS86E36gZvWFm', 'WORKER', 'choi_profile.jpg');
 
--- 12. Inventory Sample Data (4개)
-INSERT INTO inventory (factory_id, item_name, quantity, unit, expiration_date) VALUES
-(1, 'Silicon Wafers 300mm', 500, 'units', DATE_ADD(CURDATE(), INTERVAL 365 DAY)),
-(2, 'Glass Substrates', 800, 'sheets', DATE_ADD(CURDATE(), INTERVAL 180 DAY)),
-(3, 'Chemical Reagents', 250, 'liters', DATE_ADD(CURDATE(), INTERVAL 90 DAY)),
-(4, 'Steel Plates 10mm', 1200, 'units', DATE_ADD(CURDATE(), INTERVAL 365 DAY));
+-- Insert Inventory (4 rows)
+INSERT INTO inventory (factory_id, item_name, quantity, location, unit, expiration_date) VALUES
+(1, 'Steel Plate', 500, 'Warehouse A', 'pcs', NULL),
+(1, 'Rubber Gasket', 1000, 'Warehouse B', 'box', '2025-12-31'),
+(2, 'Aluminum Bar', 300, 'Warehouse A', 'pcs', NULL),
+(3, 'Plastic Resin', 200, 'Warehouse C', 'kg', '2025-06-30');

@@ -1,4 +1,4 @@
-CREATE TABLE factory (
+CREATE TABLE IF NOT EXISTS factory (
     factory_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     location VARCHAR(255),

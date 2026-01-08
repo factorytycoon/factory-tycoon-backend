@@ -25,7 +25,7 @@ spring:
     locations: classpath:db/migration
     encoding: UTF-8
     validate-on-migrate: false
-    clean-disabled: true
+    clean-disabled: false
     out-of-order: false
     table: flyway_schema_history
     create-schemas: true

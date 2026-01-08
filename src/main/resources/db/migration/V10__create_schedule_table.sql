@@ -1,4 +1,4 @@
-CREATE TABLE schedule (
+CREATE TABLE IF NOT EXISTS schedule (
     schedule_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     workorder_id BIGINT NOT NULL,
     status VARCHAR(50) NOT NULL,

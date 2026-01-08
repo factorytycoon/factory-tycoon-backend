@@ -1,4 +1,4 @@
-CREATE TABLE equipment (
+CREATE TABLE IF NOT EXISTS equipment (
     equipment_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     factory_id BIGINT NOT NULL,
     name VARCHAR(255) NOT NULL,

@@ -1,4 +1,4 @@
-CREATE TABLE workorder (
+CREATE TABLE IF NOT EXISTS workorder (
     workorder_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     equipment_id BIGINT NOT NULL,
     order_id BIGINT NOT NULL,

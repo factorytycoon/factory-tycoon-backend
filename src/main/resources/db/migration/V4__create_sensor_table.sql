@@ -1,4 +1,4 @@
-CREATE TABLE sensor (
+CREATE TABLE IF NOT EXISTS sensor (
     sensor_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     equipment_id BIGINT NOT NULL,
     name VARCHAR(255) NOT NULL,

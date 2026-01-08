@@ -1,4 +1,4 @@
-CREATE TABLE orders (
+CREATE TABLE IF NOT EXISTS orders (
     order_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     factory_id BIGINT NOT NULL,
     customer VARCHAR(255) NOT NULL,

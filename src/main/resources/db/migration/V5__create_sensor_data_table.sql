@@ -1,4 +1,4 @@
-CREATE TABLE sensor_data (
+CREATE TABLE IF NOT EXISTS sensor_data (
     sensor_data_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     sensor_id BIGINT NOT NULL,
     path VARCHAR(500),
