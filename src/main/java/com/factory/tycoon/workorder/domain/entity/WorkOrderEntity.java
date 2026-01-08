@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class WorkOrderEntity {
+    // ...existing code...
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,5 +58,25 @@ public class WorkOrderEntity {
     public void update(String productName, Integer targetAmount) {
         this.productName = productName;
         this.targetAmount = targetAmount;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
+    public void setEquipmentId(Long equipmentId) {
+        this.equipmentId = equipmentId;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public void setTargetAmount(Integer targetAmount) {
+        this.targetAmount = targetAmount;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 }
