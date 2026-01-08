@@ -1,6 +1,5 @@
 package com.factory.tycoon.alarm.domain.entity;
 
-import com.factory.tycoon.sensor.domain.entity.SensorEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,30 +23,36 @@ public class AlarmEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long alarmId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sensor_id", nullable = false)
-    private SensorEntity sensor;
+    @Column(name = "equipment_id", nullable = false)
+    private Long equipmentId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
-    private AlarmLevel level;
+    @Column(name = "monitor_name", length = 100)
+    private String monitorName;
 
-    private String message;
+    @Column(name = "trigger_name", length = 100)
+    private String triggerName;
 
-    @Column(nullable = false)
-    private Boolean status; // true: solved, false: not solved
+    @Column(name = "sensor_snapshot", columnDefinition = "longtext")
+    private String sensorSnapshot; // JSON 문자열
+
+    @Column(length = 20)
+    private String status; // OPEN, CLOSED, etc.
+
+    @Column(name = "sensor_dt")
+    private LocalDateTime sensorDt;
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    public void update(AlarmLevel level, String message, Boolean status) {
-        this.level = level;
-        this.message = message;
+    public void update(String monitorName, String triggerName, String sensorSnapshot, String status) {
+        this.monitorName = monitorName;
+        this.triggerName = triggerName;
+        this.sensorSnapshot = sensorSnapshot;
         this.status = status;
     }
 
     public void resolve() {
-        this.status = true;
+        this.status = "OPEN";
     }
 }
