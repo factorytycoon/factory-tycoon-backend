@@ -56,4 +56,11 @@ public class AlarmCtrl {
         alarmService.deleteAlarm(alarmId);
         return ResponseEntity.ok().build();
     }
+
+    @Operation(summary = "알람 해결", description = "알람을 해결 상태로 변경하고 해당 설비의 상태를 normal로 변경합니다.")
+    @PutMapping("/{alarmId}/resolve")
+    public ResponseEntity<AlarmResponse> resolveAlarm(
+            @Parameter(description = "알람 ID", required = true) @PathVariable Long alarmId) {
+        return ResponseEntity.ok(alarmService.resolveAlarm(alarmId));
+    }
 }

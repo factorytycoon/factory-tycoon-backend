@@ -145,4 +145,23 @@ public class AlarmService {
                 .orElseThrow(() -> new IllegalArgumentException("Alarm not found with id: " + id));
         alarmRepository.delete(alarm);
     }
+
+    @Transactional
+    public AlarmResponse resolveAlarm(Long alarmId) {
+        AlarmEntity alarm = alarmRepository.findById(alarmId)
+                .orElseThrow(() -> new IllegalArgumentException("Alarm not found with id: " + alarmId));
+        
+        // 알람 상태를 CLOSED로 업데이트
+        alarm.update(alarm.getDescription(), "CLOSED", alarm.getLevel());
+        
+        // 해당 equipment의 상태를 normal로 업데이트
+        EquipmentEntity equipment = equipmentRepository.findById(alarm.getEquipmentId())
+                .orElseThrow(() -> new IllegalArgumentException("Equipment not found with id: " + alarm.getEquipmentId()));
+        
+        equipment.update(equipment.getName(), "normal", equipment.getType(), 
+                equipment.getInstalledAt(), equipment.getLocation(), 
+                equipment.getDescription(), equipment.getModeling());
+        
+        return new AlarmResponse(alarm);
+    }
 }
