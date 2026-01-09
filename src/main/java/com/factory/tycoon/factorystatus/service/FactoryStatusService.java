@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -138,8 +139,10 @@ public class FactoryStatusService {
         // 1. 안전: 알람 테이블(Alarm)에서 카운트
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.atTime(23, 59, 59);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         List<AlarmEntity> alarms =
-            alarmRepository.findAllByCreatedAtBetween(startOfDay, endOfDay);
+            alarmRepository.findAllByCreatedAtBetween(startOfDay.format(formatter), endOfDay.format(formatter));
 
         if (alarms == null) {
             alarms = List.of();
