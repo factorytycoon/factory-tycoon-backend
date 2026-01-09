@@ -84,4 +84,12 @@ public class FactoryService {
     public List<PredictionResponse> getPredictions(Long factoryId, String type, String level, Boolean selected) {
         return predictionService.getPredictionsByFactory(factoryId, type, level, selected);
     }
+
+    @Transactional
+    public FactoryResponse updateFactoryModeling(Long factoryId, String modeling) {
+        FactoryEntity factory = factoryRepository.findById(factoryId)
+                .orElseThrow(() -> new IllegalArgumentException("Factory not found with id: " + factoryId));
+        factory.updateModeling(modeling);
+        return new FactoryResponse(factory);
+    }
 }

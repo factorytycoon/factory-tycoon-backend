@@ -7,6 +7,8 @@ CREATE TABLE IF NOT EXISTS equipment (
     installed_at TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modeling VARCHAR(255) COMMENT '3D Model File Path',
+    location VARCHAR(255) COMMENT 'Equipment location',
+    description TEXT COMMENT 'Equipment description',
     FOREIGN KEY (factory_id) REFERENCES factory(factory_id) ON DELETE CASCADE,
     INDEX idx_equipment_factory_id (factory_id),
     INDEX idx_equipment_status (status)

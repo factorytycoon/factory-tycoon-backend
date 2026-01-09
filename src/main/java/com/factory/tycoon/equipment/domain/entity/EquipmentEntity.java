@@ -47,6 +47,12 @@ public class EquipmentEntity {
     @Column(name = "modeling", length = 255)
     private String modeling; // 3D Model File Path
 
+    @Column(name = "location", length = 255)
+    private String location;
+
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
+
     public void update(String name, EquipmentStatus status, String type, LocalDateTime installedAt) {
         this.name = name;
         this.status = status;

@@ -2,29 +2,29 @@
 
   -- Insert Factory (4 rows)
 INSERT INTO factory (factory_id, name, location, description, phone, factory_code, operation_start_at, modeling) VALUES
-(1, 'Seoul Factory', 'Seoul, South Korea', 'Main production facility', '02-1234-5678', 'FACT-001', '2024-01-01 09:00:00', '/models/factory_seoul.glb'),
-(2, 'Busan Factory', 'Busan, South Korea', 'Secondary production facility', '051-9876-5432', 'FACT-002', '2024-01-05 08:30:00', '/models/factory_busan.glb'),
-(3, 'Incheon Factory', 'Incheon, South Korea', 'Quality control facility', '032-5555-6666', 'FACT-003', '2024-01-10 10:00:00', '/models/factory_incheon.glb'),
-(4, 'Daegu Factory', 'Daegu, South Korea', 'Assembly facility', '053-1111-2222', 'FACT-004', '2024-01-15 07:00:00', '/models/factory_daegu.glb');
+(1, 'Seoul Factory', 'Seoul, South Korea', 'Main production facility', '02-1234-5678', 'FACT-001', '2024-01-01 09:00:00', '/test_factory/ft.glb'),
+(2, 'Busan Factory', 'Busan, South Korea', 'Secondary production facility', '051-9876-5432', 'FACT-002', '2024-01-05 08:30:00', '/test_factory/ft.glb'),
+(3, 'Incheon Factory', 'Incheon, South Korea', 'Quality control facility', '032-5555-6666', 'FACT-003', '2024-01-10 10:00:00', '/test_factory/ft.glb'),
+(4, 'Daegu Factory', 'Daegu, South Korea', 'Assembly facility', '053-1111-2222', 'FACT-004', '2024-01-15 07:00:00', '/test_factory/ft.glb');
 
-  -- Insert Equipment (4 rows per factory)
-INSERT INTO equipment (factory_id, name, status, type, installed_at, modeling) VALUES
-(1, 'ft-pi-001', 'normal', 'CNC', '2023-06-01 10:00:00', '/models/cnc_1.glb'),
-(1, 'ft-pi-002', 'normal', 'Welding', '2023-06-15 11:00:00', '/models/welder_1.glb'),
-(1, 'ft-pi-003', 'warning', 'Assembly', '2023-07-01 09:00:00', '/models/assembly_1.glb'),
-(1, 'ft-pi-004', 'normal', 'Inspection', '2023-07-15 08:00:00', '/models/checker_1.glb'),
-(2, 'CNC Machine 2', 'normal', 'CNC', '2023-08-01 10:00:00', '/models/cnc_2.glb'),
-(2, 'Welding Robot 2', 'error', 'Welding', '2023-08-15 11:00:00', '/models/welder_2.glb'),
-(2, 'Assembly Line 2', 'normal', 'Assembly', '2023-09-01 09:00:00', '/models/assembly_2.glb'),
-(2, 'Quality Checker 2', 'normal', 'Inspection', '2023-09-15 08:00:00', '/models/checker_2.glb'),
-(3, 'CNC Machine 3', 'normal', 'CNC', '2023-10-01 10:00:00', '/models/cnc_3.glb'),
-(3, 'Welding Robot 3', 'normal', 'Welding', '2023-10-15 11:00:00', '/models/welder_3.glb'),
-(3, 'Assembly Line 3', 'normal', 'Assembly', '2023-11-01 09:00:00', '/models/assembly_3.glb'),
-(3, 'Quality Checker 3', 'warning', 'Inspection', '2023-11-15 08:00:00', '/models/checker_3.glb'),
-(4, 'CNC Machine 4', 'normal', 'CNC', '2023-12-01 10:00:00', '/models/cnc_4.glb'),
-(4, 'Welding Robot 4', 'normal', 'Welding', '2023-12-15 11:00:00', '/models/welder_4.glb'),
-(4, 'Assembly Line 4', 'normal', 'Assembly', '2024-01-01 09:00:00', '/models/assembly_4.glb'),
-(4, 'Quality Checker 4', 'normal', 'Inspection', '2024-01-15 08:00:00', '/models/checker_4.glb');
+  -- Insert Equipment (4 rows per factory) with location/description
+INSERT INTO equipment (factory_id, name, status, type, installed_at, modeling, location, description) VALUES
+(1, 'ft-pi-001', 'normal', 'CNC', '2023-06-01 10:00:00', '/sample/facility_test.glb', 'Building A - Floor 1 - Section 1', 'High-precision CNC milling machine for metal parts'),
+(1, 'ft-pi-002', 'normal', 'Welding', '2023-06-15 11:00:00', '/sample/facility_test.glb', 'Building A - Floor 1 - Section 2', 'Automated welding robot for assembly lines'),
+(1, 'ft-pi-003', 'warning', 'Assembly', '2023-07-01 09:00:00', '/sample/facility_test.glb', 'Building A - Floor 2 - Section 1', 'Main assembly line for final product integration'),
+(1, 'ft-pi-004', 'normal', 'Inspection', '2023-07-15 08:00:00', '/sample/facility_test.glb', 'Building A - Floor 2 - Section 3', 'Quality inspection and testing equipment'),
+(2, 'CNC Machine 2', 'normal', 'CNC', '2023-08-01 10:00:00', '/sample/facility_test.glb', 'Building B - Floor 1 - Section 1', 'CNC lathe machine for cylindrical parts'),
+(2, 'Welding Robot 2', 'error', 'Welding', '2023-08-15 11:00:00', '/sample/facility_test.glb', 'Building B - Floor 1 - Section 2', 'Heavy-duty welding robot for large components'),
+(2, 'Assembly Line 2', 'normal', 'Assembly', '2023-09-01 09:00:00', '/sample/facility_test.glb', 'Building B - Floor 2 - Section 1', 'Secondary assembly line for component integration'),
+(2, 'Quality Checker 2', 'normal', 'Inspection', '2023-09-15 08:00:00', '/sample/facility_test.glb', 'Building B - Floor 2 - Section 2', 'Automated inspection system with AI detection'),
+(3, 'CNC Machine 3', 'normal', 'CNC', '2023-10-01 10:00:00', '/sample/facility_test.glb', 'Building C - Floor 1 - Section 1', '5-axis CNC machining center for complex parts'),
+(3, 'Welding Robot 3', 'normal', 'Welding', '2023-10-15 11:00:00', '/sample/facility_test.glb', 'Building C - Floor 1 - Section 2', 'Precision welding robot for small components'),
+(3, 'Assembly Line 3', 'normal', 'Assembly', '2023-11-01 09:00:00', '/sample/facility_test.glb', 'Building C - Floor 2 - Section 1', 'Specialized assembly line for custom orders'),
+(3, 'Quality Checker 3', 'warning', 'Inspection', '2023-11-15 08:00:00', '/sample/facility_test.glb', 'Building C - Floor 2 - Section 2', 'Manual inspection station with measurement tools'),
+(4, 'CNC Machine 4', 'normal', 'CNC', '2023-12-01 10:00:00', '/sample/facility_test.glb', 'Building D - Floor 1 - Section 1', 'Multi-purpose CNC machine for diverse operations'),
+(4, 'Welding Robot 4', 'normal', 'Welding', '2023-12-15 11:00:00', '/sample/facility_test.glb', 'Building D - Floor 1 - Section 2', 'Collaborative welding robot for flexible tasks'),
+(4, 'Assembly Line 4', 'normal', 'Assembly', '2024-01-01 09:00:00', '/sample/facility_test.glb', 'Building D - Floor 2 - Section 1', 'Fast-paced assembly line for high-volume production'),
+(4, 'Quality Checker 4', 'normal', 'Inspection', '2024-01-15 08:00:00', '/sample/facility_test.glb', 'Building D - Floor 2 - Section 2', 'Final quality control station before shipment');
 
   -- Insert Sensor (4 rows per equipment)
 INSERT INTO sensor (equipment_id, name, type) VALUES
@@ -170,9 +170,9 @@ INSERT INTO prediction (factory_id, type, level, message, selected) VALUES
   -- Insert User (4 rows)
 INSERT INTO `user` (factory_id, name, dob, phone, email, password, role, created_at, image) VALUES
   (1,'Kim Min-ho', '1985-05-12','010-1234-5678','sf@sf.com','$2b$10$/0a6E6Zpf3VG4VeMD5F/NOlaH.6wMstvWgLP/DdhyJELeqrpWtMmK','OWNER','2024-01-01 09:00:00',NULL),
-  (1,'Lee Ji-won','1990-08-25','010-2345-6789','fs@fs.com','$2b$10$498HEzFnAWeVzlpuuccw6u6qkJCDQCJKAA5x5wpYGgN/d1v.MkRkK','WORKER','2024-01-01 09:00:00','lee_profile.jpg'),
-  (2,'Park Sung-il','1988-03-18','010-3456-7890','park.sungil@factory.com','$2a$10$slYQmyNdGzin7olVN3/p2OPST9/PgBkqquzi.Ss7KIUgO2t0jKMUm','OWNER','2024-01-01 09:00:00','park_profile.jpg'),
-  (3,'Choi Young-soo','1992-11-30','010-4567-8901','choi.youngsoo@factory.com','$2a$10$slYQmyNdGzin7olVN3/p2OPST9/PgBkqquzi.Ss7KIUgO2t0jKMUm','WORKER','2024-01-01 09:00:00','choi_profile.jpg');
+  (1,'Lee Ji-won','1990-08-25','010-2345-6789','fs@fs.com','$2b$10$498HEzFnAWeVzlpuuccw6u6qkJCDQCJKAA5x5wpYGgN/d1v.MkRkK','WORKER','2024-01-01 09:00:00',NULL),
+  (2,'Park Sung-il','1988-03-18','010-3456-7890','park.sungil@factory.com','$2a$10$slYQmyNdGzin7olVN3/p2OPST9/PgBkqquzi.Ss7KIUgO2t0jKMUm','OWNER','2024-01-01 09:00:00',NULL),
+  (3,'Choi Young-soo','1992-11-30','010-4567-8901','choi.youngsoo@factory.com','$2a$10$slYQmyNdGzin7olVN3/p2OPST9/PgBkqquzi.Ss7KIUgO2t0jKMUm','WORKER','2024-01-01 09:00:00',NULL);
   -- Insert Inventory (4 rows)
 INSERT INTO inventory (factory_id, item_name, quantity, location, unit, expiration_date) VALUES
 (1, 'Steel Plate', 500, 'Warehouse A', 'pcs', NULL),

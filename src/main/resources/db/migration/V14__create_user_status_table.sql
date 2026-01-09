@@ -1,4 +1,4 @@
-CREATE TABLE user_status (
+CREATE TABLE IF NOT EXISTS user_status (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     date DATE NOT NULL,

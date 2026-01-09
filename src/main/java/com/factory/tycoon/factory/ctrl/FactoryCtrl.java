@@ -2,6 +2,7 @@ package com.factory.tycoon.factory.ctrl;
 
 import com.factory.tycoon.factory.domain.dto.FactoryRequest;
 import com.factory.tycoon.factory.domain.dto.FactoryResponse;
+import com.factory.tycoon.factory.domain.dto.ModelingRequest;
 import com.factory.tycoon.factory.service.FactoryService;
 import com.factory.tycoon.equipment.domain.dto.EquipmentResponse;
 import com.factory.tycoon.inventory.domain.dto.InventoryResponse;
@@ -97,5 +98,14 @@ public class FactoryCtrl {
             @Parameter(description = "예측 레벨 (warning/critical)") @RequestParam(required = false) String level,
             @Parameter(description = "선택 상태 (true: 선택됨, false: 미선택)") @RequestParam(required = false) Boolean selected) {
         return ResponseEntity.ok(factoryService.getPredictions(factoryId, type, level, selected));
+    }
+
+    @Operation(summary = "공장 모델링 정보 수정",
+               description = "모델링 경로/JSON 문자열을 RequestBody로 받아 공장 DB에 반영합니다.")
+    @PutMapping("/{factoryId}/modeling")
+    public ResponseEntity<FactoryResponse> updateFactoryModeling(
+            @Parameter(description = "공장 ID", required = true) @PathVariable Long factoryId,
+            @RequestBody ModelingRequest request) {
+        return ResponseEntity.ok(factoryService.updateFactoryModeling(factoryId, request.getModeling()));
     }
 }

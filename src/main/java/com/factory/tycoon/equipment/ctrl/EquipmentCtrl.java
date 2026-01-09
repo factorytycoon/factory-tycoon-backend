@@ -72,4 +72,12 @@ public class EquipmentCtrl {
             @Parameter(description = "설비 ID", required = true) @PathVariable Long equipmentId) {
         return ResponseEntity.ok(equipmentService.getSensors(equipmentId));
     }
+
+    @Operation(summary = "설비 알람 목록 조회", 
+               description = "특정 설비에 속한 알람 목록을 조회합니다.")
+    @GetMapping("/{equipmentId}/alarm")
+    public ResponseEntity<List<Object>> getAlarms(
+            @Parameter(description = "설비 ID", required = true) @PathVariable Long equipmentId) {
+        return ResponseEntity.ok(equipmentService.getAlarms(equipmentId));
+    }
 }
