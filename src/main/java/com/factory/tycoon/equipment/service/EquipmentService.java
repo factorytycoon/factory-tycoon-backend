@@ -45,6 +45,7 @@ public class EquipmentService {
             .installedAt(request.getInstalledAt())
             .description(request.getDescription())
             .location(request.getLocation())
+            .modeling(request.getModeling())
             .build();
         EquipmentEntity savedEquipment = equipmentRepository.save(equipment);
         return new EquipmentResponse(savedEquipment);
@@ -66,7 +67,8 @@ public class EquipmentService {
             request.getType(),
             request.getInstalledAt(),
             request.getLocation(),
-            request.getDescription()
+            request.getDescription(),
+            request.getModeling()
         );
         return new EquipmentResponse(equipment);
     }

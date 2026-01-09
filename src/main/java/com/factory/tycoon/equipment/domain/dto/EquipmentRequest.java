@@ -17,4 +17,5 @@ public class EquipmentRequest {
     private LocalDateTime installedAt;
     private String location;
     private String description;
+    private String modeling;
 }
