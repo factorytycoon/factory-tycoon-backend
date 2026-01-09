@@ -28,29 +28,49 @@ public class AlarmService {
     private final EquipmentRepository equipmentRepository;
     private final ObjectMapper objectMapper;
 
-    public List<AlarmResponse> getAllAlarms(String triggerName, String status) {
+    public List<AlarmResponse> getAllAlarms(Long factoryId, String triggerName, String status) {
+        List<AlarmEntity> alarms = new java.util.ArrayList<>();
+        
+        // factoryId가 있으면 해당 공장의 설비 ID를 먼저 조회
+        if (factoryId != null) {
+            List<Long> equipmentIds = equipmentRepository.findByFactory_FactoryId(factoryId)
+                    .stream()
+                    .map(EquipmentEntity::getEquipmentId)
+                    .collect(Collectors.toList());
+            
+            if (equipmentIds.isEmpty()) {
+                return List.of();
+            }
+            
+            alarms = alarmRepository.findByEquipmentIdIn(equipmentIds);
+        } else {
+            // factoryId가 없으면 전체 조회
+            alarms = alarmRepository.findAll();
+        }
+        
+        // status로 단계적 필터링
         if (status != null) {
-            return alarmRepository.findByStatus(status.toString()).stream()
-                    .map(AlarmResponse::new)
+            alarms = alarms.stream()
+                    .filter(alarm -> alarm.getStatus().equals(status))
                     .collect(Collectors.toList());
         }
-        return alarmRepository.findAll().stream()
+        
+        // triggerName으로 단계적 필터링
+        if (triggerName != null) {
+            alarms = alarms.stream()
+                    .filter(alarm -> alarm.getTriggerName() != null && alarm.getTriggerName().equals(triggerName))
+                    .collect(Collectors.toList());
+        }
+        
+        return alarms.stream()
                 .map(AlarmResponse::new)
                 .collect(Collectors.toList());
     }
 
-    @Transactional
-    public AlarmResponse createAlarm(AlarmRequest request) {
-        AlarmEntity alarm = AlarmEntity.builder()
-                .equipmentId(request.getEquipmentId())
-                .monitorName(request.getMonitorName())
-                .triggerName(request.getTriggerName())
-                .sensorSnapshot(request.getSensorSnapshot())
-                .status(request.getStatus() != null ? request.getStatus() : "OPEN")
-                .sensorDt(request.getSensorDt())
-                .build();
-        AlarmEntity saved = alarmRepository.save(alarm);
-        return new AlarmResponse(saved);
+    public List<AlarmResponse> getAlarmsByEquipmentId(Long equipmentId) {
+        return alarmRepository.findByEquipmentId(equipmentId).stream()
+                .map(AlarmResponse::new)
+                .collect(Collectors.toList());
     }
     
     @Transactional
@@ -112,14 +132,5 @@ public class AlarmService {
         AlarmEntity alarm = alarmRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Alarm not found with id: " + id));
         alarmRepository.delete(alarm);
-    }
-
-    public List<AlarmResponse> getAlarmsByEquipmentId(Long equipmentId, String level, Boolean status) {
-        // equipment_id로 조회하도록 수정
-        return alarmRepository.findAll().stream()
-                .filter(alarm -> alarm.getEquipmentId().equals(equipmentId))
-                .filter(alarm -> status == null || alarm.getStatus().equals(status.toString()))
-                .map(AlarmResponse::new)
-                .collect(Collectors.toList());
     }
 }

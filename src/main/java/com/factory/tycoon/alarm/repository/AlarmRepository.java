@@ -11,4 +11,5 @@ public interface AlarmRepository extends JpaRepository<AlarmEntity, Long> {
     List<AlarmEntity> findByStatus(String status);
     List<AlarmEntity> findByEquipmentId(Long equipmentId);
     List<AlarmEntity> findByEquipmentIdAndStatus(Long equipmentId, String status);
+    List<AlarmEntity> findByEquipmentIdIn(List<Long> equipmentIds);
 }
