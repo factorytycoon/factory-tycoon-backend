@@ -14,7 +14,7 @@ import java.util.List;
 
 @Tag(name = "SensorAnalysis", description = "센서 분석 관리 API")
 @RestController
-@RequestMapping("/api/v1/ft/sensorAnalysis")
+@RequestMapping("/api/v1/ft/sensor-analysis")
 @RequiredArgsConstructor
 public class SensorAnalysisCtrl {
 
