@@ -9,9 +9,14 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDate;
 import java.util.List;
 
+
 public interface UserStatusRepository extends JpaRepository<UserStatus, Long> {
         @Query("SELECT us.user.userId FROM UserStatus us WHERE us.date = :date AND us.status = true")
         List<Long> findWorkingUserIdsByDate(@Param("date") LocalDate date);
     @Query("SELECT us.user FROM UserStatus us WHERE us.date = :date AND us.status = false")
     List<UserEntity> findUnavailableUsersByDate(@Param("date") LocalDate date);
+
+    void deleteByUser_UserIdAndDate(Long userId, LocalDate date);
 }
+
+
