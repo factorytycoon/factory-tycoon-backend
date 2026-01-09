@@ -20,6 +20,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class WorkOrderService {
+            public List<com.factory.tycoon.workorder.domain.dto.WorkOrderStatusDetailDto> getWorkOrderDetailsByFactoryIdAndStatus(Long factoryId, int status) {
+                return workorderRepository.findWorkOrderDetailsByFactoryIdAndStatus(factoryId, status);
+            }
         public List<WorkOrderResponse> getActiveWorkOrdersByFactoryId(Long factoryId) {
             return workorderRepository.findByFactoryIdAndStatusTrue(factoryId).stream()
                     .map(WorkOrderResponse::new)

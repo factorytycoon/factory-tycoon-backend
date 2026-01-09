@@ -17,4 +17,20 @@ public interface WorkOrderRepository extends JpaRepository<WorkOrderEntity, Long
 
     @Query("SELECT w FROM WorkOrderEntity w JOIN OrderEntity o ON w.orderId = o.orderId WHERE o.factory.factoryId = :factoryId")
     List<WorkOrderEntity> findByFactoryId(@Param("factoryId") Long factoryId);
+    @Query("""
+    SELECT new com.factory.tycoon.workorder.domain.dto.WorkOrderStatusDetailDto(
+        w.productName,
+        w.customerName,
+        e.name,
+        u.name,
+        o.dueDate
+    )
+    FROM WorkOrderEntity w
+    LEFT JOIN com.factory.tycoon.equipment.domain.entity.EquipmentEntity e ON w.equipmentId = e.equipmentId
+    LEFT JOIN com.factory.tycoon.order.domain.entity.OrderEntity o ON w.orderId = o.orderId
+    LEFT JOIN com.factory.tycoon.schedule.domain.entity.ScheduleEntity s ON w.workorderId = s.workorderId
+    LEFT JOIN com.factory.tycoon.user.domain.entity.UserEntity u ON s.worker = CONCAT(u.userId, '')
+    WHERE w.status = :status AND e.factory.factoryId = :factoryId
+    """)
+    List<com.factory.tycoon.workorder.domain.dto.WorkOrderStatusDetailDto> findWorkOrderDetailsByFactoryIdAndStatus(@Param("factoryId") Long factoryId, @Param("status") int status);
 }

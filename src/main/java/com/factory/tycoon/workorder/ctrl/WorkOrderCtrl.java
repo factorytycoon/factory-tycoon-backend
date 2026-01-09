@@ -20,6 +20,13 @@ import java.util.List;
 @RequestMapping("/api/v1/ft/work-order")
 @RequiredArgsConstructor
 public class WorkOrderCtrl {
+    @Operation(summary = "특정 factory, 특정 status의 WorkOrder 상세 조회", description = "product_name, customer_name, equipment_name, worker_name, due_date 반환")
+    @GetMapping("/factory/{factoryId}/status/{status}/details")
+    public ResponseEntity<List<com.factory.tycoon.workorder.domain.dto.WorkOrderStatusDetailDto>> getWorkOrderDetailsByFactoryIdAndStatus(
+            @Parameter(description = "공장 ID", required = true) @PathVariable Long factoryId,
+            @Parameter(description = "WorkOrder 상태", required = true) @PathVariable int status) {
+        return ResponseEntity.ok(workorderService.getWorkOrderDetailsByFactoryIdAndStatus(factoryId, status));
+    }
 
     @Operation(summary = "공장별 활성 작업지시서 목록 조회", description = "특정 공장에 속한 status=1 Workorder만 조회")
     @GetMapping("/factory/{factoryId}/active")
