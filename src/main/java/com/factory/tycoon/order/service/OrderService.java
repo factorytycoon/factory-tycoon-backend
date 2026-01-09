@@ -12,14 +12,37 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import com.factory.tycoon.workorder.domain.entity.WorkOrderEntity;
+import com.factory.tycoon.workorder.repository.WorkOrderRepository;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+
 public class OrderService {
 
     private final OrderRepository orderRepository;
     private final FactoryRepository factoryRepository;
+    private final WorkOrderRepository workOrderRepository;
+
+
+    public List<OrderResponse> getFilteredOrdersByFactory(Long factoryId, String selectedDate) {
+    java.time.LocalDate selDate = java.time.LocalDate.parse(selectedDate);
+    // 해당 factory의 workorder 중 status=2인 orderId 조회
+    List<WorkOrderEntity> workorders = workOrderRepository.findByFactoryId(factoryId);
+    java.util.Set<Long> excludeOrderIds = workorders.stream()
+        .filter(w -> w.getStatus() == 2)
+        .map(WorkOrderEntity::getOrderId)
+        .collect(java.util.stream.Collectors.toSet());
+    // factory의 모든 order 조회
+    List<OrderEntity> orders = orderRepository.findByFactory_FactoryId(factoryId);
+    // status2인 order와 due_date가 selectedDate 이전인 order 제외 후 변환
+    return orders.stream()
+        .filter(order -> !excludeOrderIds.contains(order.getOrderId()))
+        .filter(order -> order.getDueDate() != null && !selDate.isAfter(order.getDueDate()))
+        .map(OrderResponse::new)
+        .collect(java.util.stream.Collectors.toList());
+    }
 
     public List<OrderResponse> getAllOrders(String customer) {
         List<OrderEntity> orders;
