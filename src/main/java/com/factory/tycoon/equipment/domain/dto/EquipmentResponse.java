@@ -24,7 +24,7 @@ public class EquipmentResponse {
         this.equipmentId = equipment.getEquipmentId();
         this.factoryId = equipment.getFactory().getFactoryId();
         this.name = equipment.getName();
-        this.status = equipment.getStatus() != null ? equipment.getStatus().name().toLowerCase() : null;
+        this.status = equipment.getStatus();
         this.type = equipment.getType();
         this.installedAt = equipment.getInstalledAt();
         this.createdAt = equipment.getCreatedAt();

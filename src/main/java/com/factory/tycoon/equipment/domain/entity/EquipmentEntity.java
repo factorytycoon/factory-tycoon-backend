@@ -31,9 +31,8 @@ public class EquipmentEntity {
     @Column(nullable = false)
     private String name;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
-    private EquipmentStatus status; // normal / warning / error
+    @Column(nullable = false, length = 50)
+    private String status;
 
     private String type;
 
@@ -53,7 +52,7 @@ public class EquipmentEntity {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    public void update(String name, EquipmentStatus status, String type, LocalDateTime installedAt, String location, String description, String modeling) {
+    public void update(String name, String status, String type, LocalDateTime installedAt, String location, String description, String modeling) {
         this.name = name;
         this.status = status;
         this.type = type;
