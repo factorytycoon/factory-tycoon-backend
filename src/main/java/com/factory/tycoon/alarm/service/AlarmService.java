@@ -28,7 +28,7 @@ public class AlarmService {
     private final EquipmentRepository equipmentRepository;
     private final ObjectMapper objectMapper;
 
-    public List<AlarmResponse> getAllAlarms(Long factoryId, String triggerName, String status) {
+    public List<AlarmResponse> getAllAlarms(Long factoryId, String level, String status) {
         List<AlarmEntity> alarms = new java.util.ArrayList<>();
         
         // factoryId가 있으면 해당 공장의 설비 ID를 먼저 조회
@@ -55,10 +55,10 @@ public class AlarmService {
                     .collect(Collectors.toList());
         }
         
-        // triggerName으로 단계적 필터링
-        if (triggerName != null) {
+        // level으로 단계적 필터링 (중복되는 triggerName대신 level 사용)
+        if (level != null) {
             alarms = alarms.stream()
-                    .filter(alarm -> alarm.getTriggerName() != null && alarm.getTriggerName().equals(triggerName))
+                    .filter(alarm -> alarm.getLevel() != null && alarm.getLevel().equals(level))
                     .collect(Collectors.toList());
         }
         
@@ -71,6 +71,19 @@ public class AlarmService {
         return alarmRepository.findByEquipmentId(equipmentId).stream()
                 .map(AlarmResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public AlarmResponse createAlarm(AlarmRequest request) {
+        AlarmEntity alarm = AlarmEntity.builder()
+                .equipmentId(request.getEquipmentId())
+                .description(request.getDescription())
+                .status(request.getStatus() != null ? request.getStatus() : "OPEN")
+                .level(request.getLevel())
+                .sensorDt(request.getSensorDt())
+                .build();
+        AlarmEntity saved = alarmRepository.save(alarm);
+        return new AlarmResponse(saved);
     }
     
     @Transactional
@@ -103,9 +116,8 @@ public class AlarmService {
             // 4. AlarmEntity 생성 및 저장
             AlarmEntity alarm = AlarmEntity.builder()
                     .equipmentId(equipment.getEquipmentId())
-                    .monitorName(request.getMonitor_name())
-                    .triggerName(request.getTrigger_name())
-                    .sensorSnapshot(sensorSnapshot)
+                    .description(request.getMonitor_name() + ": " + request.getTrigger_name())
+                    .level(request.getTrigger_name())
                     .status("OPEN")
                     .sensorDt(sensorDt)
                     .build();

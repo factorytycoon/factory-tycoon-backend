@@ -53,10 +53,13 @@ public class EquipmentEntity {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    public void update(String name, EquipmentStatus status, String type, LocalDateTime installedAt) {
+    public void update(String name, EquipmentStatus status, String type, LocalDateTime installedAt, String location, String description, String modeling) {
         this.name = name;
         this.status = status;
         this.type = type;
         this.installedAt = installedAt;
+        this.location = location;
+        this.description = description;
+        this.modeling = modeling;
     }
 }

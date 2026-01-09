@@ -132,12 +132,12 @@ INSERT INTO sensor_analysis (sensor_data_id, max_value, min_value, avg_value) VA
 (16, 90.6, 36.4, 63.5);
 
   -- Insert Alarm (5 rows)
-INSERT INTO alarm (equipment_id, monitor_name, trigger_name, sensor_snapshot, status, sensor_dt, created_at) VALUES
-(2, 'turning', 'red', '{"device_id": "ft-pi-002", "timestamp": "2026-01-08T06:48:56+00:00", "sensors": [{"type": "rpm", "value": 326.79}, {"type": "nois", "value": 110.09}, {"type": "disp", "value": 0.02}, {"type": "temp", "value": 89.23}, {"type": "humi", "value": 56.82}, {"type": "illu", "value": 651.33}]}', 'OPEN', '2026-01-08 06:48:56', '2026-01-08 06:52:44'),
-(1, 'temperature', 'yellow', '{"device_id": "ft-pi-001", "timestamp": "2026-01-08T07:10:30+00:00", "sensors": [{"type": "rpm", "value": 450.49}, {"type": "nois", "value": 117.63}, {"type": "disp", "value": 0.08}, {"type": "temp", "value": 92.33}, {"type": "humi", "value": 58.19}, {"type": "illu", "value": 640.17}]}', 'OPEN', '2026-01-08 07:10:30', '2026-01-08 07:15:22'),
-(3, 'vibration', 'red', '{"device_id": "ft-pi-003", "timestamp": "2026-01-08T08:25:15+00:00", "sensors": [{"type": "rpm", "value": 520.15}, {"type": "nois", "value": 125.45}, {"type": "disp", "value": 0.15}, {"type": "temp", "value": 85.67}, {"type": "humi", "value": 62.34}, {"type": "illu", "value": 680.29}]}', 'CLOSE', '2026-01-08 08:25:15', '2026-01-08 08:30:10'),
-(2, 'noise', 'yellow', '{"device_id": "ft-pi-002", "timestamp": "2026-01-08T09:15:45+00:00", "sensors": [{"type": "rpm", "value": 380.25}, {"type": "nois", "value": 118.90}, {"type": "disp", "value": 0.05}, {"type": "temp", "value": 87.10}, {"type": "humi", "value": 60.15}, {"type": "illu", "value": 655.80}]}', 'OPEN', '2026-01-08 09:15:45', '2026-01-08 09:20:33'),
-(4, 'rpm', 'red', '{"device_id": "ft-pi-004", "timestamp": "2026-01-08T10:05:20+00:00", "sensors": [{"type": "rpm", "value": 580.95}, {"type": "nois", "value": 130.22}, {"type": "disp", "value": 0.12}, {"type": "temp", "value": 95.40}, {"type": "humi", "value": 65.78}, {"type": "illu", "value": 720.45}]}', 'CLOSE', '2026-01-08 10:05:20', '2026-01-08 10:12:15');
+INSERT INTO alarm (equipment_id, description, level, status, sensor_dt, created_at) VALUES
+(2, 'Turning issue - high RPM deviation detected', 'red', 'OPEN', '2026-01-08 06:48:56', '2026-01-08 06:52:44'),
+(1, 'Temperature warning - above operational threshold', 'yellow', 'OPEN', '2026-01-08 07:10:30', '2026-01-08 07:15:22'),
+(3, 'Vibration detected - excessive movement in spindle', 'red', 'CLOSE', '2026-01-08 08:25:15', '2026-01-08 08:30:10'),
+(2, 'Noise level exceeds safety limit', 'yellow', 'OPEN', '2026-01-08 09:15:45', '2026-01-08 09:20:33'),
+(4, 'RPM instability detected - motor variance high', 'red', 'CLOSE', '2026-01-08 10:05:20', '2026-01-08 10:12:15');
 
   -- Insert Orders (4 rows)
 INSERT INTO orders (factory_id, customer, product_name, quantity, due_date) VALUES

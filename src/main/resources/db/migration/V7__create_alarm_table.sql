@@ -1,10 +1,9 @@
 CREATE TABLE IF NOT EXISTS `alarm` (
     `alarm_id` bigint(20) NOT NULL AUTO_INCREMENT,
     `equipment_id` BIGINT NOT NULL,
-    `monitor_name` varchar(100) DEFAULT NULL,
-    `trigger_name` varchar(100) DEFAULT NULL,
-    `sensor_snapshot` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`sensor_snapshot`)),
+    `description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
     `status` varchar(20) DEFAULT 'OPEN',
+    `level` varchar(50) DEFAULT NULL,
     `sensor_dt` datetime DEFAULT NULL,
     `created_at` datetime DEFAULT current_timestamp(),
     PRIMARY KEY (`alarm_id`),

@@ -10,6 +10,8 @@ import java.util.List;
 
 @Repository
 public interface WorkOrderRepository extends JpaRepository<WorkOrderEntity, Long> {
+        @Query("SELECT w FROM WorkOrderEntity w JOIN OrderEntity o ON w.orderId = o.orderId WHERE o.factory.factoryId = :factoryId AND w.status = true")
+        List<WorkOrderEntity> findByFactoryIdAndStatusTrue(@Param("factoryId") Long factoryId);
     List<WorkOrderEntity> findByOrderId(Long orderId);
     List<WorkOrderEntity> findByEquipmentId(Long equipmentId);
 
