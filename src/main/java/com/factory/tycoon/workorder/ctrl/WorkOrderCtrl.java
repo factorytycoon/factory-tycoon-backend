@@ -1,3 +1,4 @@
+
 package com.factory.tycoon.workorder.ctrl;
 
 import com.factory.tycoon.workorder.domain.dto.WorkOrderRequest;
@@ -85,14 +86,23 @@ public class WorkOrderCtrl {
         return ResponseEntity.ok(scheduleService.getSchedulesByWorkorderId(workorderId));
     }
 
-    @Operation(summary = "workorder status 업데이트", description = "workorder의 status를 0, 1, 2로 변경합니다.")
+    @Operation(summary = "workorder status 업데이트", description = "workorder의 status를 update")
     @PatchMapping("/{workorderId}/status")
     public ResponseEntity<WorkOrderResponse> updateWorkOrderStatus(
             @Parameter(description = "workorder ID", required = true) @PathVariable Long workorderId,
-            @Parameter(description = "update status(0, 1, 2)", required = true) @RequestParam int status) {
+            @Parameter(description = "update status(0(지연), 1(진행), 2)", required = true) @RequestParam int status) {
         if (status != 0 && status != 1 && status != 2) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(workorderService.updateWorkOrderStatus(workorderId, status));
+    }
+
+    @Operation(summary = "공장 workorder 상태 일괄 업데이트", description = "선택한 날짜 기준으로 status가 2가 아닌 workorder의 상태를 일괄 업데이트합니다.")
+    @PatchMapping("/factory/{factoryId}/status-by-date")
+    public ResponseEntity<Void> updateWorkOrderStatusByDate(
+            @Parameter(description = "공장 ID", required = true) @PathVariable Long factoryId,
+            @Parameter(description = "선택 날짜(yyyy-MM-dd)", required = true) @RequestParam String selectedDate) {
+        workorderService.updateWorkOrderStatusByDate(factoryId, selectedDate);
+        return ResponseEntity.ok().build();
     }
 }

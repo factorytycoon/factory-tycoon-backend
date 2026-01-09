@@ -1,3 +1,4 @@
+
 package com.factory.tycoon.workorder.service;
 
 import com.factory.tycoon.workorder.domain.dto.WorkOrderRequest;
@@ -107,5 +108,23 @@ public class WorkOrderService {
                 .orElseThrow(() -> new IllegalArgumentException("WorkOrder not found with id: " + id));
         workorder.setStatus(status);
         return new WorkOrderResponse(workorder);
+    }
+    
+    @Transactional
+    public void updateWorkOrderStatusByDate(Long factoryId, String selectedDate) {
+        List<WorkOrderEntity> workorders = workorderRepository.findByFactoryId(factoryId);
+        for (WorkOrderEntity workorder : workorders) {
+            if (workorder.getStatus() == 2) continue;
+            OrderEntity order = orderRepository.findById(workorder.getOrderId())
+                .orElse(null);
+            if (order == null || order.getDueDate() == null) continue;
+            java.time.LocalDate dueDate = order.getDueDate();
+            java.time.LocalDate selDate = java.time.LocalDate.parse(selectedDate);
+            if (!selDate.isAfter(dueDate)) {
+                workorder.setStatus(1); // 진행중
+            } else {
+                workorder.setStatus(0); // 지연
+            }
+        }
     }
 }

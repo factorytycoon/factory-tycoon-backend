@@ -15,7 +15,7 @@ public class WorkOrderResponse {
     private String productName;
     private Integer targetAmount;
     private String customerName;
-    private Boolean status;
+    private int status;
     private String price;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
