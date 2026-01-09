@@ -11,6 +11,5 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class SensorDataRequest {
     private Long sensorId;
-    private String path;
     private LocalDate date;
 }

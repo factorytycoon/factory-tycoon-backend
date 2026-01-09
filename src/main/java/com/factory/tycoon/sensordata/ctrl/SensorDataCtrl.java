@@ -1,5 +1,6 @@
 package com.factory.tycoon.sensordata.ctrl;
 
+import com.factory.tycoon.sensoranalysis.domain.dto.SensorAnalysisResponse;
 import com.factory.tycoon.sensordata.domain.dto.SensorDataRequest;
 import com.factory.tycoon.sensordata.domain.dto.SensorDataResponse;
 import com.factory.tycoon.sensordata.service.SensorDataService;
@@ -49,7 +50,7 @@ public class SensorDataCtrl {
 
     @Operation(summary = "센서 분석 조회", description = "특정 센서 데이터의 분석 결과를 조회합니다.")
     @GetMapping("/{sensorDataId}/sensor-analysis")
-    public ResponseEntity<Object> getSensorAnalysis(
+    public ResponseEntity<SensorAnalysisResponse> getSensorAnalysis(
             @Parameter(description = "센서 데이터 ID", required = true) @PathVariable Long sensorDataId) {
         return ResponseEntity.ok(sensorDataService.getSensorAnalysis(sensorDataId));
     }

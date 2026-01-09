@@ -1,20 +1,19 @@
 package com.factory.tycoon.sensoranalysis.domain.entity;
 
-import com.factory.tycoon.sensordata.domain.entity.SensorDataEntity;
+import com.factory.tycoon.sensor.domain.entity.SensorEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "sensor_analysis")
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SensorAnalysisEntity {
 
     @Id
@@ -22,21 +21,21 @@ public class SensorAnalysisEntity {
     private Long sensorAnalysisId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sensor_data_id", nullable = false)
-    private SensorDataEntity sensorData;
+    @JoinColumn(name = "sensor_id")
+    private SensorEntity sensor;
 
-    @Column(name = "max_value")
+    private LocalDate date;
+
+    private BigDecimal avgValue;
     private BigDecimal maxValue;
-
-    @Column(name = "min_value")
     private BigDecimal minValue;
 
-    @Column(name = "avg_value")
-    private BigDecimal avgValue;
-
-    public void update(BigDecimal maxValue, BigDecimal minValue, BigDecimal avgValue) {
+    @Builder
+    public SensorAnalysisEntity(SensorEntity sensor, LocalDate date, BigDecimal avgValue, BigDecimal maxValue, BigDecimal minValue) {
+        this.sensor = sensor;
+        this.date = date;
+        this.avgValue = avgValue;
         this.maxValue = maxValue;
         this.minValue = minValue;
-        this.avgValue = avgValue;
     }
 }

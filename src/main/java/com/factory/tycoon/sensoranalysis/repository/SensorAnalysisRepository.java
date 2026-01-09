@@ -6,9 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDate;
 
 @Repository
 public interface SensorAnalysisRepository extends JpaRepository<SensorAnalysisEntity, Long> {
-    Optional<SensorAnalysisEntity> findBySensorData_SensorDataId(Long sensorDataId);
-    List<SensorAnalysisEntity> findAllBySensorData_Sensor_SensorId(Long sensorId);
+    List<SensorAnalysisEntity> findAllBySensor_SensorId(Long sensorId);
+    Optional<SensorAnalysisEntity> findBySensor_SensorIdAndDate(Long sensorId, LocalDate date);
 }

@@ -12,14 +12,12 @@ import java.time.LocalDateTime;
 public class SensorDataResponse {
     private Long sensorDataId;
     private Long sensorId;
-    private String path;
     private LocalDate date;
     private LocalDateTime createdAt;
 
     public SensorDataResponse(SensorDataEntity sensorData) {
         this.sensorDataId = sensorData.getSensorDataId();
         this.sensorId = sensorData.getSensor().getSensorId();
-        this.path = sensorData.getPath();
         this.date = sensorData.getDate();
         this.createdAt = sensorData.getCreatedAt();
     }
