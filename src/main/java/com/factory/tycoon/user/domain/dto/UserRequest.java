@@ -14,8 +14,7 @@ public class UserRequest {
             String location,
             String industry,    // owner만 사용(저장 X)
             String factoryCode,  // worker만 사용
-            String factoryName, // owner만 사용
-            Boolean status // 0: 배치 미완료, 1: 배치 완료
+            String factoryName // owner만 사용
     ) {}
 
     public record LoginRequest(
@@ -38,7 +37,6 @@ public class UserRequest {
                 String factoryCode,
                 String role,
                 java.time.LocalDate dob,
-                String password,
-                Boolean status // 0: 배치 미완료, 1: 배치 완료
+                String password
         ) {}
 }

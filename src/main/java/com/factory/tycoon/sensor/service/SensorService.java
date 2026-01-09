@@ -81,10 +81,12 @@ public class SensorService {
     }
 
     public List<Object> getAlarms(Long sensorId) {
-        sensorRepository.findById(sensorId)
+        SensorEntity sensor = sensorRepository.findById(sensorId)
                 .orElseThrow(() -> new IllegalArgumentException("Sensor not found with id: " + sensorId));
-        
-        return alarmRepository.findBySensor_SensorId(sensorId).stream()
+
+        Long equipmentId = sensor.getEquipment().getEquipmentId();
+
+        return alarmRepository.findByEquipmentId(equipmentId).stream()
                 .map(AlarmResponse::new)
                 .collect(Collectors.toList());
     }

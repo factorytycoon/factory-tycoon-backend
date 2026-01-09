@@ -16,6 +16,23 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/ft/user")
 @RequiredArgsConstructor
 public class UserCtrl {
+            @GetMapping("/factory/{factoryId}/available-workers")
+            public ResponseEntity<List<String>> getAvailableWorkers(
+                    @PathVariable Long factoryId,
+                    @RequestParam("date") String dateStr) {
+                java.time.LocalDate date = java.time.LocalDate.parse(dateStr);
+                List<String> names = userService.findAvailableWorkers(factoryId, date)
+                        .stream()
+                        .map(com.factory.tycoon.user.domain.entity.UserEntity::getName)
+                        .toList();
+                return ResponseEntity.ok(names);
+            }
+        @Operation(summary = "특정 날짜에 status=0인 유저 조회", description = "date별로 근무 불가인 유저 목록 조회")
+        @GetMapping("/unavailable")
+        public ResponseEntity<List<com.factory.tycoon.user.domain.entity.UserEntity>> getUnavailableUsersByDate(@RequestParam("date") String dateStr) {
+            java.time.LocalDate date = java.time.LocalDate.parse(dateStr);
+            return ResponseEntity.ok(userService.findUnavailableUsersByDate(date));
+        }
     private final UserService userService;
     private final com.factory.tycoon.auth.TokenService tokenService;
     
@@ -103,18 +120,6 @@ public class UserCtrl {
         return ResponseEntity.noContent().build();
     }
     
-    @Operation(summary = "직원 상태만 변경", description = "userId로 직원의 status만 변경(PATCH)")
-    @PatchMapping("/{userId}/status")
-    public ResponseEntity<UserResponse.WorkerResponse> updateUserStatus(
-            @PathVariable Long userId,
-            @RequestBody StatusRequest statusRequest) {
-        return ResponseEntity.ok(userService.updateUserStatus(userId, statusRequest.getStatus()));
-    }
-    public static class StatusRequest {
-        private Boolean status;
-        public Boolean getStatus() { return status; }
-        public void setStatus(Boolean status) { this.status = status; }
-    }
     
     
 }
