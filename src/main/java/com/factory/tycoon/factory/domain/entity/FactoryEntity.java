@@ -57,6 +57,10 @@ public class FactoryEntity {
         this.phone = phone;
     }
 
+    public void updateModeling(String modeling) {
+        this.modeling = modeling;
+    }
+
     public void setFactoryCode(String factoryCode) {
         this.factoryCode = factoryCode;
     } //공장코드 setter

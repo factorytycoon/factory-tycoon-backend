@@ -98,4 +98,13 @@ public class FactoryCtrl {
             @Parameter(description = "선택 상태 (true: 선택됨, false: 미선택)") @RequestParam(required = false) Boolean selected) {
         return ResponseEntity.ok(factoryService.getPredictions(factoryId, type, level, selected));
     }
+
+    @Operation(summary = "공장 모델링 정보 수정",
+               description = "URL 인코딩된 모델링 경로/JSON 문자열을 PathVariable로 받아 공장 DB에 반영합니다.")
+    @PutMapping("/{factoryId}/modeling/{modeling}")
+    public ResponseEntity<FactoryResponse> updateFactoryModeling(
+            @Parameter(description = "공장 ID", required = true) @PathVariable Long factoryId,
+            @Parameter(description = "URL 인코딩된 모델링 문자열", required = true) @PathVariable String modeling) {
+        return ResponseEntity.ok(factoryService.updateFactoryModeling(factoryId, modeling));
+    }
 }

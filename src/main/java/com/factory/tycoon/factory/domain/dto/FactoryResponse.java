@@ -15,6 +15,7 @@ public class FactoryResponse {
     private String location;
     private String description;
     private String phone;
+    private String modeling;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -24,6 +25,7 @@ public class FactoryResponse {
         this.location = factory.getLocation();
         this.description = factory.getDescription();
         this.phone = factory.getPhone();
+        this.modeling = factory.getModeling();
         this.createdAt = factory.getCreatedAt();
         this.updatedAt = factory.getUpdatedAt();
     }
