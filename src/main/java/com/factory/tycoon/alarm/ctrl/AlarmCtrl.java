@@ -25,16 +25,16 @@ public class AlarmCtrl {
     @GetMapping
     public ResponseEntity<List<AlarmResponse>> getAllAlarms(
             @Parameter(description = "공장 ID") @RequestParam(required = false) Long factoryId,
-            @Parameter(description = "알람 레벨 (yellow/orange/red)") @RequestParam(required = false) String triggerName,
+            @Parameter(description = "알람 레벨 (yellow/orange/red)") @RequestParam(required = false) String level,
             @Parameter(description = "해결 상태 (OPEN: 해결됨, CLOSE: 미해결)") @RequestParam(required = false) String status) {
-        return ResponseEntity.ok(alarmService.getAllAlarms(factoryId, triggerName, status));
+        return ResponseEntity.ok(alarmService.getAllAlarms(factoryId, level, status));
     }
 
-    // @Operation(summary = "알람 등록", description = "새로운 알람을 등록합니다.")
-    // @PostMapping
-    // public ResponseEntity<AlarmResponse> createAlarm(@RequestBody AlarmRequest request) {
-    //     return ResponseEntity.ok(alarmService.createAlarm(request));
-    // }
+    @Operation(summary = "알람 등록", description = "새로운 알람을 등록합니다.")
+    @PostMapping
+    public ResponseEntity<AlarmResponse> createAlarm(@RequestBody AlarmRequest request) {
+        return ResponseEntity.ok(alarmService.createAlarm(request));
+    }
 
     @Operation(summary = "알람 등록", description = "opensearch 에서 온 알람을 등록합니다.")
     @PostMapping("/os")

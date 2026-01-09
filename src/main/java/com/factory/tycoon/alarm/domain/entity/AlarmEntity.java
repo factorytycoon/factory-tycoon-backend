@@ -26,17 +26,14 @@ public class AlarmEntity {
     @Column(name = "equipment_id", nullable = false)
     private Long equipmentId;
 
-    @Column(name = "monitor_name", length = 100)
-    private String monitorName;
-
-    @Column(name = "trigger_name", length = 100)
-    private String triggerName;
-
-    @Column(name = "sensor_snapshot", columnDefinition = "longtext")
-    private String sensorSnapshot; // JSON 문자열
+    @Column(columnDefinition = "longtext")
+    private String description; // 알람 설명
 
     @Column(length = 20)
     private String status; // OPEN, CLOSED, etc.
+
+    @Column(length = 50)
+    private String level; // yellow, orange, red
 
     @Column(name = "sensor_dt")
     private LocalDateTime sensorDt;
@@ -45,10 +42,9 @@ public class AlarmEntity {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    public void update(String monitorName, String triggerName, String sensorSnapshot, String status) {
-        this.monitorName = monitorName;
-        this.triggerName = triggerName;
-        this.sensorSnapshot = sensorSnapshot;
+    public void update(String description, String status, String level) {
+        this.description = description;
         this.status = status;
+        this.level = level;
     }
 }

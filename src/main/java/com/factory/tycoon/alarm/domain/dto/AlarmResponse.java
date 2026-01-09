@@ -11,20 +11,18 @@ import java.time.LocalDateTime;
 public class AlarmResponse {
     private Long alarmId;
     private Long equipmentId;
-    private String monitorName;
-    private String triggerName;
-    private String sensorSnapshot; // JSON 문자열
+    private String description;
     private String status;
+    private String level;
     private LocalDateTime sensorDt;
     private LocalDateTime createdAt;
 
     public AlarmResponse(AlarmEntity alarm) {
         this.alarmId = alarm.getAlarmId();
         this.equipmentId = alarm.getEquipmentId();
-        this.monitorName = alarm.getMonitorName();
-        this.triggerName = alarm.getTriggerName();
-        this.sensorSnapshot = alarm.getSensorSnapshot();
+        this.description = alarm.getDescription();
         this.status = alarm.getStatus();
+        this.level = alarm.getLevel();
         this.sensorDt = alarm.getSensorDt();
         this.createdAt = alarm.getCreatedAt();
     }

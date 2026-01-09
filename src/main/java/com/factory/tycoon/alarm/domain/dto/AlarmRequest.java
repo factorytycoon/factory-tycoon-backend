@@ -11,9 +11,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class AlarmRequest {
     private Long equipmentId;
-    private String monitorName;
-    private String triggerName;
-    private String sensorSnapshot; // JSON 문자열
+    private String description;
     private String status;
+    private String level;
     private LocalDateTime sensorDt;
 }
