@@ -31,7 +31,6 @@ public class OrderService {
     // 해당 factory의 workorder 중 status=2인 orderId 조회
     List<WorkOrderEntity> workorders = workOrderRepository.findByFactoryId(factoryId);
     java.util.Set<Long> excludeOrderIds = workorders.stream()
-        .filter(w -> w.getStatus() == 2)
         .map(WorkOrderEntity::getOrderId)
         .collect(java.util.stream.Collectors.toSet());
     // factory의 모든 order 조회
