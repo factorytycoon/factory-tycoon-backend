@@ -55,7 +55,7 @@ public class WorkOrderService {
             .productName(order.getProductName())
             .targetAmount(order.getQuantity())
             .customerName(order.getCustomer())
-            .status(true) // 기본값 1 (true)
+            .status(1) // 기본값 1 (진행중)
             .price(null)
             .build();
         WorkOrderEntity savedWorkOrder = workorderRepository.save(workorder);
@@ -105,7 +105,7 @@ public class WorkOrderService {
     public WorkOrderResponse updateWorkOrderStatus(Long id, int status) {
         WorkOrderEntity workorder = workorderRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("WorkOrder not found with id: " + id));
-        workorder.setStatus(status == 1);
+        workorder.setStatus(status);
         return new WorkOrderResponse(workorder);
     }
 }

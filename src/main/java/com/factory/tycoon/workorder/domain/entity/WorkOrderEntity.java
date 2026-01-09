@@ -42,7 +42,7 @@ public class WorkOrderEntity {
 
     @Builder.Default
     @Column(nullable = false)
-    private Boolean status = false;
+    private int status = 0;
 
     @Column
     private String price;
@@ -79,7 +79,7 @@ public class WorkOrderEntity {
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
     }
-    public void setStatus(Boolean status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 }

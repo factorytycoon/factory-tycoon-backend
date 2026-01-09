@@ -85,12 +85,12 @@ public class WorkOrderCtrl {
         return ResponseEntity.ok(scheduleService.getSchedulesByWorkorderId(workorderId));
     }
 
-    @Operation(summary = "workorder status 업데이트", description = "workorder의 status를 update")
+    @Operation(summary = "workorder status 업데이트", description = "workorder의 status를 0, 1, 2로 변경합니다.")
     @PatchMapping("/{workorderId}/status")
     public ResponseEntity<WorkOrderResponse> updateWorkOrderStatus(
             @Parameter(description = "workorder ID", required = true) @PathVariable Long workorderId,
-            @Parameter(description = "update status(0 or 1)", required = true) @RequestParam int status) {
-        if (status != 0 && status != 1) {
+            @Parameter(description = "update status(0, 1, 2)", required = true) @RequestParam int status) {
+        if (status != 0 && status != 1 && status != 2) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(workorderService.updateWorkOrderStatus(workorderId, status));
