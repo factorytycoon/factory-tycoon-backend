@@ -9,7 +9,7 @@ import java.util.List;
 public class FactoryStatusResponse {
     private String factoryStatusId;
     private String date;
-    private double totalScore100; // 100점 환산 점수
+    private int totalScore100; // 100점 환산 점수
     private String rank;          // SS, S, A, B, C
     private List<CategoryScore> details;
     private FactoryStatusRequest rawData; // 계산에 사용된 원본 데이터

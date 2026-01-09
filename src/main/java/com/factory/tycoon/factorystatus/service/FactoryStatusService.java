@@ -16,6 +16,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -102,7 +104,7 @@ public class FactoryStatusService {
         totalRawScore += efficiencyScore;
 
         // 3. 최종 점수 및 랭크 산정
-        double finalScore100 = (double) totalRawScore / TOTAL_MAX_SCORE * 100;
+        int finalScore100 = (int) ((double) totalRawScore / TOTAL_MAX_SCORE * 100);
         String rank = determineRank(finalScore100);
 
         return FactoryStatusResponse.builder()
@@ -123,7 +125,7 @@ public class FactoryStatusService {
                 .build();
     }
 
-    private String determineRank(double score) {
+    private String determineRank(int score) {
         if (score >= 100) return "SS";
         if (score >= 95) return "S";
         if (score >= 90) return "A";
@@ -149,9 +151,14 @@ public class FactoryStatusService {
         if (allOrders == null) {
             allOrders = List.of();
         }
-        List<WorkOrderEntity> todayOrders = allOrders.stream()
-                .filter(o -> o.getCreatedAt() != null && o.getCreatedAt().toLocalDate().equals(date))
-                .toList();
+
+        // 전체 주문을 날짜별로 그룹화
+        Map<LocalDate, List<WorkOrderEntity>> ordersByDate = allOrders.stream()
+            .filter(o -> o.getCreatedAt() != null)
+            .collect(Collectors.groupingBy(o -> o.getCreatedAt().toLocalDate()));
+
+        // 오늘자 주문 목록
+        List<WorkOrderEntity> todayOrders = ordersByDate.getOrDefault(date, List.of());
 
         // 3. 생산: 목표 생산량 (오늘 오더의 목표량 합계)
         long targetProduction = todayOrders.stream()
@@ -164,7 +171,8 @@ public class FactoryStatusService {
                 .mapToLong(WorkOrderEntity::getTargetAmount)
                 .sum();
 
-        // 4. 수익: 현재 수익 (오늘 오더의 가격 합계)
+        // 4. 수익
+        // 현재 수익 (오늘 오더의 가격 합계)
         BigDecimal currentProfit = todayOrders.stream()
             .map(o -> {
                 try {
@@ -176,12 +184,28 @@ public class FactoryStatusService {
                 }
             })
             .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // 평균 수익 (전체 기간의 일평균 수익)
+        BigDecimal totalProfitAllTime = allOrders.stream()
+            .map(o -> {
+                try {
+                    return o.getPrice() != null ? new BigDecimal(o.getPrice()) : BigDecimal.ZERO;
+                } catch (Exception e) {
+                    return BigDecimal.ZERO;
+                }
+            })
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+        
+        BigDecimal avgProfit = BigDecimal.ZERO;
+        if (!ordersByDate.isEmpty() && totalProfitAllTime.compareTo(BigDecimal.ZERO) > 0) {
+            avgProfit = totalProfitAllTime.divide(BigDecimal.valueOf(ordersByDate.size()), 0, RoundingMode.HALF_UP);
+        }
             
         return FactoryStatusRequest.builder()
                 .safetyAlertCount(safetyAlertCount)
                 .targetProduction(targetProduction)
                 .actualProduction(actualProduction)
-                .avgProfit(BigDecimal.valueOf(10000000)) // 평균 수익 하드코딩
+                .avgProfit(avgProfit)
                 .currentProfit(currentProfit)
                 .defectRate(0.5) // 불량률 하드코딩
                 .operationRate(98.5) // 가동률 하드코딩
