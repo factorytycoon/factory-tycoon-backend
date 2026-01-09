@@ -8,15 +8,15 @@ spring:
     name: tycoon
     
   datasource:
-    url: jdbc:mysql://175.114.229.158:3306/factory-tycoon2
-    username: root
-    password: pass
+    url: ${MARIADB_URL}
+    username: ${MARIADB_USERNAME}
+    password: ${MARIADB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   
   data:
     redis:
-      host: 175.114.229.158
-      port: 6379
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
 
   flyway:
     enabled: true
@@ -32,7 +32,6 @@ spring:
     schemas: factory-tycoon
 
 jwt:
-  secret: your-secret-key-change-this-in-production-min-256-bits
-  access-ttl-ms: 3600000
-  refresh-ttl-ms: 86400000
-
+  secret: ${JWT_SECRET_KEY}
+  access-ttl-ms: ${JWT_ACCESS_TTL_MS}
+  refresh-ttl-ms: ${JWT_REFRESH_TTL_MS}
