@@ -48,6 +48,15 @@ public class OrderCtrl {
         return ResponseEntity.ok(orderService.getOrder(orderId));
     }
 
+    @Operation(summary = "특정 factory의 기간내, 작업미완료 order 목록 조회", description = "workorder status=2, 선택 날짜가 due_date 이후인 order를 제외한 목록 조회")
+    @GetMapping("/filtered-by-workorder")
+    public ResponseEntity<List<OrderResponse>> getFilteredOrdersByFactory(
+            @RequestParam Long factoryId,
+            @RequestParam String selectedDate) {
+        List<OrderResponse> orders = orderService.getFilteredOrdersByFactory(factoryId, selectedDate);
+        return ResponseEntity.ok(orders);
+    }
+
     @Operation(summary = "수주 수정", description = "기존 수주 정보를 수정합니다.")
     @PutMapping("/{orderId}")
     public ResponseEntity<OrderResponse> updateOrder(

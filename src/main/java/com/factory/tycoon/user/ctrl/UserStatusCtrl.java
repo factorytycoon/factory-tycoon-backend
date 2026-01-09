@@ -4,6 +4,9 @@ import com.factory.tycoon.user.domain.dto.UserStatusDto;
 import com.factory.tycoon.user.domain.entity.UserEntity;
 import com.factory.tycoon.user.domain.entity.UserStatus;
 import com.factory.tycoon.user.repository.UserStatusRepository;
+
+import io.swagger.v3.oas.annotations.Operation;
+
 import com.factory.tycoon.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -47,5 +50,13 @@ public class UserStatusCtrl {
                 .map(us -> new UserStatusDto(us.getId(), us.getUser().getUserId(), us.getDate(), us.getStatus()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(result);
+    }
+
+    @Operation(summary = "status 삭제", description = "특정 사용자와 날짜에 해당하는 상태를 삭제")
+    @DeleteMapping
+    @org.springframework.transaction.annotation.Transactional
+    public ResponseEntity<Void> deleteStatusByUserIdAndDate(@RequestParam Long userId, @RequestParam String date) {
+        userStatusRepository.deleteByUser_UserIdAndDate(userId, java.time.LocalDate.parse(date));
+        return ResponseEntity.ok().build();
     }
 }

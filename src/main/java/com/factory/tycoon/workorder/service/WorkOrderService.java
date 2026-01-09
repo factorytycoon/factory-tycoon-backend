@@ -1,3 +1,4 @@
+
 package com.factory.tycoon.workorder.service;
 
 import com.factory.tycoon.workorder.domain.dto.WorkOrderRequest;
@@ -19,6 +20,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class WorkOrderService {
+            public List<com.factory.tycoon.workorder.domain.dto.WorkOrderStatusDetailDto> getWorkOrderDetailsByFactoryIdAndStatus(Long factoryId, int status) {
+                return workorderRepository.findWorkOrderDetailsByFactoryIdAndStatus(factoryId, status);
+            }
         public List<WorkOrderResponse> getActiveWorkOrdersByFactoryId(Long factoryId) {
             return workorderRepository.findByFactoryIdAndStatusTrue(factoryId).stream()
                     .map(WorkOrderResponse::new)
@@ -55,7 +59,7 @@ public class WorkOrderService {
             .productName(order.getProductName())
             .targetAmount(order.getQuantity())
             .customerName(order.getCustomer())
-            .status(true) // 기본값 1 (true)
+            .status(1) // 기본값 1 (진행중)
             .price(null)
             .build();
         WorkOrderEntity savedWorkOrder = workorderRepository.save(workorder);
@@ -100,5 +104,30 @@ public class WorkOrderService {
         return workorderRepository.findByOrderId(orderId).stream()
                 .map(WorkOrderResponse::new)
                 .collect(Collectors.toList());
+    }
+    @Transactional
+    public WorkOrderResponse updateWorkOrderStatus(Long id, int status) {
+        WorkOrderEntity workorder = workorderRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("WorkOrder not found with id: " + id));
+        workorder.setStatus(status);
+        return new WorkOrderResponse(workorder);
+    }
+    
+    @Transactional
+    public void updateWorkOrderStatusByDate(Long factoryId, String selectedDate) {
+        List<WorkOrderEntity> workorders = workorderRepository.findByFactoryId(factoryId);
+        for (WorkOrderEntity workorder : workorders) {
+            if (workorder.getStatus() == 2) continue;
+            OrderEntity order = orderRepository.findById(workorder.getOrderId())
+                .orElse(null);
+            if (order == null || order.getDueDate() == null) continue;
+            java.time.LocalDate dueDate = order.getDueDate();
+            java.time.LocalDate selDate = java.time.LocalDate.parse(selectedDate);
+            if (!selDate.isAfter(dueDate)) {
+                workorder.setStatus(1); // 진행중
+            } else {
+                workorder.setStatus(0); // 지연
+            }
+        }
     }
 }
