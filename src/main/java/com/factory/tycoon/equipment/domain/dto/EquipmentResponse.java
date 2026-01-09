@@ -17,6 +17,8 @@ public class EquipmentResponse {
     private LocalDateTime installedAt;
     private LocalDateTime createdAt;
     private String modeling;
+    private String location;
+    private String description;
 
     public EquipmentResponse(EquipmentEntity equipment) {
         this.equipmentId = equipment.getEquipmentId();
@@ -27,5 +29,7 @@ public class EquipmentResponse {
         this.installedAt = equipment.getInstalledAt();
         this.createdAt = equipment.getCreatedAt();
         this.modeling = equipment.getModeling();
+        this.location = equipment.getLocation();
+        this.description = equipment.getDescription();
     }
 }
