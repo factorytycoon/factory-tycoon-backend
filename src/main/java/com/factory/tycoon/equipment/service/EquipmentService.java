@@ -40,7 +40,7 @@ public class EquipmentService {
         EquipmentEntity equipment = EquipmentEntity.builder()
             .factory(factory)
             .name(request.getName())
-            .status(EquipmentStatus.from(request.getStatus()))
+            .status(request.getStatus())
             .type(request.getType())
             .installedAt(request.getInstalledAt())
             .description(request.getDescription())
@@ -63,7 +63,7 @@ public class EquipmentService {
                 .orElseThrow(() -> new IllegalArgumentException("Equipment not found with id: " + id));
         equipment.update(
             request.getName(),
-            EquipmentStatus.from(request.getStatus()),
+            request.getStatus(),
             request.getType(),
             request.getInstalledAt(),
             request.getLocation(),
