@@ -271,9 +271,9 @@ public class UserService {
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
-        if (user.getRole() != UserRole.WORKER) {
-            throw new IllegalArgumentException("owner는 이 경로로 수정할 수 없습니다.");
-        }
+        // if (user.getRole() != UserRole.WORKER) {
+        //     throw new IllegalArgumentException("owner는 이 경로로 수정할 수 없습니다.");
+        // }
 
         resolveRole(req); // role 필드가 들어오면 worker인지 검증
         validateEmailUniqueness(req.email(), userId);
