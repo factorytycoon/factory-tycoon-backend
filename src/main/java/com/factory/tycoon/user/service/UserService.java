@@ -283,6 +283,19 @@ public class UserService {
         return toWorkerResponse(user);
     }
 
+        // userId기반 비밀번호 변경
+    @Transactional
+    public void updatePassword(Long userId, String newPassword) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+        if (newPassword == null || newPassword.isBlank()) {
+            throw new IllegalArgumentException("비밀번호가 필요합니다.");
+        }
+        String hashed = passwordService.hash(newPassword);
+        user.setPassword(hashed);
+        userRepository.save(user);
+    }
+
     @Transactional
     public void deleteUser(Long userId) {
         if (!userRepository.existsById(userId)) {

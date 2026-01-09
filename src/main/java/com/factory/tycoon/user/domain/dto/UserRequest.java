@@ -26,6 +26,13 @@ public class UserRequest {
             String refreshToken // 지금은 안 쓰면 null 가능
     ) {}
 
+    // 비밀번호 변경용 DTO
+    public static class PasswordUpdateRequest {
+        private String password;
+        public String getPassword() { return password; }
+        public void setPassword(String password) { this.password = password; }
+    }
+
     public record UpdateImageRequest(
             String image // S3 file name (nullable)
     ) {}

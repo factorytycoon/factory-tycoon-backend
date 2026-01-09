@@ -1,3 +1,4 @@
+
 package com.factory.tycoon.user.ctrl;
 
 import com.factory.tycoon.user.domain.dto.UserRequest;
@@ -112,6 +113,15 @@ public class UserCtrl {
             @RequestBody UserRequest.ManageWorkerRequest request) {
         return ResponseEntity.ok(userService.updateWorker(userId, request));
     }
+
+        @Operation(summary = "비밀번호 재설정", description = "userId에 해당하는 비밀번호 변경")
+    @PutMapping("/{userId}/password")
+    public ResponseEntity<Void> updatePassword(
+            @PathVariable Long userId,
+            @RequestBody UserRequest.PasswordUpdateRequest request) {
+        userService.updatePassword(userId, request.getPassword());
+        return ResponseEntity.ok().build();
+    }    
 
     @Operation(summary = "직원 삭제", description = "userId로 직원 삭제")
     @DeleteMapping("/{userId}")
