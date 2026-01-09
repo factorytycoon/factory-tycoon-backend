@@ -79,4 +79,7 @@ public class WorkOrderEntity {
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
     }
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 }

@@ -101,4 +101,11 @@ public class WorkOrderService {
                 .map(WorkOrderResponse::new)
                 .collect(Collectors.toList());
     }
+    @Transactional
+    public WorkOrderResponse updateWorkOrderStatus(Long id, int status) {
+        WorkOrderEntity workorder = workorderRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("WorkOrder not found with id: " + id));
+        workorder.setStatus(status == 1);
+        return new WorkOrderResponse(workorder);
+    }
 }
