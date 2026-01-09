@@ -20,6 +20,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WorkOrderCtrl {
 
+    @Operation(summary = "공장별 활성 작업지시서 목록 조회", description = "특정 공장에 속한 status=1 Workorder만 조회")
+    @GetMapping("/factory/{factoryId}/active")
+    public ResponseEntity<List<WorkOrderResponse>> getActiveWorkOrdersByFactoryId(
+            @Parameter(description = "공장 ID", required = true) @PathVariable Long factoryId) {
+        return ResponseEntity.ok(workorderService.getActiveWorkOrdersByFactoryId(factoryId));
+    }
+
     @Operation(summary = "공장별 Workorder 목록 조회", description = "특정 factory에 해당하는 모든 Workorder 조회")
     @GetMapping("/factory/{factoryId}")
     public ResponseEntity<List<WorkOrderResponse>> getWorkOrdersByFactoryId(

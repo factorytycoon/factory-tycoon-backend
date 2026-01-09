@@ -19,6 +19,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class WorkOrderService {
+        public List<WorkOrderResponse> getActiveWorkOrdersByFactoryId(Long factoryId) {
+            return workorderRepository.findByFactoryIdAndStatusTrue(factoryId).stream()
+                    .map(WorkOrderResponse::new)
+                    .collect(Collectors.toList());
+        }
     public List<WorkOrderResponse> getWorkOrdersByFactoryId(Long factoryId) {
         return workorderRepository.findByFactoryId(factoryId).stream()
                 .map(WorkOrderResponse::new)
