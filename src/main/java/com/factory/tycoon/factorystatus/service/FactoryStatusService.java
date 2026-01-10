@@ -113,7 +113,14 @@ public class FactoryStatusService {
                 .totalScore100(finalScore100)
                 .rank(rank)
                 .details(details)
-                .rawData(status)
+                .safetyAlertCount(status.getSafetyAlertCount())      
+                .targetProduction(status.getTargetProduction())
+                .actualProduction(status.getActualProduction())
+                .avgProfit(status.getAvgProfit())
+                .currentProfit(status.getCurrentProfit())
+                .defectRate(status.getDefectRate())
+                .operationRate(status.getOperationRate())
+                .maintenanceDone(status.isMaintenanceDone()) 
                 .build();
     }
 
