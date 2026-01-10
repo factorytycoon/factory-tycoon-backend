@@ -19,18 +19,38 @@ public class FactoryStatusEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long factoryStatusid;
+    private Long factoryStatusId;
 
     private LocalDate date;
     private String factoryId;
-    private String status;
 
-    private int safetyAlertCount;       // 안전: 이상 감지 알림 횟수
-    private long targetProduction;      // 생산: 목표 생산량
-    private long actualProduction;      // 생산: 실제 생산량
-    private BigDecimal avgProfit;       // 수익: 평균 수익
-    private BigDecimal currentProfit;   // 수익: 현재 수익
-    private double defectRate;          // 품질: 불량률 (%)
-    private double operationRate;       // 효율: 가동률 (%)
-    private boolean maintenanceDone;    // 관리: 설비 점검 여부
+    private Integer totalScore100;
+
+    @Column(name = "`rank`") // SQL 예약어 충돌 방지
+    private String rank;
+
+    private Integer safetyAlertCount;
+    private Long targetProduction;
+    private Long actualProduction;
+    private BigDecimal avgProfit;
+    private BigDecimal currentProfit;
+    private Double defectRate;
+    private Double operationRate;
+    private boolean maintenanceDone;
+
+    public void update(Integer totalScore100, String rank, Integer safetyAlertCount,
+                       Long targetProduction, Long actualProduction, BigDecimal avgProfit,
+                       BigDecimal currentProfit, Double defectRate, Double operationRate,
+                       boolean maintenanceDone) {
+        this.totalScore100 = totalScore100;
+        this.rank = rank;
+        this.safetyAlertCount = safetyAlertCount;
+        this.targetProduction = targetProduction;
+        this.actualProduction = actualProduction;
+        this.avgProfit = avgProfit;
+        this.currentProfit = currentProfit;
+        this.defectRate = defectRate;
+        this.operationRate = operationRate;
+        this.maintenanceDone = maintenanceDone;
+    }
 }
