@@ -64,6 +64,104 @@ services:
       start_period: 10s
     networks:
       - db_network
+      
+  mariadb-backup:
+    container_name: mariadb-backup
+    image: mariadb:10.11
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    environment:
+      MARIADB_ROOT_PASSWORD: pass
+      BACKUP_INTERVAL_SECONDS: ${BACKUP_INTERVAL_SECONDS:-3600}
+    volumes:
+      - ./mariadb/backups:/backups
+    restart: unless-stopped
+    command: >-
+      sh -c '
+        echo "[mariadb-backup] starting backup loop with interval ${BACKUP_INTERVAL_SECONDS:-3600}s";
+        while true; do 
+          if mysqladmin ping -h mariadb -u root -ppass --silent >/dev/null 2>&1; then
+              ts=$$(date +%F-%H%M%S);
+              outFile=/backups/factory-tycoon-$$ts.sql;
+              echo "[mariadb-backup] running mysqldump to $$outFile";
+              mysqldump -h mariadb -u root -ppass --all-databases > "$$outFile" && echo "[mariadb-backup] success: $$outFile" || echo "[mariadb-backup] mysqldump failed";
+          else
+              echo "[mariadb-backup] db not ready, will retry";
+          fi;
+          sleep $${BACKUP_INTERVAL_SECONDS:-3600};
+        done'
+    networks:
+      - db_network
+
+  mongodb-backup:
+    container_name: mongodb-backup
+    image: mongo:8.0
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: pass
+      MONGO_HOST: mongodb
+      MONGO_PORT: 27017
+      BACKUP_INTERVAL_SECONDS: ${BACKUP_INTERVAL_SECONDS:-3600}
+    volumes:
+      - ./mongodb/backups:/backups
+    restart: unless-stopped
+    command: >-
+      sh -c '
+        echo "[mongodb-backup] starting backup loop with interval ${BACKUP_INTERVAL_SECONDS:-3600}s";
+        while true; do 
+          if mongosh --quiet \
+            --host="$$MONGO_HOST" --port="$$MONGO_PORT" \
+            -u "$$MONGO_INITDB_ROOT_USERNAME" -p "$$MONGO_INITDB_ROOT_PASSWORD" \
+            --authenticationDatabase admin \
+            --eval "db.adminCommand(\"ping\")" >/dev/null 2>&1; then
+              ts=$$(date +%F-%H%M%S);
+              outDir=/backups/dump-$$ts;
+              echo "[mongodb-backup] running mongodump to $$outDir";
+              mongodump \
+                --host="$$MONGO_HOST" --port="$$MONGO_PORT" \
+                -u "$$MONGO_INITDB_ROOT_USERNAME" -p "$$MONGO_INITDB_ROOT_PASSWORD" \
+                --authenticationDatabase admin \
+                --out "$$outDir" && echo "[mongodb-backup] success: $$outDir" || echo "[mongodb-backup] mongodump failed";
+          else
+              echo "[mongodb-backup] db not ready, will retry";
+          fi;
+          sleep $${BACKUP_INTERVAL_SECONDS:-3600};
+        done'
+    networks:
+      - db_network
+
+  redis-backup:
+    container_name: redis-backup
+    image: redis:7.4
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      REDIS_PASSWORD: pass
+      BACKUP_INTERVAL_SECONDS: ${BACKUP_INTERVAL_SECONDS:-3600}
+    volumes:
+      - ./redis/backups:/backups
+    restart: unless-stopped
+    command: >-
+      sh -c '
+        echo "[redis-backup] starting backup loop with interval ${BACKUP_INTERVAL_SECONDS:-3600}s";
+        while true; do 
+          if redis-cli -a pass ping >/dev/null 2>&1; then
+              ts=$$(date +%F-%H%M%S);
+              outFile=/backups/redis-$$ts.rdb;
+              echo "[redis-backup] running BGSAVE";
+              redis-cli -a pass BGSAVE && sleep 2 && cp /data/dump.rdb "$$outFile" && echo "[redis-backup] success: $$outFile" || echo "[redis-backup] backup failed";
+          else
+              echo "[redis-backup] redis not ready, will retry";
+          fi;
+          sleep $${BACKUP_INTERVAL_SECONDS:-3600};
+        done'
+    networks:
+      - db_network
 
 volumes:
   mariadb_data:
