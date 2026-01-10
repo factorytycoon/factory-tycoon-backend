@@ -161,11 +161,11 @@ INSERT INTO schedule (workorder_id, status, date, shift, worker) VALUES
 (4, 'pending', '2024-01-13', 'morning', 'Choi, Young-soo');
 
   -- Insert Prediction (4 rows)
-INSERT INTO prediction (factory_id, type, level, message, selected) VALUES
-(1, 'maintenance', 'warning', 'CNC Machine 1 requires maintenance in 7 days', FALSE),
-(2, 'failure', 'critical', 'Welding Robot 2 failure risk detected', TRUE),
-(3, 'efficiency', 'warning', 'Assembly Line 3 efficiency dropped by 15%', FALSE),
-(4, 'safety', 'critical', 'Safety inspection required immediately', TRUE);
+INSERT INTO prediction (user_id, description) VALUES
+(1, 'CNC Machine 1 requires maintenance in 7 days due to operational hours exceeding threshold'),
+(2, 'Welding Robot 2 shows signs of potential failure - immediate inspection recommended'),
+(3, 'Assembly Line 3 efficiency has dropped by 15% - check for bottlenecks'),
+(4, 'Safety inspection is required immediately for Quality Checker equipment');
 
   -- Insert User (4 rows)
 INSERT INTO `user` (factory_id, name, dob, phone, email, password, role, created_at, image) VALUES
