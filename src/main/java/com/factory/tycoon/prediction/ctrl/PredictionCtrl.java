@@ -21,13 +21,10 @@ public class PredictionCtrl {
     private final PredictionService predictionService;
 
     @Operation(summary = "예측값 목록 조회", 
-               description = "등록된 모든 예측값 목록을 조회하거나 타입/레벨/선택별로 필터링합니다.")
+               description = "등록된 모든 예측값 목록을 조회합니다.")
     @GetMapping
-    public ResponseEntity<List<PredictionResponse>> getAllPredictions(
-            @Parameter(description = "예측 타입") @RequestParam(required = false) String type,
-            @Parameter(description = "예측 레벨 (warning/critical)") @RequestParam(required = false) String level,
-            @Parameter(description = "선택 상태 (true: 선택됨, false: 미선택)") @RequestParam(required = false) Boolean selected) {
-        return ResponseEntity.ok(predictionService.getAllPredictions(type, level, selected));
+    public ResponseEntity<List<PredictionResponse>> getAllPredictions() {
+        return ResponseEntity.ok(predictionService.getAllPredictions());
     }
 
     @Operation(summary = "예측값 등록", 
@@ -46,7 +43,7 @@ public class PredictionCtrl {
     }
 
     @Operation(summary = "예측값 수정", 
-               description = "예측값의 선택 상태를 수정합니다.")
+               description = "예측값의 설명을 수정합니다.")
     @PutMapping("/{predictionId}")
     public ResponseEntity<PredictionResponse> updatePrediction(
             @Parameter(description = "예측값 ID", required = true) @PathVariable Long predictionId,

@@ -81,9 +81,9 @@ public class FactoryService {
         return orderService.getOrdersByFactoryId(factoryId);
     }
 
-    public List<PredictionResponse> getPredictions(Long factoryId, String type, String level, Boolean selected) {
-        return predictionService.getPredictionsByFactory(factoryId, type, level, selected);
-    }
+    // public List<PredictionResponse> getPredictions(Long factoryId, String type, String level, Boolean selected) {
+    //     return predictionService.getPredictionsByFactory(factoryId, type, level, selected);
+    // }
 
     @Transactional
     public FactoryResponse updateFactoryModeling(Long factoryId, String modeling) {

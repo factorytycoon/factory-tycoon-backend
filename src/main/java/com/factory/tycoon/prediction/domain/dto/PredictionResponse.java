@@ -10,22 +10,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class PredictionResponse {
     private Long predictionId;
-    private Long factoryId;
-    private String type;
-    private String level;
-    private String message;
-    private Boolean selected;
+    private Long userId;
+    private String description;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
     public PredictionResponse(PredictionEntity prediction) {
         this.predictionId = prediction.getPredictionId();
-        this.factoryId = prediction.getFactoryId();
-        this.type = prediction.getType();
-        this.level = prediction.getLevel().name();
-        this.message = prediction.getMessage();
-        this.selected = prediction.getSelected();
+        this.userId = prediction.getUserId();
+        this.description = prediction.getDescription();
         this.createdAt = prediction.getCreatedAt();
-        this.updatedAt = prediction.getUpdatedAt();
     }
 }
