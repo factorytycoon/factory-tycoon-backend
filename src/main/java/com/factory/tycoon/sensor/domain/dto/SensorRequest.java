@@ -9,6 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SensorRequest {
     private Long equipmentId;
-    private String name;
-    private String type;
+    private String key;
+    private String label;
+    private String unit;
 }

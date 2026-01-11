@@ -28,17 +28,22 @@ public class SensorEntity {
     @JoinColumn(name = "equipment_id", nullable = false)
     private EquipmentEntity equipment;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(name = "`key`", nullable = false)
+    private String key;
 
-    private String type;
+    @Column(nullable = false)
+    private String label;
+
+    @Column(nullable = false)
+    private String unit;
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    public void update(String name, String type) {
-        this.name = name;
-        this.type = type;
+    public void update(String key, String label, String unit) {
+        this.key = key;
+        this.label = label;
+        this.unit = unit;
     }
 }

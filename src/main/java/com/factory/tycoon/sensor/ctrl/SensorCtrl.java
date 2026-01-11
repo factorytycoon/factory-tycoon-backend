@@ -22,14 +22,10 @@ public class SensorCtrl {
 
     private final SensorService sensorService;
 
-    @Operation(summary = "센서 목록 조회", description = "등록된 모든 센서 목록을 조회하거나 타입별로 필터링합니다.")
+    @Operation(summary = "센서 목록 조회", description = "등록된 모든 센서 목록을 조회합니다.")
     @GetMapping
-    public ResponseEntity<List<SensorResponse>> getSensors(
-            @Parameter(description = "센서 타입 (선택사항)") @RequestParam(required = false) String sensorType) {
-        if (sensorType == null || sensorType.trim().isEmpty()) {
-            return ResponseEntity.ok(sensorService.getSensors());
-        }
-        return ResponseEntity.ok(sensorService.getSensorsByType(sensorType));
+    public ResponseEntity<List<SensorResponse>> getSensors() {
+        return ResponseEntity.ok(sensorService.getSensors());
     }
 
     @Operation(summary = "센서 등록", description = "새로운 센서를 등록합니다.")
@@ -68,12 +64,11 @@ public class SensorCtrl {
         return ResponseEntity.ok(sensorService.getAlarms(sensorId));
     }
 
-    @Operation(summary = "센서 데이터 조회", description = "센서 데이터 전체 또는 필터(날짜, 센서타입)로 조회합니다.")
+    @Operation(summary = "센서 데이터 조회", description = "센서 데이터 전체 또는 날짜별로 조회합니다.")
     @GetMapping("/{sensorId}/sensor-data")
     public ResponseEntity<List<Object>> getSensorData(
             @Parameter(description = "센서 ID", required = true) @PathVariable Long sensorId,
-            @Parameter(description = "조회 날짜(yyyy-MM-dd)") @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @Parameter(description = "센서 타입") @RequestParam(required = false) String sensorType) {
-        return ResponseEntity.ok(sensorService.getSensorData(sensorId, date, sensorType));
+            @Parameter(description = "조회 날짜(yyyy-MM-dd)") @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        return ResponseEntity.ok(sensorService.getSensorData(sensorId, date, null));
     }
 }

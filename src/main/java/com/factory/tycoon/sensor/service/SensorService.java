@@ -41,8 +41,9 @@ public class SensorService {
 
         SensorEntity sensor = SensorEntity.builder()
                 .equipment(equipment)
-                .name(request.getName())
-                .type(request.getType())
+                .key(request.getKey())
+                .label(request.getLabel())
+                .unit(request.getUnit())
                 .build();
         SensorEntity saved = sensorRepository.save(sensor);
         return new SensorResponse(saved);
@@ -63,7 +64,7 @@ public class SensorService {
     public SensorResponse updateSensor(Long id, SensorRequest request) {
         SensorEntity sensor = sensorRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Sensor not found with id: " + id));
-        sensor.update(request.getName(), request.getType());
+        sensor.update(request.getKey(), request.getLabel(), request.getUnit());
         return new SensorResponse(sensor);
     }
 
@@ -102,12 +103,6 @@ public class SensorService {
         }
         return sensorDataRepository.findBySensor_SensorId(sensorId).stream()
                 .map(SensorDataResponse::new)
-                .collect(Collectors.toList());
-    }
-
-    public List<SensorResponse> getSensorsByType(String sensorType) {
-        return sensorRepository.findByType(sensorType).stream()
-                .map(SensorResponse::new)
                 .collect(Collectors.toList());
     }
 }

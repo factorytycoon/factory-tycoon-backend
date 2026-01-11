@@ -9,10 +9,10 @@ INSERT INTO factory (name, location, description, phone, factory_code, operation
 
   -- Insert Equipment (4 rows per factory) with location/description
 INSERT INTO equipment (factory_id, name, status, type, installed_at, modeling, location, description) VALUES
-(1, 'ft-pi-001', 'normal', 'CNC', '2023-06-01 10:00:00', '/sample/facility_test.glb', 'Building A - Floor 1 - Section 1', 'High-precision CNC milling machine for metal parts'),
-(1, 'ft-pi-002', 'normal', 'Welding', '2023-06-15 11:00:00', '/sample/facility_test.glb', 'Building A - Floor 1 - Section 2', 'Automated welding robot for assembly lines'),
-(1, 'ft-pi-003', 'warning', 'Assembly', '2023-07-01 09:00:00', '/sample/facility_test.glb', 'Building A - Floor 2 - Section 1', 'Main assembly line for final product integration'),
-(1, 'ft-pi-004', 'normal', 'Inspection', '2023-07-15 08:00:00', '/sample/facility_test.glb', 'Building A - Floor 2 - Section 3', 'Quality inspection and testing equipment'),
+(1, 'ft-pi-001', 'normal', '공장', '2023-06-01 10:00:00', '/sample/ft.glb', 'Building A - Floor 1 - Section 1', 'High-precision CNC milling machine for metal parts'),
+(1, 'ft-pi-002', 'normal', '선반', '2023-06-15 11:00:00', '/sample/facility_trim.glb', 'Building A - Floor 1 - Section 2', 'Automated welding robot for assembly lines'),
+(1, 'ft-pi-003', 'warning', '도색', '2023-07-01 09:00:00', '/sample/facility_heating.glb', 'Building A - Floor 2 - Section 1', 'Main assembly line for final product integration'),
+(1, 'ft-pi-004', 'normal', '검수', '2023-07-15 08:00:00', '/sample/facility_moving.glb', 'Building A - Floor 2 - Section 3', 'Quality inspection and testing equipment'),
 (2, 'CNC Machine 2', 'normal', 'CNC', '2023-08-01 10:00:00', '/sample/facility_test.glb', 'Building B - Floor 1 - Section 1', 'CNC lathe machine for cylindrical parts'),
 (2, 'Welding Robot 2', 'error', 'Welding', '2023-08-15 11:00:00', '/sample/facility_test.glb', 'Building B - Floor 1 - Section 2', 'Heavy-duty welding robot for large components'),
 (2, 'Assembly Line 2', 'normal', 'Assembly', '2023-09-01 09:00:00', '/sample/facility_test.glb', 'Building B - Floor 2 - Section 1', 'Secondary assembly line for component integration'),
@@ -27,27 +27,27 @@ INSERT INTO equipment (factory_id, name, status, type, installed_at, modeling, l
 (4, 'Quality Checker 4', 'normal', 'Inspection', '2024-01-15 08:00:00', '/sample/facility_test.glb', 'Building D - Floor 2 - Section 2', 'Final quality control station before shipment');
 
   -- Insert Sensor
-INSERT INTO sensor (equipment_id, name, type) VALUES
-(1, 'temp', 'temp'),
-(1, 'humi', 'humidity'),
-(1, 'illu', 'lux'),
-(2, 'rpm', 'rpm'),
-(2, 'nois', 'noise'),
-(2, 'disp', 'disp'),
-(2, 'temp', 'temperature'),
-(2, 'humi', 'humidity'),
-(2, 'illu', 'lux'),
-(3, 'pres', 'pressure'),
-(3, 'voc', 'voc'),
-(3, 'temp', 'temp'),
-(3, 'humi', 'humidity'),
-(3, 'illu', 'lux'),
-(4, 'phot', 'photo'),
-(4, 'torq', 'torque'),
-(4, 'weig', 'weight'),
-(4, 'temp', 'temperature'),
-(4, 'humi', 'humidity'),
-(4, 'illu', 'lux');
+INSERT INTO sensor (equipment_id, `key`, label, unit) VALUES
+(1, 'temp', '온도', '°C'),
+(1, 'humi', '습도', '%'),
+(1, 'illu', '조도', 'lux'),
+(2, 'rpm', '회전수', 'rpm'),
+(2, 'nois', '소음', 'dB'),
+(2, 'disp', '진동', 'mm'),
+(2, 'temp', '온도', '°C'),
+(2, 'humi', '습도', '%'),
+(2, 'illu', '조도', 'lux'),
+(3, 'pres', '압력', 'bar'),
+(3, 'voc', '가스', 'ppm'),
+(3, 'temp', '온도', '°C'),
+(3, 'humi', '습도', '%'),
+(3, 'illu', '조도', 'lux'),
+(4, 'phot', '포토센서', 'bool'),
+(4, 'torq', '토크', 'Nm'),
+(4, 'weig', '무게', 'g'),
+(4, 'temp', '온도', '°C'),
+(4, 'humi', '습도', '%'),
+(4, 'illu', '조도', 'lux');
 
   -- Insert Sensor Data (4 rows per sensor)
 INSERT INTO sensor_data (sensor_id, date) VALUES

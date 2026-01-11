@@ -11,15 +11,17 @@ import java.time.LocalDateTime;
 public class SensorResponse {
     private Long sensorId;
     private Long equipmentId;
-    private String name;
-    private String type;
+    private String key;
+    private String label;
+    private String unit;
     private LocalDateTime createdAt;
 
     public SensorResponse(SensorEntity sensor) {
         this.sensorId = sensor.getSensorId();
         this.equipmentId = sensor.getEquipment().getEquipmentId();
-        this.name = sensor.getName();
-        this.type = sensor.getType();
+        this.key = sensor.getKey();
+        this.label = sensor.getLabel();
+        this.unit = sensor.getUnit();
         this.createdAt = sensor.getCreatedAt();
     }
 }
