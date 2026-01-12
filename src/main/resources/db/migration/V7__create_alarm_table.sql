@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS `alarm` (
     `alarm_id` bigint(20) NOT NULL AUTO_INCREMENT,
     `equipment_id` BIGINT NOT NULL,
+    `title` varchar(255) NOT NULL,
     `description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
     `status` varchar(20) DEFAULT 'OPEN',
     `level` varchar(50) DEFAULT NULL,
