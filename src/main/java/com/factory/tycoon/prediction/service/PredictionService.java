@@ -3,7 +3,6 @@ package com.factory.tycoon.prediction.service;
 import com.factory.tycoon.prediction.domain.dto.PredictionRequest;
 import com.factory.tycoon.prediction.domain.dto.PredictionResponse;
 import com.factory.tycoon.prediction.domain.entity.PredictionEntity;
-import com.factory.tycoon.prediction.domain.entity.PredictionLevel;
 import com.factory.tycoon.prediction.repository.PredictionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,22 +18,23 @@ public class PredictionService {
 
     private final PredictionRepository predictionRepository;
 
-    public List<PredictionResponse> getAllPredictions(String type, String level, Boolean selected) {
-        return filterAndMap(predictionRepository.findAll(), type, level, selected);
+    public List<PredictionResponse> getAllPredictions() {
+        return predictionRepository.findAll().stream()
+                .map(PredictionResponse::new)
+                .collect(Collectors.toList());
     }
 
-    public List<PredictionResponse> getPredictionsByFactory(Long factoryId, String type, String level, Boolean selected) {
-        return filterAndMap(predictionRepository.findByFactoryId(factoryId), type, level, selected);
+    public List<PredictionResponse> getPredictionsByUser(Long userId) {
+        return predictionRepository.findByUserId(userId).stream()
+                .map(PredictionResponse::new)
+                .collect(Collectors.toList());
     }
 
     @Transactional
     public PredictionResponse createPrediction(PredictionRequest request) {
         PredictionEntity prediction = PredictionEntity.builder()
-                .factoryId(request.getFactoryId())
-                .type(request.getType())
-                .level(PredictionLevel.from(request.getLevel()))
-                .message(request.getMessage())
-                .selected(request.getSelected() != null ? request.getSelected() : false)
+                .userId(request.getUserId())
+                .description(request.getDescription())
                 .build();
         PredictionEntity savedPrediction = predictionRepository.save(prediction);
         return new PredictionResponse(savedPrediction);
@@ -50,7 +50,7 @@ public class PredictionService {
     public PredictionResponse updatePrediction(Long id, PredictionRequest request) {
         PredictionEntity prediction = predictionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Prediction not found with id: " + id));
-        prediction.updateSelected(request.getSelected());
+        prediction.updateDescription(request.getDescription());
         return new PredictionResponse(prediction);
     }
 
@@ -61,28 +61,8 @@ public class PredictionService {
         predictionRepository.delete(prediction);
     }
 
-    private List<PredictionResponse> filterAndMap(List<PredictionEntity> predictions, String type, String level, Boolean selected) {
-        if (type != null) {
-            predictions = predictions.stream()
-                    .filter(p -> p.getType().equalsIgnoreCase(type))
-                    .collect(Collectors.toList());
-        }
-
-        if (level != null) {
-            PredictionLevel predictionLevel = PredictionLevel.from(level);
-            predictions = predictions.stream()
-                    .filter(p -> p.getLevel() == predictionLevel)
-                    .collect(Collectors.toList());
-        }
-
-        if (selected != null) {
-            predictions = predictions.stream()
-                    .filter(p -> p.getSelected().equals(selected))
-                    .collect(Collectors.toList());
-        }
-
-        return predictions.stream()
-                .map(PredictionResponse::new)
-                .collect(Collectors.toList());
+    @Transactional
+    public void deletePredictionsByUser(Long userId) {
+        predictionRepository.deleteByUserId(userId);
     }
 }

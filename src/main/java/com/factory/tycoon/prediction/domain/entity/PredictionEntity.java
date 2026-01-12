@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -25,29 +24,16 @@ public class PredictionEntity {
     private Long predictionId;
 
     @Column(nullable = false)
-    private Long factoryId;
+    private Long userId;
 
-    @Column(nullable = false)
-    private String type;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private PredictionLevel level;
-
-    private String message;
-
-    @Column(nullable = false)
-    private Boolean selected;
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    public void updateSelected(Boolean selected) {
-        this.selected = selected;
+    public void updateDescription(String description) {
+        this.description = description;
     }
 }

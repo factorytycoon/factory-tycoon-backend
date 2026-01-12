@@ -8,9 +8,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class PredictionRequest {
-    private Long factoryId;
-    private String type;
-    private String level;
-    private String message;
-    private Boolean selected;
+    private Long userId;
+    private String description;
 }

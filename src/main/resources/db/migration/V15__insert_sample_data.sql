@@ -1,18 +1,18 @@
   -- Insert sample data for all tables
 
   -- Insert Factory (4 rows)
-INSERT INTO factory (factory_id, name, location, description, phone, factory_code, operation_start_at, modeling) VALUES
-(1, 'Seoul Factory', 'Seoul, South Korea', 'Main production facility', '02-1234-5678', 'FACT-001', '2024-01-01 09:00:00', '/test_factory/ft.glb'),
-(2, 'Busan Factory', 'Busan, South Korea', 'Secondary production facility', '051-9876-5432', 'FACT-002', '2024-01-05 08:30:00', '/test_factory/ft.glb'),
-(3, 'Incheon Factory', 'Incheon, South Korea', 'Quality control facility', '032-5555-6666', 'FACT-003', '2024-01-10 10:00:00', '/test_factory/ft.glb'),
-(4, 'Daegu Factory', 'Daegu, South Korea', 'Assembly facility', '053-1111-2222', 'FACT-004', '2024-01-15 07:00:00', '/test_factory/ft.glb');
+INSERT INTO factory (name, location, description, phone, factory_code, operation_start_at, modeling) VALUES
+('Seoul Factory', 'Seoul, South Korea', 'Main production facility', '02-1234-5678', 'FACT-001', '2024-01-01 09:00:00', '/test_factory/ft.glb'),
+('Busan Factory', 'Busan, South Korea', 'Secondary production facility', '051-9876-5432', 'FACT-002', '2024-01-05 08:30:00', '/test_factory/ft.glb'),
+('Incheon Factory', 'Incheon, South Korea', 'Quality control facility', '032-5555-6666', 'FACT-003', '2024-01-10 10:00:00', '/test_factory/ft.glb'),
+('Daegu Factory', 'Daegu, South Korea', 'Assembly facility', '053-1111-2222', 'FACT-004', '2024-01-15 07:00:00', '/test_factory/ft.glb');
 
   -- Insert Equipment (4 rows per factory) with location/description
 INSERT INTO equipment (factory_id, name, status, type, installed_at, modeling, location, description) VALUES
-(1, 'ft-pi-001', 'normal', 'CNC', '2023-06-01 10:00:00', '/sample/facility_test.glb', 'Building A - Floor 1 - Section 1', 'High-precision CNC milling machine for metal parts'),
-(1, 'ft-pi-002', 'normal', 'Welding', '2023-06-15 11:00:00', '/sample/facility_test.glb', 'Building A - Floor 1 - Section 2', 'Automated welding robot for assembly lines'),
-(1, 'ft-pi-003', 'warning', 'Assembly', '2023-07-01 09:00:00', '/sample/facility_test.glb', 'Building A - Floor 2 - Section 1', 'Main assembly line for final product integration'),
-(1, 'ft-pi-004', 'normal', 'Inspection', '2023-07-15 08:00:00', '/sample/facility_test.glb', 'Building A - Floor 2 - Section 3', 'Quality inspection and testing equipment'),
+(1, 'ft-pi-001', 'normal', '공장', '2023-06-01 10:00:00', '/sample/ft.glb', 'Building A - Floor 1 - Section 1', 'High-precision CNC milling machine for metal parts'),
+(1, 'ft-pi-002', 'normal', '선반', '2023-06-15 11:00:00', '/sample/facility_trim.glb', 'Building A - Floor 1 - Section 2', 'Automated welding robot for assembly lines'),
+(1, 'ft-pi-003', 'warning', '도색', '2023-07-01 09:00:00', '/sample/facility_heating.glb', 'Building A - Floor 2 - Section 1', 'Main assembly line for final product integration'),
+(1, 'ft-pi-004', 'normal', '검수', '2023-07-15 08:00:00', '/sample/facility_moving.glb', 'Building A - Floor 2 - Section 3', 'Quality inspection and testing equipment'),
 (2, 'CNC Machine 2', 'normal', 'CNC', '2023-08-01 10:00:00', '/sample/facility_test.glb', 'Building B - Floor 1 - Section 1', 'CNC lathe machine for cylindrical parts'),
 (2, 'Welding Robot 2', 'error', 'Welding', '2023-08-15 11:00:00', '/sample/facility_test.glb', 'Building B - Floor 1 - Section 2', 'Heavy-duty welding robot for large components'),
 (2, 'Assembly Line 2', 'normal', 'Assembly', '2023-09-01 09:00:00', '/sample/facility_test.glb', 'Building B - Floor 2 - Section 1', 'Secondary assembly line for component integration'),
@@ -26,72 +26,28 @@ INSERT INTO equipment (factory_id, name, status, type, installed_at, modeling, l
 (4, 'Assembly Line 4', 'normal', 'Assembly', '2024-01-01 09:00:00', '/sample/facility_test.glb', 'Building D - Floor 2 - Section 1', 'Fast-paced assembly line for high-volume production'),
 (4, 'Quality Checker 4', 'normal', 'Inspection', '2024-01-15 08:00:00', '/sample/facility_test.glb', 'Building D - Floor 2 - Section 2', 'Final quality control station before shipment');
 
-  -- Insert Sensor (4 rows per equipment)
-INSERT INTO sensor (equipment_id, name, type) VALUES
-(1, 'Temperature Sensor 1-1', 'Temperature'),
-(1, 'Pressure Sensor 1-1', 'Pressure'),
-(1, 'Vibration Sensor 1-1', 'Vibration'),
-(1, 'Speed Sensor 1-1', 'Speed'),
-(2, 'Temperature Sensor 2-1', 'Temperature'),
-(2, 'Pressure Sensor 2-1', 'Pressure'),
-(2, 'Vibration Sensor 2-1', 'Vibration'),
-(2, 'Speed Sensor 2-1', 'Speed'),
-(3, 'Temperature Sensor 3-1', 'Temperature'),
-(3, 'Pressure Sensor 3-1', 'Pressure'),
-(3, 'Vibration Sensor 3-1', 'Vibration'),
-(3, 'Speed Sensor 3-1', 'Speed'),
-(4, 'Temperature Sensor 4-1', 'Temperature'),
-(4, 'Pressure Sensor 4-1', 'Pressure'),
-(4, 'Vibration Sensor 4-1', 'Vibration'),
-(4, 'Speed Sensor 4-1', 'Speed'),
-(5, 'Temperature Sensor 5-1', 'Temperature'),
-(5, 'Pressure Sensor 5-1', 'Pressure'),
-(5, 'Vibration Sensor 5-1', 'Vibration'),
-(5, 'Speed Sensor 5-1', 'Speed'),
-(6, 'Temperature Sensor 6-1', 'Temperature'),
-(6, 'Pressure Sensor 6-1', 'Pressure'),
-(6, 'Vibration Sensor 6-1', 'Vibration'),
-(6, 'Speed Sensor 6-1', 'Speed'),
-(7, 'Temperature Sensor 7-1', 'Temperature'),
-(7, 'Pressure Sensor 7-1', 'Pressure'),
-(7, 'Vibration Sensor 7-1', 'Vibration'),
-(7, 'Speed Sensor 7-1', 'Speed'),
-(8, 'Temperature Sensor 8-1', 'Temperature'),
-(8, 'Pressure Sensor 8-1', 'Pressure'),
-(8, 'Vibration Sensor 8-1', 'Vibration'),
-(8, 'Speed Sensor 8-1', 'Speed'),
-(9, 'Temperature Sensor 9-1', 'Temperature'),
-(9, 'Pressure Sensor 9-1', 'Pressure'),
-(9, 'Vibration Sensor 9-1', 'Vibration'),
-(9, 'Speed Sensor 9-1', 'Speed'),
-(10, 'Temperature Sensor 10-1', 'Temperature'),
-(10, 'Pressure Sensor 10-1', 'Pressure'),
-(10, 'Vibration Sensor 10-1', 'Vibration'),
-(10, 'Speed Sensor 10-1', 'Speed'),
-(11, 'Temperature Sensor 11-1', 'Temperature'),
-(11, 'Pressure Sensor 11-1', 'Pressure'),
-(11, 'Vibration Sensor 11-1', 'Vibration'),
-(11, 'Speed Sensor 11-1', 'Speed'),
-(12, 'Temperature Sensor 12-1', 'Temperature'),
-(12, 'Pressure Sensor 12-1', 'Pressure'),
-(12, 'Vibration Sensor 12-1', 'Vibration'),
-(12, 'Speed Sensor 12-1', 'Speed'),
-(13, 'Temperature Sensor 13-1', 'Temperature'),
-(13, 'Pressure Sensor 13-1', 'Pressure'),
-(13, 'Vibration Sensor 13-1', 'Vibration'),
-(13, 'Speed Sensor 13-1', 'Speed'),
-(14, 'Temperature Sensor 14-1', 'Temperature'),
-(14, 'Pressure Sensor 14-1', 'Pressure'),
-(14, 'Vibration Sensor 14-1', 'Vibration'),
-(14, 'Speed Sensor 14-1', 'Speed'),
-(15, 'Temperature Sensor 15-1', 'Temperature'),
-(15, 'Pressure Sensor 15-1', 'Pressure'),
-(15, 'Vibration Sensor 15-1', 'Vibration'),
-(15, 'Speed Sensor 15-1', 'Speed'),
-(16, 'Temperature Sensor 16-1', 'Temperature'),
-(16, 'Pressure Sensor 16-1', 'Pressure'),
-(16, 'Vibration Sensor 16-1', 'Vibration'),
-(16, 'Speed Sensor 16-1', 'Speed');
+  -- Insert Sensor
+INSERT INTO sensor (equipment_id, `key`, label, unit) VALUES
+(1, 'temp', '온도', '°C'),
+(1, 'humi', '습도', '%'),
+(1, 'illu', '조도', 'lux'),
+(2, 'rpm', '회전수', 'rpm'),
+(2, 'nois', '소음', 'dB'),
+(2, 'disp', '진동', 'mm'),
+(2, 'temp', '온도', '°C'),
+(2, 'humi', '습도', '%'),
+(2, 'illu', '조도', 'lux'),
+(3, 'pres', '압력', 'bar'),
+(3, 'voc', '가스', 'ppm'),
+(3, 'temp', '온도', '°C'),
+(3, 'humi', '습도', '%'),
+(3, 'illu', '조도', 'lux'),
+(4, 'phot', '포토센서', 'bool'),
+(4, 'torq', '토크', 'Nm'),
+(4, 'weig', '무게', 'g'),
+(4, 'temp', '온도', '°C'),
+(4, 'humi', '습도', '%'),
+(4, 'illu', '조도', 'lux');
 
   -- Insert Sensor Data (4 rows per sensor)
 INSERT INTO sensor_data (sensor_id, date) VALUES
@@ -160,19 +116,19 @@ INSERT INTO schedule (workorder_id, status, date, shift, worker) VALUES
 (3, 'completed', '2024-01-12', 'night', 'Park, Sung-il'),
 (4, 'pending', '2024-01-13', 'morning', 'Choi, Young-soo');
 
-  -- Insert Prediction (4 rows)
-INSERT INTO prediction (factory_id, type, level, message, selected) VALUES
-(1, 'maintenance', 'warning', 'CNC Machine 1 requires maintenance in 7 days', FALSE),
-(2, 'failure', 'critical', 'Welding Robot 2 failure risk detected', TRUE),
-(3, 'efficiency', 'warning', 'Assembly Line 3 efficiency dropped by 15%', FALSE),
-(4, 'safety', 'critical', 'Safety inspection required immediately', TRUE);
-
   -- Insert User (4 rows)
 INSERT INTO `user` (factory_id, name, dob, phone, email, password, role, created_at, image) VALUES
   (1,'Kim Min-ho', '1985-05-12','010-1234-5678','sf@sf.com','$2b$10$/0a6E6Zpf3VG4VeMD5F/NOlaH.6wMstvWgLP/DdhyJELeqrpWtMmK','OWNER','2024-01-01 09:00:00',NULL),
   (1,'Lee Ji-won','1990-08-25','010-2345-6789','fs@fs.com','$2b$10$498HEzFnAWeVzlpuuccw6u6qkJCDQCJKAA5x5wpYGgN/d1v.MkRkK','WORKER','2024-01-01 09:00:00',NULL),
   (2,'Park Sung-il','1988-03-18','010-3456-7890','park.sungil@factory.com','$2a$10$slYQmyNdGzin7olVN3/p2OPST9/PgBkqquzi.Ss7KIUgO2t0jKMUm','OWNER','2024-01-01 09:00:00',NULL),
   (3,'Choi Young-soo','1992-11-30','010-4567-8901','choi.youngsoo@factory.com','$2a$10$slYQmyNdGzin7olVN3/p2OPST9/PgBkqquzi.Ss7KIUgO2t0jKMUm','WORKER','2024-01-01 09:00:00',NULL);
+
+  -- Insert Prediction (4 rows)
+INSERT INTO prediction (user_id, description) VALUES
+(1, 'CNC Machine 1 requires maintenance in 7 days due to operational hours exceeding threshold'),
+(2, 'Welding Robot 2 shows signs of potential failure - immediate inspection recommended'),
+(3, 'Assembly Line 3 efficiency has dropped by 15% - check for bottlenecks'),
+(4, 'Safety inspection is required immediately for Quality Checker equipment');
   -- Insert Inventory (4 rows)
 INSERT INTO inventory (factory_id, item_name, quantity, location, unit, expiration_date) VALUES
 (1, 'Steel Plate', 500, 'Warehouse A', 'pcs', NULL),

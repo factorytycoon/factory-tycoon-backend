@@ -4,9 +4,12 @@ package com.factory.tycoon.user.ctrl;
 import com.factory.tycoon.user.domain.dto.UserRequest;
 import com.factory.tycoon.user.domain.dto.UserResponse;
 import com.factory.tycoon.user.service.UserService;
+import com.factory.tycoon.prediction.domain.dto.PredictionResponse;
+import com.factory.tycoon.prediction.service.PredictionService;
 
 import java.util.List;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +39,23 @@ public class UserCtrl {
         }
     private final UserService userService;
     private final com.factory.tycoon.auth.TokenService tokenService;
+    private final PredictionService predictionService;
     
+    
+    @Operation(summary = "사용자별 예측값 조회", description = "특정 사용자의 예측값 목록을 조회합니다.")
+    @GetMapping("/{userId}/predictions")
+    public ResponseEntity<List<PredictionResponse>> getUserPredictions(
+            @Parameter(description = "사용자 ID", required = true) @PathVariable Long userId) {
+        return ResponseEntity.ok(predictionService.getPredictionsByUser(userId));
+    }
+
+    @Operation(summary = "사용자별 예측값 전체 삭제", description = "특정 사용자의 예측값을 모두 삭제합니다.")
+    @DeleteMapping("/{userId}/predictions")
+    public ResponseEntity<Void> deleteUserPredictions(
+            @Parameter(description = "사용자 ID", required = true) @PathVariable Long userId) {
+        predictionService.deletePredictionsByUser(userId);
+        return ResponseEntity.noContent().build();
+    }
     
     @Operation(summary = "공장별 작업자 목록 조회", description = "특정 factoryId의 worker 목록 조회")
     @GetMapping("/factory/{factoryId}/workers")
