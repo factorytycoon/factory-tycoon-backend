@@ -26,11 +26,14 @@ public class AlarmEntity {
     @Column(name = "equipment_id", nullable = false)
     private Long equipmentId;
 
+    @Column(length = 255, nullable = false)
+    private String title; // 알람 제목
+
     @Column(columnDefinition = "longtext")
     private String description; // 알람 설명
 
     @Column(length = 20)
-    private String status; // OPEN, CLOSED, etc.
+    private String status; // OPEN, CLOSE, etc.
 
     @Column(length = 50)
     private String level; // yellow, orange, red

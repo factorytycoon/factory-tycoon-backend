@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class AlarmRequest {
     private Long equipmentId;
+    private String title;
     private String description;
     private String status;
     private String level;

@@ -75,8 +75,14 @@ public class AlarmService {
 
     @Transactional
     public AlarmResponse createAlarm(AlarmRequest request) {
+        String title = request.getTitle();
+        if (title == null || title.isBlank()) {
+            title = request.getLevel() != null ? request.getLevel() : "alarm";
+        }
+
         AlarmEntity alarm = AlarmEntity.builder()
                 .equipmentId(request.getEquipmentId())
+                .title(title)
                 .description(request.getDescription())
                 .status(request.getStatus() != null ? request.getStatus() : "OPEN")
                 .level(request.getLevel())
@@ -114,8 +120,13 @@ public class AlarmService {
             String sensorSnapshot = objectMapper.writeValueAsString(request.getHits());
             
             // 4. AlarmEntity 생성 및 저장
+                String title = request.getMonitor_name() != null ? request.getMonitor_name() : request.getTrigger_name();
+                if (title == null || title.isBlank()) {
+                title = "alarm";
+                }
             AlarmEntity alarm = AlarmEntity.builder()
                     .equipmentId(equipment.getEquipmentId())
+                    .title(title)
                     .description(request.getMonitor_name() + ": " + request.getTrigger_name())
                     .level(request.getTrigger_name())
                     .status("OPEN")
@@ -151,8 +162,8 @@ public class AlarmService {
         AlarmEntity alarm = alarmRepository.findById(alarmId)
                 .orElseThrow(() -> new IllegalArgumentException("Alarm not found with id: " + alarmId));
         
-        // 알람 상태를 CLOSED로 업데이트
-        alarm.update(alarm.getDescription(), "CLOSED", alarm.getLevel());
+        // 알람 상태를 CLOSE로 업데이트
+        alarm.update(alarm.getDescription(), "CLOSE", alarm.getLevel());
         
         // 해당 equipment의 상태를 normal로 업데이트
         EquipmentEntity equipment = equipmentRepository.findById(alarm.getEquipmentId())

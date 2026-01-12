@@ -88,12 +88,12 @@ INSERT INTO sensor_analysis (sensor_id, date, max_value, min_value, avg_value) V
 (4, '2024-01-04', 90.6, 36.4, 63.5);
 
   -- Insert Alarm (5 rows)
-INSERT INTO alarm (equipment_id, description, level, status, sensor_dt, created_at) VALUES
-(2, 'Turning issue - high RPM deviation detected', 'red', 'OPEN', '2026-01-08 06:48:56', '2026-01-08 06:52:44'),
-(1, 'Temperature warning - above operational threshold', 'yellow', 'OPEN', '2026-01-08 07:10:30', '2026-01-08 07:15:22'),
-(3, 'Vibration detected - excessive movement in spindle', 'red', 'CLOSE', '2026-01-08 08:25:15', '2026-01-08 08:30:10'),
-(2, 'Noise level exceeds safety limit', 'yellow', 'OPEN', '2026-01-08 09:15:45', '2026-01-08 09:20:33'),
-(4, 'RPM instability detected - motor variance high', 'red', 'CLOSE', '2026-01-08 10:05:20', '2026-01-08 10:12:15');
+INSERT INTO alarm (equipment_id, title, description, level, status, sensor_dt, created_at) VALUES
+(2, 'title', 'Turning issue - high RPM deviation detected', 'red', 'OPEN', '2026-01-08 06:48:56', '2026-01-08 06:52:44'),
+(1, 'title', 'Temperature warning - above operational threshold', 'yellow', 'OPEN', '2026-01-08 07:10:30', '2026-01-08 07:15:22'),
+(3, 'title', 'Vibration detected - excessive movement in spindle', 'red', 'CLOSE', '2026-01-08 08:25:15', '2026-01-08 08:30:10'),
+(2, 'title', 'Noise level exceeds safety limit', 'yellow', 'OPEN', '2026-01-08 09:15:45', '2026-01-08 09:20:33'),
+(4, 'title', 'RPM instability detected - motor variance high', 'red', 'CLOSE', '2026-01-08 10:05:20', '2026-01-08 10:12:15');
 
   -- Insert Orders (4 rows)
 INSERT INTO orders (factory_id, customer, product_name, quantity, due_date) VALUES

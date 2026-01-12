@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class AlarmResponse {
     private Long alarmId;
     private Long equipmentId;
+    private String title;
     private String description;
     private String status;
     private String level;
@@ -20,6 +21,7 @@ public class AlarmResponse {
     public AlarmResponse(AlarmEntity alarm) {
         this.alarmId = alarm.getAlarmId();
         this.equipmentId = alarm.getEquipmentId();
+        this.title = alarm.getTitle();
         this.description = alarm.getDescription();
         this.status = alarm.getStatus();
         this.level = alarm.getLevel();
