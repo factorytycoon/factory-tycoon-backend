@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -120,6 +119,7 @@ public class FactoryStatusService {
 
     // Entity -> Response 변환
     private FactoryStatusResponse mapEntityToResponse(FactoryStatusEntity entity) {
+        
         // 1. Entity 데이터를 기반으로 Request 객체(지표 모음) 복원
         FactoryStatusRequest status = FactoryStatusRequest.builder()
                 .safetyAlertCount(entity.getSafetyAlertCount())
@@ -225,31 +225,18 @@ public class FactoryStatusService {
     // 원천 데이터(Alarm, WorkOrder)에서 지표 집계
     private FactoryStatusRequest calculateDailyMetricsFromSource(LocalDate date) {
         // 1. 안전: 알람 테이블(Alarm)에서 카운트
-        LocalDateTime startOfDay = date.atStartOfDay();
-        LocalDateTime endOfDay = date.atTime(23, 59, 59);
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        // 요청받은 날짜(date)를 기준으로 어제(date-1)의 데이터를 조회
+        LocalDate targetDate = date.minusDays(1);
+        LocalDateTime startOfDay = targetDate.atStartOfDay();
+        LocalDateTime nextDayStart = targetDate.plusDays(1).atStartOfDay();
         List<AlarmEntity> alarms =
-            alarmRepository.findAllByCreatedAtBetween(startOfDay.format(formatter), endOfDay.format(formatter));
+            alarmRepository.findAllBySensorDtBetween(startOfDay, nextDayStart);
 
-        if (alarms == null) {
-            alarms = List.of();
-        }
         int safetyAlertCount = alarms.size();
 
-        // 2. 오더 데이터 가져오기 (WorkOrder)
-        List<WorkOrderEntity> allOrders = workOrderRepository.findAll();
-        if (allOrders == null) {
-            allOrders = List.of();
-        }
-
-        // 전체 주문을 날짜별로 그룹화
-        Map<LocalDate, List<WorkOrderEntity>> ordersByDate = allOrders.stream()
-            .filter(o -> o.getCreatedAt() != null)
-            .collect(Collectors.groupingBy(o -> o.getCreatedAt().toLocalDate()));
-
-        // 오늘자 주문 목록
-        List<WorkOrderEntity> todayOrders = ordersByDate.getOrDefault(date, List.of());
+        // 2. 오더 데이터 가져오기 (WorkOrder) - 오늘 날짜 데이터만 조회 (최적화)
+        List<WorkOrderEntity> todayOrders = workOrderRepository.findByCreatedAtBetween(startOfDay, nextDayStart);
+        if (todayOrders == null) todayOrders = List.of();
 
         // 3. 생산: 목표 생산량 (오늘 오더의 목표량 합계)
         long targetProduction = todayOrders.stream()
@@ -276,6 +263,8 @@ public class FactoryStatusService {
             })
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
+        // 5. 평균 수익 (전체 데이터 조회 필요 - 성능을 위해 별도 쿼리 권장되나 기존 로직 유지 시 findAll 사용)
+        List<WorkOrderEntity> allOrders = workOrderRepository.findAll();
         // 평균 수익 (전체 기간의 일평균 수익)
         BigDecimal totalProfitAllTime = allOrders.stream()
             .map(o -> {
@@ -286,21 +275,34 @@ public class FactoryStatusService {
                 }
             })
             .reduce(BigDecimal.ZERO, BigDecimal::add);
-        
+
+        Map<LocalDate, List<WorkOrderEntity>> ordersByDate = allOrders.stream()
+                .filter(o -> o.getCreatedAt() != null)
+                .collect(Collectors.groupingBy(o -> o.getCreatedAt().toLocalDate()));
+
         BigDecimal avgProfit = BigDecimal.ZERO;
         if (!ordersByDate.isEmpty() && totalProfitAllTime.compareTo(BigDecimal.ZERO) > 0) {
             avgProfit = totalProfitAllTime.divide(BigDecimal.valueOf(ordersByDate.size()), 0, RoundingMode.HALF_UP);
         }
-            
+
+        // 6. 품질(불량률) 및 효율(가동률) 동적 계산
+        // 불량률: (목표량 - 실제생산량) / 목표량 * 100
+        double defectRate = targetProduction > 0 
+                ? (double) (targetProduction - actualProduction) / targetProduction * 100 
+                : 0.0;
+        
+        // 가동률: 기본 100%에서 알람 1회당 0.5% 차감 (최소 0%)
+        double operationRate = Math.max(0.0, 100.0 - (safetyAlertCount * 0.5));
+
         return FactoryStatusRequest.builder()
                 .safetyAlertCount(safetyAlertCount)
                 .targetProduction(targetProduction)
                 .actualProduction(actualProduction)
                 .avgProfit(avgProfit)
                 .currentProfit(currentProfit)
-                .defectRate(0.5) // 불량률 하드코딩
-                .operationRate(98.5) // 가동률 하드코딩
-                .maintenanceDone(true) // 점검 여부 하드코딩
+                .defectRate(Math.round(defectRate * 10.0) / 10.0) // 소수점 첫째자리 반올림
+                .operationRate(Math.round(operationRate * 10.0) / 10.0)
+                .maintenanceDone(safetyAlertCount == 0) // 알람이 없으면 점검 완료로 간주
                 .build();
     }
 }
