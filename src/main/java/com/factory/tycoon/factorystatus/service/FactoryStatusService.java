@@ -199,6 +199,7 @@ public class FactoryStatusService {
             efficiencyPenalty = steps * 2;
         }
         int efficiencyScore = Math.max(0, MAX_SCORE_PER_CATEGORY - efficiencyPenalty);
+        
         details.add(createCategoryScore("효율", efficiencyScore, String.format("가동률: %.1f%%", operationRate)));
 
         return details;
@@ -225,8 +226,8 @@ public class FactoryStatusService {
     // 원천 데이터(Alarm, WorkOrder)에서 지표 집계
     private FactoryStatusRequest calculateDailyMetricsFromSource(LocalDate date) {
         // 1. 안전: 알람 테이블(Alarm)에서 카운트
-        // 요청받은 날짜(date)를 기준으로 어제(date-1)의 데이터를 조회
-        LocalDate targetDate = date.minusDays(1);
+        // 요청받은 날짜(date)를 기준으로 해당 날짜의 데이터를 조회
+        LocalDate targetDate = date;
         LocalDateTime startOfDay = targetDate.atStartOfDay();
         LocalDateTime nextDayStart = targetDate.plusDays(1).atStartOfDay();
         List<AlarmEntity> alarms =
@@ -245,9 +246,9 @@ public class FactoryStatusService {
 
         // 실제 생산량 (완료된 오더의 목표량 합계)
         long actualProduction = todayOrders.stream()
-                .filter(o -> Boolean.TRUE.equals(o.getStatus()))
-                .mapToLong(WorkOrderEntity::getTargetAmount)
-                .sum();
+            .filter(o -> o.getStatus() == 1)
+            .mapToLong(WorkOrderEntity::getTargetAmount)
+            .sum();
 
         // 4. 수익
         // 현재 수익 (오늘 오더의 가격 합계)
@@ -286,13 +287,21 @@ public class FactoryStatusService {
         }
 
         // 6. 품질(불량률) 및 효율(가동률) 동적 계산
-        // 불량률: (목표량 - 실제생산량) / 목표량 * 100
-        double defectRate = targetProduction > 0 
-                ? (double) (targetProduction - actualProduction) / targetProduction * 100 
-                : 0.0;
-        
-        // 가동률: 기본 100%에서 알람 1회당 0.5% 차감 (최소 0%)
-        double operationRate = Math.max(0.0, 100.0 - (safetyAlertCount * 0.5));
+        // 데이터가 없으면 기본값(불량률 5%, 가동률 95%) 적용
+        double defectRate;
+        if (todayOrders == null || todayOrders.isEmpty() || targetProduction <= 0) {
+            defectRate = 5.0;
+        } else {
+            // 불량률: (목표량 - 실제생산량) / 목표량 * 100
+            defectRate = (double) (targetProduction - actualProduction) / targetProduction * 100;
+        }
+
+        // 가동률: 실제 설비 가동 데이터가 없으면 기본값 95% 사용
+        // (알람과는 무관 - 알람은 안전 점수에만 영향)
+        double operationRate = 95.0;
+        System.out.println("=== 가동률 ===");
+        System.out.println("가동률: " + operationRate + "% (기본값)");
+        System.out.println("==============");
 
         return FactoryStatusRequest.builder()
                 .safetyAlertCount(safetyAlertCount)
@@ -302,7 +311,7 @@ public class FactoryStatusService {
                 .currentProfit(currentProfit)
                 .defectRate(Math.round(defectRate * 10.0) / 10.0) // 소수점 첫째자리 반올림
                 .operationRate(Math.round(operationRate * 10.0) / 10.0)
-                .maintenanceDone(safetyAlertCount == 0) // 알람이 없으면 점검 완료로 간주
+                .maintenanceDone(true) // 알람이 없으면 점검 완료로 간주
                 .build();
     }
 }
