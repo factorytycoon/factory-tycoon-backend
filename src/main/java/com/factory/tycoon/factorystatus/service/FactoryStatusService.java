@@ -86,7 +86,7 @@ public class FactoryStatusService {
     public FactoryStatusResponse calculateAndSaveFactoryStatus(LocalDate date, String factoryId) {
         // 1. 점수 계산
         FactoryStatusResponse calculated = calculateMetrics(date);
-    
+
         // 2. DB 저장 또는 갱신 (factoryId 포함)
         FactoryStatusEntity entity = factoryStatusRepository.findByDate(date)
                 .filter(e -> e.getFactoryId().equals(factoryId))  // factoryId 일치 확인
@@ -94,7 +94,7 @@ public class FactoryStatusService {
                         .date(date)
                         .factoryId(factoryId)  // ✅ 동적으로 설정
                         .build());
-    
+
         entity.update(
                 calculated.getTotalScore100(),
                 calculated.getRank(),
@@ -107,7 +107,7 @@ public class FactoryStatusService {
                 calculated.getOperationRate(),
                 calculated.isMaintenanceDone()
         );
-    
+
         factoryStatusRepository.save(entity);
         System.out.println("[SAVE/UPDATE] " + date + " (Factory: " + factoryId + ") 완료");
         return calculated;
@@ -301,9 +301,6 @@ public class FactoryStatusService {
         // 가동률: 실제 설비 가동 데이터가 없으면 기본값 95% 사용
         // (알람과는 무관 - 알람은 안전 점수에만 영향)
         double operationRate = 95.0;
-        System.out.println("=== 가동률 ===");
-        System.out.println("가동률: " + operationRate + "% (기본값)");
-        System.out.println("==============");
 
         return FactoryStatusRequest.builder()
                 .safetyAlertCount(safetyAlertCount)
