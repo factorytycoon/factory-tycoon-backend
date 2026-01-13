@@ -30,38 +30,38 @@ public class AlarmService {
 
     public List<AlarmResponse> getAllAlarms(Long factoryId, String level, String status) {
         List<AlarmEntity> alarms = new java.util.ArrayList<>();
-        
+
         // factoryId가 있으면 해당 공장의 설비 ID를 먼저 조회
         if (factoryId != null) {
             List<Long> equipmentIds = equipmentRepository.findByFactory_FactoryId(factoryId)
                     .stream()
                     .map(EquipmentEntity::getEquipmentId)
                     .collect(Collectors.toList());
-            
+
             if (equipmentIds.isEmpty()) {
                 return List.of();
             }
-            
+
             alarms = alarmRepository.findByEquipmentIdIn(equipmentIds);
         } else {
             // factoryId가 없으면 전체 조회
             alarms = alarmRepository.findAll();
         }
-        
+
         // status로 단계적 필터링
         if (status != null) {
             alarms = alarms.stream()
                     .filter(alarm -> alarm.getStatus().equals(status))
                     .collect(Collectors.toList());
         }
-        
+
         // level으로 단계적 필터링 (중복되는 triggerName대신 level 사용)
         if (level != null) {
             alarms = alarms.stream()
                     .filter(alarm -> alarm.getLevel() != null && alarm.getLevel().equals(level))
                     .collect(Collectors.toList());
         }
-        
+
         return alarms.stream()
                 .map(AlarmResponse::new)
                 .collect(Collectors.toList());
@@ -91,7 +91,7 @@ public class AlarmService {
         AlarmEntity saved = alarmRepository.save(alarm);
         return new AlarmResponse(saved);
     }
-    
+
     @Transactional
     public AlarmResponse createOsAlarm(AlarmOsRequest request) {
         try {
@@ -99,13 +99,13 @@ public class AlarmService {
             if (request.getHits() == null || request.getHits().isEmpty()) {
                 throw new IllegalArgumentException("No hits data in OpenSearch alarm");
             }
-            
+
             AlarmOsRequest.Hit firstHit = request.getHits().get(0);
             String deviceId = firstHit.getDevice_id();
-            
+
             EquipmentEntity equipment = equipmentRepository.findByName(deviceId)
                     .orElseThrow(() -> new IllegalArgumentException("Equipment not found with name: " + deviceId));
-            
+
             // 2. sensor_time 파싱
             LocalDateTime sensorDt = null;
             if (firstHit.getSensor_time() != null) {
@@ -115,28 +115,34 @@ public class AlarmService {
                     log.warn("Failed to parse sensor_time: {}", firstHit.getSensor_time(), e);
                 }
             }
-            
-            // 3. hits 배열을 JSON 문자열로 변환
-            String sensorSnapshot = objectMapper.writeValueAsString(request.getHits());
-            
-            // 4. AlarmEntity 생성 및 저장
-                String title = request.getMonitor_name() != null ? request.getMonitor_name() : request.getTrigger_name();
-                if (title == null || title.isBlank()) {
+
+            String title = request.getMonitor_name() != null ? request.getMonitor_name() : request.getTrigger_name();
+            if (title == null || title.isBlank()) {
                 title = "alarm";
+            }
+
+            String description = request.getMonitor_name() + ": " + request.getTrigger_name();
+            if (request.getHits() != null && !request.getHits().isEmpty()) {
+                try {
+                    description += "\nDetails: " + objectMapper.writeValueAsString(request.getHits());
+                } catch (Exception e) {
+                    log.warn("hits stringify failed", e);
                 }
+            }
+
             AlarmEntity alarm = AlarmEntity.builder()
                     .equipmentId(equipment.getEquipmentId())
                     .title(title)
-                    .description(request.getMonitor_name() + ": " + request.getTrigger_name())
+                    .description(description)
                     .level(request.getTrigger_name())
                     .status("OPEN")
                     .sensorDt(sensorDt)
                     .build();
-            
+
             AlarmEntity saved = alarmRepository.save(alarm);
-            log.info("OpenSearch alarm saved: alarmId={}, equipmentId={}, deviceId={}", 
+            log.info("OpenSearch alarm saved: alarmId={}, equipmentId={}, deviceId={}",
                     saved.getAlarmId(), saved.getEquipmentId(), deviceId);
-            
+
             return new AlarmResponse(saved);
         } catch (Exception e) {
             log.error("Failed to create OpenSearch alarm", e);
@@ -161,18 +167,19 @@ public class AlarmService {
     public AlarmResponse resolveAlarm(Long alarmId) {
         AlarmEntity alarm = alarmRepository.findById(alarmId)
                 .orElseThrow(() -> new IllegalArgumentException("Alarm not found with id: " + alarmId));
-        
+
         // 알람 상태를 CLOSE로 업데이트
         alarm.update(alarm.getDescription(), "CLOSE", alarm.getLevel());
-        
+
         // 해당 equipment의 상태를 normal로 업데이트
         EquipmentEntity equipment = equipmentRepository.findById(alarm.getEquipmentId())
-                .orElseThrow(() -> new IllegalArgumentException("Equipment not found with id: " + alarm.getEquipmentId()));
-        
-        equipment.update(equipment.getName(), "normal", equipment.getType(), 
-                equipment.getInstalledAt(), equipment.getLocation(), 
+                .orElseThrow(
+                        () -> new IllegalArgumentException("Equipment not found with id: " + alarm.getEquipmentId()));
+
+        equipment.update(equipment.getName(), "normal", equipment.getType(),
+                equipment.getInstalledAt(), equipment.getLocation(),
                 equipment.getDescription(), equipment.getModeling());
-        
+
         return new AlarmResponse(alarm);
     }
 }
