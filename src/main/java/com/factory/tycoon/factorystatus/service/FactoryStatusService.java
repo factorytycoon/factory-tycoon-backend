@@ -83,17 +83,18 @@ public class FactoryStatusService {
 
     // 해당 날짜의 데이터를 집계하여 DB에 저장 또는 갱신
     @org.springframework.transaction.annotation.Transactional
-    public FactoryStatusResponse calculateAndSaveFactoryStatus(LocalDate date) {
+    public FactoryStatusResponse calculateAndSaveFactoryStatus(LocalDate date, String factoryId) {
         // 1. 점수 계산
         FactoryStatusResponse calculated = calculateMetrics(date);
-
-        // 2. DB 저장 (이미 존재하면 업데이트)
+    
+        // 2. DB 저장 또는 갱신 (factoryId 포함)
         FactoryStatusEntity entity = factoryStatusRepository.findByDate(date)
+                .filter(e -> e.getFactoryId().equals(factoryId))  // factoryId 일치 확인
                 .orElse(FactoryStatusEntity.builder()
                         .date(date)
-                        .factoryId("1") // 기본 공장 ID
+                        .factoryId(factoryId)  // ✅ 동적으로 설정
                         .build());
-
+    
         entity.update(
                 calculated.getTotalScore100(),
                 calculated.getRank(),
@@ -106,8 +107,9 @@ public class FactoryStatusService {
                 calculated.getOperationRate(),
                 calculated.isMaintenanceDone()
         );
-
+    
         factoryStatusRepository.save(entity);
+        System.out.println("[SAVE/UPDATE] " + date + " (Factory: " + factoryId + ") 완료");
         return calculated;
     }
 
