@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import java.time.LocalDateTime;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public interface AlarmRepository extends JpaRepository<AlarmEntity, Long> {
     List<AlarmEntity> findByEquipmentIdAndStatus(Long equipmentId, String status);
     List<AlarmEntity> findByEquipmentIdIn(List<Long> equipmentIds);
 
-    @Query(value = "SELECT * FROM alarm WHERE sensor_dt BETWEEN :startOfDay AND :endOfDay", nativeQuery = true)
-    List<AlarmEntity> findAllByCreatedAtBetween(@Param("startOfDay") String startOfDay, @Param("endOfDay") String endOfDay);
+    @Query("SELECT a FROM AlarmEntity a WHERE a.sensorDt >= :start AND a.sensorDt < :end")
+    List<AlarmEntity> findAllBySensorDtBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
 }

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import java.time.LocalDateTime;
 
 import java.util.List;
 
@@ -33,4 +34,7 @@ public interface WorkOrderRepository extends JpaRepository<WorkOrderEntity, Long
     WHERE w.status = :status AND e.factory.factoryId = :factoryId
     """)
     List<com.factory.tycoon.workorder.domain.dto.WorkOrderStatusDetailDto> findWorkOrderDetailsByFactoryIdAndStatus(@Param("factoryId") Long factoryId, @Param("status") int status);
+
+    @Query("SELECT w FROM WorkOrderEntity w WHERE w.createdAt >= :start AND w.createdAt < :end")
+    List<WorkOrderEntity> findByCreatedAtBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 }

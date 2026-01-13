@@ -5,16 +5,19 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.List;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 @Repository
 public interface FactoryStatusRepository extends JpaRepository<FactoryStatusEntity, Long> {
-    // Renamed from getDailyFactoryStatusFromRDB to match the 'date' property
-    List<FactoryStatusEntity> findAllByDate(LocalDate date);
+    Optional<FactoryStatusEntity> findByDate(LocalDate date);
     
-    @Query("SELECT f FROM FactoryStatusEntity f WHERE f.date = :date")
-    List<FactoryStatusEntity> getDailyFactoryStatusFromRDB(@Param("date") LocalDate date);
-
+    // factoryId를 포함한 조회 (중요!)
+    Optional<FactoryStatusEntity> findByDateAndFactoryId(LocalDate date, String factoryId);
+    
+    // 날짜 범위 조회 (차트용)
+    List<FactoryStatusEntity> findByDateBetweenAndFactoryIdOrderByDateAsc(
+        LocalDate startDate, LocalDate endDate, String factoryId);
+    
+    void deleteByDate(LocalDate date);
 }
