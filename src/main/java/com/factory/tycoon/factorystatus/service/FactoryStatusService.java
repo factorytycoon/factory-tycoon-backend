@@ -109,7 +109,6 @@ public class FactoryStatusService {
         );
 
         factoryStatusRepository.save(entity);
-        System.out.println("[SAVE/UPDATE] " + date + " (Factory: " + factoryId + ") 완료");
         return calculated;
     }
 
