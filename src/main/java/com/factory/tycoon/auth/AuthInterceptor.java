@@ -22,27 +22,26 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        // TODO: 인증 로직 구현
-        // Preflight는 토큰 없이 통과
-        // if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-        //     return true;
-        // }
+        //TODO: 인증 로직 구현
+        //Preflight는 토큰 없이 통과
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            return true;
+        }
 
-        // String auth = request.getHeader(HttpHeaders.AUTHORIZATION); //Authorization 헤더에서 토큰 추출
-        // if (auth == null || auth.isBlank() || !auth.startsWith("Bearer ")) {
-        //     response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        //     return false;
-        // }
+        String auth = request.getHeader(HttpHeaders.AUTHORIZATION); //Authorization 헤더에서 토큰 추출
+        if (auth == null || auth.isBlank() || !auth.startsWith("Bearer ")) {
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            return false;
+        }
 
-        // String token = auth.substring("Bearer ".length()).trim(); //토큰 파싱
-        // if (!tokenService.validateAccessToken(token)) { //토큰 검증
-        //     response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        //     return false;
-        // }
+        String token = auth.substring("Bearer ".length()).trim(); //토큰 파싱
+        if (!tokenService.validateAccessToken(token)) { //토큰 검증
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            return false;
+        }
 
-        // Long userId = tokenService.getUserId(token); //토큰에서 userId 추출
-        // request.setAttribute(REQ_ATTR_USER_ID, userId); //request 속성에 userId 저장
-        // return true;
+        Long userId = tokenService.getUserId(token); //토큰에서 userId 추출
+        request.setAttribute(REQ_ATTR_USER_ID, userId); //request 속성에 userId 저장
         return true;
     }
 }
