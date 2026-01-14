@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -27,6 +29,9 @@ public class EmailAuthService {
     @Value("${spring.mail.username:}")
     private String mailUsername;
 
+    @Autowired
+    private TemplateEngine templateEngine;
+
     private static final long EXPIRE_MINUTES = 5; // 인증 코드 만료 시간
 
     public void sendAuthCode(String toEmail) throws MessagingException, UnsupportedEncodingException {
@@ -35,8 +40,24 @@ public class EmailAuthService {
         emailAuthRepository.upsertAuthCode(toEmail, authNum, LocalDateTime.now());
 
         // 메일 전송
-        MimeMessage emailForm = createEmailForm(toEmail, authNum);
-        emailSender.send(emailForm);
+        String title = "[Factory Tycoon] 인증 코드는 " + authNum + "입니다";
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, false, "utf-8");
+
+        helper.setTo(toEmail);
+        helper.setSubject(title);
+
+        if (mailUsername != null && !mailUsername.isBlank()) {
+            helper.setFrom(mailUsername);
+        }
+
+        // Use Thymeleaf to process the mail.html template
+        Context context = new Context();
+        context.setVariable("code", authNum);
+        String htmlContent = templateEngine.process("mail", context);
+
+        helper.setText(htmlContent, true);
+        emailSender.send(message);
     }
 
     public String verifyCode(String email, int inputCode) {
@@ -66,23 +87,5 @@ public class EmailAuthService {
 
     private int generate4Digits() {
         return new Random().nextInt(9000) + 1000;
-    }
-
-    private MimeMessage createEmailForm(String email, int authNum)
-            throws MessagingException, UnsupportedEncodingException {
-
-        String title = "[Factory Tycoon] 인증 코드는 " + authNum + "입니다";
-        MimeMessage message = emailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, false, "utf-8");
-
-        helper.setTo(email);
-        helper.setSubject(title);
-
-        if (mailUsername != null && !mailUsername.isBlank()) {
-            helper.setFrom(mailUsername);
-        }
-
-        helper.setText("<h3>인증번호: " + authNum + "</h3><p>유효시간: 5분</p>", true);
-        return message;
     }
 }
