@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS emailauth (
+  email VARCHAR(255) PRIMARY KEY,
+  auth_num INT NOT NULL,
+  created_at DATETIME NOT NULL
+);
