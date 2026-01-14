@@ -40,7 +40,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns(
                         "/api/v1/ft/user/signup",
                         "/api/v1/ft/user/login",
-                        "/api/email/**"
+                        "/api/v1/ft/email/send-authcode",
+                        "/api/v1/ft/email/check-authcode"
                 )
                 
                 // Swagger 인증 예외

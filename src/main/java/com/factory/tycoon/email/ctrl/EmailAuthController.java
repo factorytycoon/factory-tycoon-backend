@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/email")
+@RequestMapping("/api/v1/ft/email")
 public class EmailAuthController {
 
     @Autowired
@@ -21,16 +22,17 @@ public class EmailAuthController {
     public ResponseEntity<?> sendAuthCode(@RequestBody SendAuthCodeRequest req)
             throws MessagingException, UnsupportedEncodingException {
 
-        //emailAuthService.deleteExistCode(req.getEmail());
+        emailAuthService.sendAuthCode(req.getEmail()); // 코드 생성 및 메일 전송
 
-        emailAuthService.sendAuthCode(req.getEmail()); //코드 생성 및 메일 전송
-
-        return ResponseEntity.ok("Success");
+        // JSON 형식으로 응답 반환
+        return ResponseEntity.ok(Map.of("message", "Success"));
     }
 
     @PostMapping("/check-authcode")
     public ResponseEntity<?> checkAuthCode(@RequestBody VerifyAuthCodeRequest req) {
         String result = emailAuthService.verifyCode(req.getEmail(), req.getAuthNum());
-        return ResponseEntity.ok(result);
+
+        // JSON 형식으로 응답 반환
+        return ResponseEntity.ok(Map.of("message", result));
     }
 }
