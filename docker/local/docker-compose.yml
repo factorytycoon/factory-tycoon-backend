@@ -142,18 +142,21 @@ services:
         condition: service_healthy
     environment:
       BACKUP_INTERVAL_SECONDS: ${BACKUP_INTERVAL_SECONDS:-3600}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
     volumes:
       - ./redis/backups:/backups
+      - redis_data:/data:ro
     restart: unless-stopped
     command: >-
       sh -c '
         echo "[redis-backup] starting backup loop with interval ${BACKUP_INTERVAL_SECONDS:-3600}s";
         while true; do 
-          if redis-cli ping >/dev/null 2>&1; then
+          if redis-cli -h $$REDIS_HOST -p $$REDIS_PORT ping >/dev/null 2>&1; then
               ts=$$(date +%F-%H%M%S);
               outFile=/backups/redis-$$ts.rdb;
               echo "[redis-backup] running BGSAVE";
-              redis-cli BGSAVE && sleep 2 && cp /data/dump.rdb "$$outFile" && echo "[redis-backup] success: $$outFile" || echo "[redis-backup] backup failed";
+              redis-cli -h $$REDIS_HOST -p $$REDIS_PORT BGSAVE && sleep 2 && cp /data/dump.rdb "$$outFile" && echo "[redis-backup] success: $$outFile" || echo "[redis-backup] backup failed";
           else
               echo "[redis-backup] redis not ready, will retry";
           fi;
