@@ -51,7 +51,6 @@ public class EmailAuthService {
             helper.setFrom(mailUsername);
         }
 
-        // Use Thymeleaf to process the mail.html template
         Context context = new Context();
         context.setVariable("code", authNum);
         String htmlContent = templateEngine.process("mail", context);
