@@ -11,7 +11,7 @@ import jakarta.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 
 @RestController
-@RequestMapping("/api/email")
+@RequestMapping("/api/v1/email")
 public class EmailAuthController {
 
     @Autowired
