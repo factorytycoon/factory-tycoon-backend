@@ -13,6 +13,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class AuthInterceptor implements HandlerInterceptor {
 
     public static final String REQ_ATTR_USER_ID = "AUTH_USER_ID";
+    public static final Long SERVICE_ACCOUNT_ID = -1L; // 서비스간 통신용 계정
+    private static final String INTERNAL_SERVICE_HEADER = "X-Internal-Service";
 
     private final TokenService tokenService;
 
@@ -22,9 +24,15 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        //TODO: 인증 로직 구현
         //Preflight는 토큰 없이 통과
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            return true;
+        }
+
+        // 내부 서비스 요청 체크 (Kubernetes 클러스터 내부)
+        String internalService = request.getHeader(INTERNAL_SERVICE_HEADER);
+        if ("backend-aws".equals(internalService) || "backend-websocket".equals(internalService)) {
+            request.setAttribute(REQ_ATTR_USER_ID, SERVICE_ACCOUNT_ID);
             return true;
         }
 
