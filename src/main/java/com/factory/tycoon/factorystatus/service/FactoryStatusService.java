@@ -147,8 +147,10 @@ public class FactoryStatusService {
         List<CategoryScore> details = new ArrayList<>();
 
         // [안전] 0회면 만점, 10회당 1점 감점
-        int safetyScore = Math.max(0, MAX_SCORE_PER_CATEGORY - (status.getSafetyAlertCount() / 10));
-        details.add(createCategoryScore("안전", safetyScore, "이상 감지: " + status.getSafetyAlertCount() + "회"));
+        int safetyAlertCount = status.getSafetyAlertCount();
+        int safetyScore = Math.max(0, MAX_SCORE_PER_CATEGORY - (safetyAlertCount / 10));
+        System.out.println("[DEBUG] 안전 - alertCount: " + safetyAlertCount + ", 감점: " + (safetyAlertCount / 10) + ", 점수: " + safetyScore);
+        details.add(createCategoryScore("안전", safetyScore, "이상 감지: " + safetyAlertCount + "회"));
 
         // [생산] 목표 대비 생산량. 100% 이상 만점, 5% 미만마다 2점 감점
         double productionRate = 0;
