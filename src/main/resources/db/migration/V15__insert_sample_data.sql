@@ -100,7 +100,13 @@ INSERT INTO orders (factory_id, customer, product_name, quantity, due_date) VALU
 (1, 'ABC Electronics', 'PCB Assembly', 1000, '2024-02-28'),
 (1, 'XYZ Manufacturing', 'Motor Component', 500, '2024-03-15'),
 (2, 'DEF Industries', 'Metal Fastener', 5000, '2024-02-15'),
-(3, 'GHI Corporation', 'Plastic Housing', 2000, '2024-03-30');
+(3, 'GHI Corporation', 'Plastic Housing', 2000, '2024-03-30'),
+(1, '나이키', '나이키 야구배트', 5000, '2026-01-31'),
+(1, '이용진', '용진이 글러브', 2000, '2026-12-31'),
+(1, '이용진', '본 나무 배트 오더 배트', 350000, '2024-06-09'),
+(1, '이현진', 'HIT 히트 경식 연습용', 3000, '2026-02-02'),
+(1, '김경문', '하드프리미엄 리퍼브 모델', 500, '2026-03-01'),
+(1, '허규연', '야구 피칭 네트', 99, '2026-02-26');
 
   -- Insert Workorder (4 rows)
 INSERT INTO workorder (equipment_id, order_id, product_name, target_amount, customer_name, status, price) VALUES
