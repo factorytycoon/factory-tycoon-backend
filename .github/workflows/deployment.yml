@@ -9,7 +9,7 @@ on:
       - 'src/**'
       - 'build.gradle'
       - 'Dockerfile'
-      - '.github/workflows/deploy-backend.yml'
+      - '.github/workflows/deployment.yml'
 
 jobs:
   build-and-deploy:
